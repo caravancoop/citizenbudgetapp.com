@@ -1,0 +1,69 @@
+// Colors
+$blue: #004587;
+$blue-95: rgba(0,69,135,.95);
+$gray: rgba(0,0,0,0.8);
+$gray-05: rgba(0,0,0,0.05);
+$gray-20: rgba(0,0,0,0.2);
+$gray-40: rgba(0,0,0,0.4);
+$teal: #00abaf;
+$orange: #eb6354;
+$white: #fff;
+$white-40: rgba(255,255,255,.4);
+$white-10: rgba(255,255,255,.1);
+
+$text-color: #333;
+
+
+.category {
+    background-color: $blue;
+    padding: 10px 0;
+    color: $white;
+    border: 0;
+}
+
+td { border-bottom-color: $orange; }
+.simulator td.highlight {
+    border-bottom: 8px solid $orange;
+    padding-bottom: 20px;
+}
+
+td .header.header.header {
+    background-color: $teal;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    color: $white;
+    font-weight: normal;
+    text-align: center;
+}
+
+.selected td {
+    // ToDo: Hack to overwrite the light-blue.
+    // Ideally we will delete the JS that does it.
+    background-color: transparent !important;
+}
+
+.highlight { background-color: $white; }
+
+#identification > fieldset:first-of-type > legend {
+    background-color: $blue;
+    color: $white;
+}
+
+#message {
+    box-shadow: 0 3px 10px $gray-40;
+    background-color: $blue;
+}
+
+.btn {
+
+}
+
+.btn-primary {
+    background-image: none;
+    background-color: $teal;
+    border: 0;
+    border-radius: 0;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+}

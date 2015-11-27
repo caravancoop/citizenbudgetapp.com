@@ -1,0 +1,72 @@
+#identification {
+    padding: 70px 0;
+
+    h2 {
+        margin-bottom: 50px;
+        text-align: center;
+        color: $blue;
+        font-size: 52px;
+    }
+
+    form {
+        padding: 0;
+        margin: 50px auto;
+        // font-family: "Signika", sans-serif;
+    }
+
+    input:not([type="submit"]), textarea {
+        padding: 5px 15px;
+        border: 0;
+        border-bottom: 1px solid $teal;
+        margin-bottom: 20px;
+        font-size: 18px;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    input:focus,
+    textarea:focus {
+        border-color: $orange;
+        color: $text-color;
+    }
+
+    textarea {
+        margin-top: 30px;
+        border: 1px solid $teal;
+        resize: none;
+    }
+
+    input[type="submit"] {
+        border: 0;
+        font-family: "Signika", sans-serif;
+        padding: 10px 30px;
+        float: right;
+    }
+
+    textarea:focus, input:focus { outline: 0; }
+
+    input::-webkit-input-placeholder,
+    textarea::-webkit-input-placeholder {
+        color: $blue;
+        font-family: "Signika", sans-serif;
+    }
+
+    input:-moz-placeholder, /* Firefox 18- */
+    textarea:-moz-placeholder { /* Firefox 18- */
+        color: $blue;
+        font-family: "Signika", sans-serif;
+    }
+
+    input::-moz-placeholder,  /* Firefox 19+ */
+    textarea::-moz-placeholder {  /* Firefox 19+ */
+        color: $blue;
+        font-family: "Signika", sans-serif;
+    }
+
+    input:-ms-input-placeholder,
+    textarea:-ms-input-placeholder {
+        color: $blue;
+        font-family: "Signika", sans-serif;
+    }
+
+}
