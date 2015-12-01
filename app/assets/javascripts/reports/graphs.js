@@ -39,10 +39,10 @@ function addGraph(id) {
   var details = all_details[id];
   var graph = d3.select("#graph_" + id);
 
-  if (details.counts !== undefined) {
+  if (details && details.counts !== undefined) {
     // checkboxes or radio buttons
     checkboxesGraph(graph, details);
-  } else if (details.choices !== undefined) {
+  } else if (details && details.choices !== undefined) {
     // slider or scaler
     sliderGraph(graph, details);
     // maintainIncreaseDecreaseGraph(graph, details);
