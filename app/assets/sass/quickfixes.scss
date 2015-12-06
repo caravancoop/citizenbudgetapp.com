@@ -1,8 +1,20 @@
 $desktop: "min-width: 940px";
 $mobile-only: "max-width: 400px";
 
-@import 'colors.scss';
-// @import 'form.scss';
+// Colors
+$blue: #004587;
+$blue-95: rgba(0,69,135,.95);
+$gray: rgba(0,0,0,0.8);
+$gray-05: rgba(0,0,0,0.05);
+$gray-20: rgba(0,0,0,0.2);
+$gray-40: rgba(0,0,0,0.4);
+$teal: #00abaf;
+$orange: #eb6354;
+$white: #fff;
+$white-40: rgba(255,255,255,.4);
+$white-10: rgba(255,255,255,.1);
+
+$text-color: #333;
 
 // Fixing Mobile
 
@@ -11,10 +23,11 @@ $mobile-only: "max-width: 400px";
     width: auto;
 }
 
-@media ($mobile-only) {
 
+@import 'facelift-all.scss';
+@import 'mobile.scss';
+@import 'desktop.scss';
 
-.simulator { margin: 0; }
 
 .simulator .description > p:only-of-type {
     margin-top: 20px;
@@ -118,6 +131,3 @@ td.description .controls { margin-left: 0 !important; }
     .chart-container { margin-left: 90px;}
 }
 
-
-
-} // Closing Media Query Mobile Only
