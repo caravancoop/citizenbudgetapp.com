@@ -1,5 +1,5 @@
 .container {
-  margin-top: 2em;
+  padding-top: 2em;
 }
 
 /* responses#show ------------------------------------------------------------*/
@@ -56,13 +56,13 @@ header {
 
 #facebook {
   position: absolute;
-  top: 0;
-  right: 130px;
+  top: -30px;
+  right: 105px;
 }
 #twitter {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -30px;
+  right: 20px;
 }
 
 h1,
@@ -666,7 +666,7 @@ nav {
     .dropdown-menu {
       -webkit-border-radius: 0 0 4px 4px;
       -moz-border-radius: 0 0 4px 4px;
-      border-radius: 0 0 4px 4px;  
+      border-radius: 0 0 4px 4px;
     }
   }
 }

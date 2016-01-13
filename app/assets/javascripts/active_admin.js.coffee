@@ -4,6 +4,7 @@
 //= require plugins/jquery.clippy
 //= require i18n
 //= require libs/d3
+//= require reports/svg2png
 //= require reports/graphs
 
 $ ->
@@ -158,6 +159,14 @@ $ ->
       window.unsaved = false
 
       return
+
+  # Download dashboards.
+  $('.graph').on 'click', '.download-graph li', ->
+    $svg = $(this).parent().prev()
+
+    saveSvgAsPng($svg[0], "graph", {backgroundColor: 'white', width: 768, format: $(this).data('format')});
+
+    return
 
 # Dashboard charts.
 window.draw = (chart_type, id, headers, rows, options) ->

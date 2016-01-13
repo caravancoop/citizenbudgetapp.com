@@ -21,6 +21,7 @@ $text-color: #333;
 .container {
     max-width: 940px;
     width: auto;
+    overflow-x: hidden;
 }
 
 
@@ -56,6 +57,7 @@ td.description > fieldset { margin: 1em 0;}
 th.category { text-align: center; }
 
 .widget-slider { width: auto; }
+.widget-scaler { width: auto; }
 .widget-onoff { margin: 0 auto; }
 td.description .controls { margin-left: 0 !important; }
 

@@ -255,6 +255,17 @@ body.summary {
     width: 210px;
   }
 
+  .download-graph {
+    display: inline-block;
+    vertical-align: top;
+    color: #aaa;
+    list-style: none;
+
+    li:hover {
+      color: #666;
+      cursor: pointer;
+    }
+  }
   .bars {
     margin: 3em auto;
   }
