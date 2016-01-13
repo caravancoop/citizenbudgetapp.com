@@ -43,7 +43,7 @@ $ ->
 
       if $nav.length
         target = 'nav'
-        offset = $nav.offset().top
+        offset = $('#questionnaire').offset().top
         height = $nav.outerHeight() + $message.outerHeight()
         $receiver = $nav
       else
