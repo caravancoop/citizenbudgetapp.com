@@ -2,12 +2,13 @@
   - content_for :head do
     %style
       = @questionnaire.stylesheet.html_safe
+- content_for(:body_class, @questionnaire.mode)
 - @simulator.each do |section|
   %table(id="#{table_id(section)}" class="#{section.group}")
     %thead
       - unless section.title.blank? && section.nonbudgetary?
         %tr
-          %th.category
+          %th.category(colspan="2")
             = render partial: 'title', locals: {object: section, placement: 'bottom'}
           %th.column.highlight
             - unless section.nonbudgetary?

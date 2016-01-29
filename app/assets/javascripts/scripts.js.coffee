@@ -23,7 +23,7 @@ $ ->
   $('.dropdown-toggle').dropdown()
 
   # Before changing this line, make sure popovers still work properly on the iPad.
-  $('.popover-toggle').popover(trigger: 'click').click (event) -> event.preventDefault()
+  $('.popover-toggle').popover(trigger: 'focus').click (event) -> event.preventDefault()
   $('[rel="tooltip"]').tooltip()
 
   # Bootstrap hacks.
@@ -43,7 +43,7 @@ $ ->
 
       if $nav.length
         target = 'nav'
-        offset = $nav.offset().top
+        offset = $('#questionnaire').offset().top
         height = $nav.outerHeight() + $message.outerHeight()
         $receiver = $nav
       else

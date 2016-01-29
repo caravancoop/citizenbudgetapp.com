@@ -1,0 +1,207 @@
+.container {
+  max-width: 940px;
+  width: auto; }
+
+#questionnaire > nav {
+  display: none; }
+
+#questionnaire > .nav-fixed {
+  display: block; }
+
+#message {
+  display: none !important; }
+
+#message.message-fixed {
+  display: block !important; }
+
+#whitespace {
+  display: none !important; }
+
+.simulator {
+  margin: 0; }
+
+td.description .header {
+  padding: 15px 0; }
+  td.description .header > span a {
+    color: #00abaf;
+    background-color: transparent; }
+  td.description .header .icon-info-sign {
+    display: none; }
+
+.container > header > h1 {
+  font-family: 'Signika', sans-serif;
+  color: #004587; }
+
+.category,
+#identification > fieldset > legend > span {
+  font-family: 'Signika Negative', sans-serif;
+  text-transform: none !important; }
+
+.alert {
+  border-radius: 0;
+  border: 0;
+  padding: 15px;
+  margin: 0; }
+
+.alert-info {
+  color: white;
+  background-color: #eb6354;
+  text-align: center; }
+
+.selected td {
+  background-color: transparent !important; }
+
+.highlight {
+  background-color: white; }
+
+#identification > fieldset:first-of-type > legend {
+  background-color: #004587;
+  color: white; }
+
+#message {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  background-color: #004587; }
+
+.btn-primary {
+  background-image: none;
+  background-color: #00abaf;
+  border: 0;
+  border-radius: 0;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px; }
+
+th.category {
+  background-color: #004587;
+  padding: 10px 0;
+  color: white;
+  border: 0;
+  width: 100%;
+  text-align: center; }
+
+td.description {
+  padding: 0; }
+
+.simulator > tbody td.highlight {
+  padding: 0 10px; }
+
+@media (max-width: 400px) {
+  table,
+  thead,
+  tbody,
+  tr,
+  th,
+  td {
+    display: block; }
+
+  .simulator {
+    margin: 0; }
+
+  .simulator .description > p:only-of-type {
+    margin-top: 20px; }
+
+  .container > header,
+  #introduction,
+  .simulator .description > p {
+    padding-left: 20px;
+    padding-right: 20px; }
+
+  #introduction {
+    margin-bottom: 20px; }
+
+  .description.description {
+    padding: 0; }
+    .description.description .header {
+      background-color: #00abaf;
+      padding: 15px 20px;
+      color: white;
+      font-weight: normal;
+      text-align: center; }
+      .description.description .header > span {
+        display: block;
+        margin-left: 50px;
+        margin-right: 50px;
+        width: auto;
+        padding: 2px 6px;
+        margin-top: 10px;
+        background-color: #004587; }
+        .description.description .header > span a {
+          color: white;
+          background-color: transparent; }
+        .description.description .header > span .icon-info-sign {
+          display: none; }
+    .description.description > p > img {
+      display: block;
+      float: none;
+      margin: 20px 0 0;
+      width: 100%;
+      height: auto !important; }
+    .description.description > fieldset {
+      margin: 1em 0;
+      padding-left: 20px;
+      padding-right: 20px; }
+    .description.description .controls {
+      margin-left: 0 !important; }
+
+  #questionnaire > nav .dropdown {
+    display: none !important; }
+
+  #message {
+    display: none !important; }
+
+  #message.message-fixed {
+    display: block !important; }
+
+  .highlight {
+    padding: 15px 20px !important; }
+    .highlight .widget-slider {
+      width: auto; }
+    .highlight .widget-onoff {
+      margin: 0 auto; }
+
+  #identification {
+    width: auto; }
+    #identification .control-group label {
+      display: block;
+      float: none;
+      width: auto;
+      margin: 0;
+      text-align: left; }
+    #identification .control-group {
+      margin: 10px 5%; }
+    #identification .controls {
+      margin-left: 0; }
+    #identification .controls textarea.span6 {
+      max-width: 380px; }
+    #identification .form-actions {
+      padding-left: 0; }
+    #identification .controls input[type='email'],
+    #identification .controls input[type='text'],
+    #identification .controls textarea,
+    #identification .controls .radio.inline {
+      width: 90%;
+      padding: 5px 15px; }
+    #identification .form-actions {
+      padding-left: 5%;
+      padding-right: 5%; }
+    #identification > fieldset:first-of-type > legend {
+      text-align: center; }
+    #identification > fieldset:first-of-type > legend > span {
+      padding-left: 0; }
+    #identification .form-actions .btn {
+      width: 100%;
+      padding: 10px 0; }
+    #identification .formError {
+      left: 5% !important; } }
+@media (min-width: 940px) {
+  .simulator > tbody > tr > td {
+    padding: 10px 0 20px; }
+
+  td.description .header {
+    background-color: transparent; }
+
+  #identification > fieldset > legend > span {
+    display: block;
+    text-align: center;
+    padding: 0;
+    background-color: #00abaf; } }
