@@ -21,13 +21,13 @@ $(function () {
 
 var GRAPH_CONF = {
   // Width and height of the graph are exclusive of margins
-  max_width: 710,
+  max_width: 900,
   height: 240,
   margin: {
-    top: 15,
-    right: 5,
-    bottom: 25,
-    left: 60
+    top: 10,
+    right: 30,
+    bottom: 20,
+    left: 50
   },
   max_bar_width: 100
 };
@@ -38,29 +38,14 @@ GRAPH_CONF.max_n_bars = Math.floor(GRAPH_CONF.max_width / 25);
 function addGraph(id) {
   var details = all_details[id];
   var graph = d3.select("#graph_" + id);
-  var xport = $('<ul class="download-graph"></ul>');
-
-  xport.append($('<li/>').data('format', 'svg').text('svg'));
-  xport.append($('<li/>').data('format', 'png').text('png'));
-  xport.append($('<li/>').data('format', 'jpeg').text('jpeg'));
 
   if (details && details.counts !== undefined) {
     // checkboxes or radio buttons
     checkboxesGraph(graph, details);
-
-    $('#graph_' + id).find('text').attr('font-size', '11px');
-    $('#graph_' + id).find('text').attr('font-family', 'Helvetica, Arial, sans-serif');
-    $('#graph_' + id).append(xport);
-
   } else if (details && details.choices !== undefined) {
     // slider or scaler
     sliderGraph(graph, details);
     // maintainIncreaseDecreaseGraph(graph, details);
-
-    $('#graph_' + id).find('text').attr('font-size', '11px');
-    $('#graph_' + id).find('text').attr('font-family', 'Helvetica, Arial, sans-serif');
-    $('#graph_' + id).append(xport);
-
   } else {
     console && console.log && console.log('Unsupported graph: ' + id);
   }

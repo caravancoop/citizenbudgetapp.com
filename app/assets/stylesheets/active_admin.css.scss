@@ -20,7 +20,7 @@
 //
 // Notice that Active Admin CSS rules are nested within a
 // 'body.active_admin' selector to prevent conflicts with
-// other pages in the app. It is best to wrap your changes in a
+// other pages in the app. It is best to wrap your changes in a 
 // namespace so they are properly recognized. You have options
 // if you e.g. want different styles for different namespaces:
 //
@@ -255,17 +255,6 @@ body.summary {
     width: 210px;
   }
 
-  .download-graph {
-    display: inline-block;
-    vertical-align: top;
-    color: #aaa;
-    list-style: none;
-
-    li:hover {
-      color: #666;
-      cursor: pointer;
-    }
-  }
   .bars {
     margin: 3em auto;
   }
@@ -418,10 +407,6 @@ body.summary {
 #questionnaire_remove_logo_input,
 #questionnaire_remove_title_image_input {
   height: auto;
-
-  img {
-    max-height: 200px;
-  }
 }
 
 // Formtastic class

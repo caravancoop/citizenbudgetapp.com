@@ -4,7 +4,6 @@
 //= require plugins/jquery.clippy
 //= require i18n
 //= require libs/d3
-//= require reports/svg2png
 //= require reports/graphs
 
 $ ->
@@ -109,64 +108,6 @@ $ ->
     setup_fieldset($('.has_many.questions fieldset:last [id]').attr('id').match(/\d+/)[0])
 
   $('.has_many.questions fieldset').each(setup_fieldset)
-
-  $('#questionnaire_logo').change ->
-    if $('#questionnaire_remove_logo_input img').length
-      img = this
-      file = img.files[0]
-      reader = new FileReader()
-
-      reader.onloadend = ->
-        $('#questionnaire_remove_logo_input img')[0].src = reader.result
-
-        return
-
-      if (file)
-         reader.readAsDataURL(file)
-
-      return
-
-  $('#questionnaire_title_image').change ->
-    if $('#questionnaire_remove_title_image_input img').length
-      img = this
-      file = img.files[0]
-      reader = new FileReader()
-
-      reader.onloadend = ->
-        $('#questionnaire_remove_title_image_input img')[0].src = reader.result
-
-        return
-
-      if (file)
-         reader.readAsDataURL(file)
-
-      return
-
-  # Ask user confirmation for leave the page with unchanged work.
-  if ($('.admin_questionnaires form').length)
-    window.unsaved = false
-
-    $(window).on 'beforeunload', ->
-      if (unsaved)
-        'You have unsaved work. Do you want to leave this page and discard it?'
-
-    $('.admin_questionnaires form').on 'change', ':input', ->
-      window.unsaved = true
-
-      return
-
-    $('.admin_questionnaires form').submit ->
-      window.unsaved = false
-
-      return
-
-  # Download dashboards.
-  $('.graph').on 'click', '.download-graph li', ->
-    $svg = $(this).parent().prev()
-
-    saveSvgAsPng($svg[0], "graph", {backgroundColor: 'white', width: 768, format: $(this).data('format')});
-
-    return
 
 # Dashboard charts.
 window.draw = (chart_type, id, headers, rows, options) ->
