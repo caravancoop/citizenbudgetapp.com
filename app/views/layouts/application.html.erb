@@ -6,6 +6,7 @@
 <!--[if gt IE 9]><!--> <html class="no-js" xml:lang="<%= locale %>" lang="<%= locale %>"> <!--<![endif]-->
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <link rel="dns-prefetch" href="//ajax.googleapis.com">
   <link rel="dns-prefetch" href="//platform.twitter.com">
@@ -28,6 +29,7 @@
 <% end %>
   <%= stylesheet_link_tag '//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css', 'application' %>
   <%= stylesheet_link_tag 'print', media: 'print' %>
+  <%= stylesheet_link_tag 'mobile' %>
   <%= yield :head %>
   <%= javascript_include_tag 'individual/modernizr.min.js', 'https://www.google.com/jsapi' %>
   <!--[if lt IE 9]>
