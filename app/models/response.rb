@@ -5,7 +5,7 @@ class Response
   include Mongoid::Paranoia
   include Mongoid::Timestamps
 
-  default_scope where(deleted_at: nil, comments: {'$in' => ['', nil]})
+  default_scope -> { where(deleted_at: nil, comments: {'$in' => ['', nil]}) }
 
   # Don't embed, as a popular questionnaire may be over 16MB in size.
   belongs_to :questionnaire
