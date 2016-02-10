@@ -4,6 +4,8 @@ ruby '2.3.0'
 gem 'rails', '3.2.22.1'
 gem 'rails-i18n'
 
+gem 'dotenv-rails'
+
 group :production do
   # Non-Heroku deployments
   unless ENV['HEROKU']
