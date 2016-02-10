@@ -48,6 +48,9 @@ gem 'faraday'
 # Rake
 gem 'ruby-progressbar'
 
+# Assets
+gem 'jquery-rails'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -62,7 +65,6 @@ group :assets do
   gem 'uglifier', '>= 1.3.0'
 end
 
-gem 'jquery-rails'
 
 # For maintenance scripts to run in development console.
 group :development do
