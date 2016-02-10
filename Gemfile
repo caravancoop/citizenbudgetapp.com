@@ -65,17 +65,20 @@ group :assets do
   gem 'uglifier', '>= 1.3.0'
 end
 
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'pry-rails'
+  gem 'byebug'
+end
 
 # For maintenance scripts to run in development console.
 group :development do
   gem 'mechanize'
-  gem 'pry-rails'
   gem 'odf-report'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
-group :development, :test do
-  gem 'rspec-rails', '~> 2.6'
-end
 group :production do
   # Non-Heroku deployments
   unless ENV['HEROKU']
