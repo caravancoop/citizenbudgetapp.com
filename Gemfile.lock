@@ -450,6 +450,7 @@ PLATFORMS
 DEPENDENCIES
   action_dispatch-gz_static
   activeadmin-mongoid (= 0.3.0)
+  actionpack-action_caching
   activeadmin (= 1.0.0.pre2)
   airbrake (~> 3.1.15)
   axlsx (= 2.1.0.pre)
