@@ -466,10 +466,8 @@ DEPENDENCIES
   faraday
   fog
   foreman
-  formtastic (~> 2.2.1)
   google-api-client (= 0.9)
   haml-rails
-  inherited_resources (~> 1.4.1)
   jquery-rails
   jwt
   libv8 (= 3.16.14.7)

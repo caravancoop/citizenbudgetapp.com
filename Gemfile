@@ -13,9 +13,6 @@ gem 'unicorn'
 gem 'mongoid', '5.1'
 
 # Admin
-gem 'formtastic', '~> 2.2.1'
-gem 'inherited_resources', '~> 1.4.1'
-gem 'sass', '~> 3.2.14'
 gem 'activeadmin-mongoid', '0.3.0'
 gem 'activeadmin', '1.0.0.pre2'
 gem 'cancan'
