@@ -300,7 +300,7 @@ GEM
       mongoid (>= 3.0, < 6.0)
     multi_json (1.11.2)
     multipart-post (1.2.0)
-    mustache (0.99.8)
+    mustache (1.0.2)
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     net-scp (1.2.1)
@@ -460,7 +460,7 @@ DEPENDENCIES
   memcachier
   mongoid
   multi_json
-  mustache (~> 0.99.0)
+  mustache
   odf-report
   oj
   pry-rails
