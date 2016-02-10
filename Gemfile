@@ -12,7 +12,6 @@ group :production do
 
   # Error logging
   gem 'airbrake', '~> 3.1.15'
-  gem 'heroku'
   gem 'rails_12factor'
 
   # Performance
