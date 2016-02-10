@@ -6,6 +6,8 @@ gem 'rails-i18n'
 
 gem 'dotenv-rails'
 
+# Server
+gem 'unicorn'
 
 # Database
 gem 'mongoid', '5.1'
@@ -78,7 +80,6 @@ group :production do
     gem 'foreman'
   end
 
-gem 'unicorn'
   # Error logging
   gem 'airbrake', '~> 3.1.15'
   gem 'rails_12factor'
