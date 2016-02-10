@@ -66,9 +66,9 @@ class Question
   before_validation :set_options, :set_labels, :set_unit_amount
   before_save :strip_title_and_extra
 
-  scope :budgetary, where(:widget.nin => NONBUDGETARY_WIDGETS)
-  scope :nonbudgetary, where(:widget.in => NONBUDGETARY_WIDGETS)
-  default_scope asc(:position)
+  scope :budgetary, ->{ where(:widget.nin => NONBUDGETARY_WIDGETS) }
+  scope :nonbudgetary, ->{ where(:widget.in => NONBUDGETARY_WIDGETS) }
+  default_scope ->{ asc(:position) }
 
   # @return [String] the name to display in the administrative interface
   def name
