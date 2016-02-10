@@ -33,6 +33,7 @@ gem 'formtastic', '~> 2.2.1'
 gem 'inherited_resources', '~> 1.4.1'
 gem 'sass', '~> 3.2.14'
 gem 'activeadmin-mongoid', '0.3.0'
+gem 'activeadmin', '1.0.0.pre2'
 gem 'cancan'
 gem 'devise', '~> 2.1.3' # 2.2 is backwards-incompatible
 gem 'devise-i18n'
