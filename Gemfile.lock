@@ -88,7 +88,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1.1)
-    connection_pool (1.2.0)
     dalli (2.7.4)
     devise (2.1.4)
       bcrypt-ruby (~> 3.0)
@@ -206,9 +205,6 @@ GEM
     formatador (0.2.5)
     formtastic (2.2.1)
       actionpack (>= 3.0)
-    girl_friday (0.11.2)
-      connection_pool (~> 1.0)
-      rubinius-actor
     google-api-client (0.6.4)
       addressable (>= 2.3.2)
       autoparse (>= 0.3.3)
@@ -376,9 +372,6 @@ GEM
       rspec-core (~> 2.99.0)
       rspec-expectations (~> 2.99.0)
       rspec-mocks (~> 2.99.0)
-    rubinius-actor (0.0.2)
-      rubinius-core-api
-    rubinius-core-api (0.0.1)
     ruby-ole (1.2.11.8)
     ruby-progressbar (1.7.5)
     rubyzip (0.9.9)
@@ -444,7 +437,6 @@ DEPENDENCIES
   fog
   foreman
   formtastic (~> 2.2.1)
-  girl_friday
   google-api-client (~> 0.6.4)
   haml-rails
   heroku
@@ -477,4 +469,4 @@ DEPENDENCIES
   unicorn
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
