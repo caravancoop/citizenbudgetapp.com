@@ -26,11 +26,10 @@ group :production do
 end
 
 # Database
-gem 'mongoid', '~> 3.1.0' # 4.0 is backwards-incompatible
+gem 'mongoid', '5.1'
 
 # Admin
 gem 'formtastic', '~> 2.2.1'
-gem 'activeadmin', '0.6.3'
 gem 'inherited_resources', '~> 1.4.1'
 gem 'sass', '~> 3.2.14'
 gem 'activeadmin-mongoid', '0.3.0'
@@ -44,7 +43,7 @@ gem 'mustache', '~> 0.99.0'
 # Image uploads
 gem 'fog'
 gem 'rmagick'
-gem 'carrierwave-mongoid', '~> 0.6.3'
+gem 'carrierwave-mongoid'
 
 # Views
 gem 'haml-rails'
