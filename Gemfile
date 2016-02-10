@@ -26,9 +26,6 @@ group :production do
   end
 end
 
-# Background jobs
-gem 'girl_friday'
-
 # Database
 gem 'mongoid', '~> 3.1.0' # 4.0 is backwards-incompatible
 
