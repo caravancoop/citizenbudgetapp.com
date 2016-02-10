@@ -6,26 +6,6 @@ gem 'rails-i18n'
 
 gem 'dotenv-rails'
 
-group :production do
-  # Non-Heroku deployments
-  unless ENV['HEROKU']
-    gem 'foreman'
-  end
-
-  # Error logging
-  gem 'airbrake', '~> 3.1.15'
-  gem 'rails_12factor'
-
-  # Performance
-  gem 'action_dispatch-gz_static'
-  gem 'memcachier'
-  gem 'dalli'
-
-  # Heroku deployments
-  if ENV['HEROKU']
-    gem 'newrelic_rpm'
-  end
-end
 
 # Database
 gem 'mongoid', '5.1'
@@ -92,5 +72,24 @@ end
 group :development, :test do
   gem 'rspec-rails', '~> 2.6'
 end
+group :production do
+  # Non-Heroku deployments
+  unless ENV['HEROKU']
+    gem 'foreman'
+  end
 
 gem 'unicorn'
+  # Error logging
+  gem 'airbrake', '~> 3.1.15'
+  gem 'rails_12factor'
+
+  # Performance
+  gem 'action_dispatch-gz_static'
+  gem 'memcachier'
+  gem 'dalli'
+
+  # Heroku deployments
+  if ENV['HEROKU']
+    gem 'newrelic_rpm'
+  end
+end
