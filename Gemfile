@@ -21,9 +21,9 @@ gem 'activeadmin', '1.0.0.pre2'
 gem 'cancan'
 gem 'devise'
 gem 'devise-i18n'
-gem 'mustache', '~> 0.99.0'
 gem 'google-api-client', '0.9'
 gem 'jwt'
+gem 'mustache'
 
 # Image uploads
 gem 'fog'
