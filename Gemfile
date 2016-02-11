@@ -11,6 +11,7 @@ gem 'unicorn'
 
 # Database
 gem 'mongoid', '5.1'
+gem 'mongoid_paranoia'
 
 # Admin
 gem 'activeadmin-mongoid', '0.3.0'
