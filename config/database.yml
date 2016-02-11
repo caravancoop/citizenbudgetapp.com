@@ -1,0 +1,22 @@
+defaults: &defaults
+  adapter: postgresql
+  database: <%= ENV['POSTGRESQL_DATABASE'] %>
+  username: <%= ENV['POSTGRESQL_USERNAME'] %>
+  password: <%= ENV['POSTGRESQL_PASSWORD'] %>
+  host: <%= ENV['POSTGRESQL_ADDRESS'] %>
+  encoding: utf8
+  pool: <%= ENV["DB_POOL"] || 10 %>
+  timeout: 5000
+  reconnect: false
+
+development:
+  <<: *defaults
+  database: <%= [ENV['POSTGRESQL_DATABASE'], 'development'].join('_') %>
+
+test:
+  <<: *defaults
+  database: <%= [ENV['POSTGRESQL_DATABASE'], 'test'].join('_') %>
+
+production:
+  <<: *defaults
+  database: <%= [ENV['POSTGRESQL_DATABASE'], 'production'].join('_') %>
