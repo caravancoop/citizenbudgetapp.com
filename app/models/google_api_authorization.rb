@@ -1,16 +1,12 @@
 # http://code.google.com/p/google-api-ruby-client/wiki/OAuth2
 # @note Using a JavaScript client, it's impossible for users belonging to the
 # same organization to share access to Google Analytics data.
-class GoogleApiAuthorization
-  include Mongoid::Document
-
+class GoogleApiAuthorization < ActiveRecord::Base
   class CodeExchangeError < StandardError; end
   class AccessRevokedError < StandardError; end
   class APIError < StandardError; end
 
-  embedded_in :questionnaire
-
-  field :token, type: Hash, default: {}
+  belongs_to :questionnaire
 
   # @return [Boolean] whether configuration variables are set
   def self.configured?
