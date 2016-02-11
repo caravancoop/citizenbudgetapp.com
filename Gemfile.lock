@@ -298,9 +298,15 @@ GEM
       mongo (~> 2.1)
       origin (~> 2.2)
       tzinfo (>= 0.3.37)
+    mongoid-compatibility (0.3.1)
+      activesupport
+      mongoid (>= 2.0)
     mongoid-grid_fs (2.2.1)
       mime-types (>= 1.0, < 3.0)
       mongoid (>= 3.0, < 6.0)
+    mongoid_paranoia (0.2.1)
+      mongoid (>= 4)
+      mongoid-compatibility
     multi_json (1.11.2)
     multipart-post (1.2.0)
     mustache (1.0.2)
@@ -474,7 +480,8 @@ DEPENDENCIES
   libv8 (= 3.16.14.7)
   mechanize
   memcachier
-  mongoid
+  mongoid (= 5.1)
+  mongoid_paranoia
   multi_json
   mustache
   odf-report
