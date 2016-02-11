@@ -14,8 +14,8 @@ gem 'mongoid', '5.1'
 gem 'mongoid_paranoia'
 
 # Admin
-gem 'activeadmin-mongoid', '0.3.0'
 gem 'activeadmin', '1.0.0.pre2'
+
 gem 'cancan'
 gem 'devise'
 gem 'devise-i18n'
