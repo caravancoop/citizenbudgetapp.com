@@ -11,6 +11,7 @@ gem 'unicorn'
 
 # Database
 gem 'pg'
+gem 'paranoia', '~> 2.0'
 
 # Admin
 gem 'activeadmin', '1.0.0.pre2'
