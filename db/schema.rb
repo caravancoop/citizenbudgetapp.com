@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211215427) do
+ActiveRecord::Schema.define(version: 20160211220307) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,12 +32,16 @@ ActiveRecord::Schema.define(version: 20160211215427) do
     t.string   "last_sign_in_ip"
   end
 
+  add_index "admin_users", ["organization_id"], name: "index_admin_users_on_organization_id", using: :btree
+
   create_table "google_api_authorizations", force: :cascade do |t|
     t.integer  "questionnaire_id"
     t.jsonb    "token",            default: {}
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
   end
+
+  add_index "google_api_authorizations", ["questionnaire_id"], name: "index_google_api_authorizations_on_questionnaire_id", using: :btree
 
   create_table "organizations", force: :cascade do |t|
     t.string   "name"
@@ -96,6 +100,8 @@ ActiveRecord::Schema.define(version: 20160211215427) do
     t.datetime "updated_at",                                 null: false
   end
 
+  add_index "questionnaires", ["organization_id"], name: "index_questionnaires_on_organization_id", using: :btree
+
   create_table "questions", force: :cascade do |t|
     t.integer  "section_id"
     t.string   "title"
@@ -120,6 +126,8 @@ ActiveRecord::Schema.define(version: 20160211215427) do
     t.datetime "updated_at",                 null: false
   end
 
+  add_index "questions", ["section_id"], name: "index_questions_on_section_id", using: :btree
+
   create_table "responses", force: :cascade do |t|
     t.integer  "questionnaire_id"
     t.datetime "initialized_at"
@@ -143,5 +151,7 @@ ActiveRecord::Schema.define(version: 20160211215427) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
+
+  add_index "sections", ["questionnaire_id"], name: "index_sections_on_questionnaire_id", using: :btree
 
 end
