@@ -10,8 +10,7 @@ gem 'dotenv-rails'
 gem 'unicorn'
 
 # Database
-gem 'mongoid', '5.1'
-gem 'mongoid_paranoia'
+gem 'pg'
 
 # Admin
 gem 'activeadmin', '1.0.0.pre2'
