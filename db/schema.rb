@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211220307) do
+ActiveRecord::Schema.define(version: 20160211230035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,7 +47,10 @@ ActiveRecord::Schema.define(version: 20160211220307) do
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
   end
+
+  add_index "organizations", ["deleted_at"], name: "index_organizations_on_deleted_at", using: :btree
 
   create_table "questionnaires", force: :cascade do |t|
     t.integer  "organization_id"
@@ -98,8 +101,10 @@ ActiveRecord::Schema.define(version: 20160211220307) do
     t.integer  "title_image_height"
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
+    t.datetime "deleted_at"
   end
 
+  add_index "questionnaires", ["deleted_at"], name: "index_questionnaires_on_deleted_at", using: :btree
   add_index "questionnaires", ["organization_id"], name: "index_questionnaires_on_organization_id", using: :btree
 
   create_table "questions", force: :cascade do |t|
@@ -138,7 +143,10 @@ ActiveRecord::Schema.define(version: 20160211220307) do
     t.string   "name"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.datetime "deleted_at"
   end
+
+  add_index "responses", ["deleted_at"], name: "index_responses_on_deleted_at", using: :btree
 
   create_table "sections", force: :cascade do |t|
     t.integer  "questionnaire_id"
