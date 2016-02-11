@@ -1,18 +1,9 @@
-class Section
-  include Mongoid::Document
-
+class Section < ActiveRecord::Base
   GROUPS = %w(simulator custom other)
 
-  embedded_in :questionnaire
-  embeds_many :questions
+  belongs_to :questionnaire
+  has_many :questions
 
-  field :title, type: String
-  field :description, type: String
-  field :extra, type: String
-  field :embed, type: String
-  field :group, type: String
-  field :position, type: Integer
-  index position: 1
 
   validates :group, presence: true
   validates :group, inclusion: { in: GROUPS, allow_blank: true }
