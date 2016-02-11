@@ -26,7 +26,7 @@ gem 'mustache'
 # Image uploads
 gem 'fog'
 gem 'rmagick'
-gem 'carrierwave-mongoid'
+gem 'carrierwave'
 
 # Views
 gem 'haml-rails'
