@@ -1,84 +1,20 @@
 require 'mail'
 
-class Questionnaire
-  include Mongoid::Document
   include Mongoid::Paranoia
-  include Mongoid::Timestamps
   include Mongoid::MultiParameterAttributes
+class Questionnaire < ActiveRecord::Base
 
   MODES = %w(services taxes)
   ASSESSMENT_PERIODS = %w(month year)
 
-  belongs_to :organization, index: true
-  embeds_many :sections
+  belongs_to :organization
+  has_one :google_api_authorization
+  has_many :sections
   has_many :responses
-  embeds_one :google_api_authorization, autobuild: true
+
   mount_uploader :logo, ImageUploader
   mount_uploader :title_image, ImageUploader
 
-  # Basic
-  field :title, type: String
-  field :locale, type: String
-  field :starts_at, type: Time
-  field :ends_at, type: Time
-  field :time_zone, type: String
-  field :domain, type: String
-  field :email_required, type: Boolean, default: true
-
-  # Mode
-  field :mode, type: String
-  field :starting_balance, type: Integer
-  field :maximum_deviation, type: Integer
-  field :default_assessment, type: Integer
-  field :assessment_period, type: String, default: 'month'
-  field :tax_rate, type: Float
-  field :tax_revenue, type: Integer
-  field :change_required, type: Boolean
-
-  # Appearance
-  field :logo, type: String
-  field :title_image, type: String
-  field :introduction, type: String
-  field :instructions, type: String
-  field :read_more, type: String
-  field :content_before, type: String
-  field :content_after, type: String
-  field :description, type: String
-  field :attribution, type: String
-  field :stylesheet, type: String
-  field :javascript, type: String
-
-  # Thank-you email
-  field :reply_to, type: String
-  field :thank_you_subject, type: String
-  field :thank_you_template, type: String
-
-  # Individual response
-  field :response_notice, type: String
-  field :response_preamble, type: String
-  field :response_body, type: String
-
-  # Third-party integration
-  field :google_analytics, type: String # tracking code
-  field :google_analytics_profile, type: String # table ID
-  field :twitter_screen_name, type: String
-  field :twitter_text, type: String
-  field :twitter_share_text, type: String
-  field :facebook_app_id, type: String
-  field :open_graph_title, type: String
-  field :open_graph_description, type: String
-  field :authorization_token, type: String
-
-  # Image uploaders
-  field :logo_width, type: Integer
-  field :logo_height, type: Integer
-  field :title_image_width, type: Integer
-  field :title_image_height, type: Integer
-
-  attr_protected :authorization_token, :logo_width, :logo_height,
-    :title_image_width, :title_image_height
-
-  index domain: 1
 
   validates :title, :organization_id, :mode, presence: true
   validates :default_assessment, :tax_rate, presence: true, if: ->(q){q.mode == 'taxes'}
