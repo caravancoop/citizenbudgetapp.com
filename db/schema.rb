@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211213345) do
+ActiveRecord::Schema.define(version: 20160211213700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,6 +87,30 @@ ActiveRecord::Schema.define(version: 20160211213345) do
     t.integer  "title_image_height"
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.integer  "section_id"
+    t.string   "title"
+    t.string   "description"
+    t.integer  "default_value"
+    t.integer  "size"
+    t.integer  "maxlength"
+    t.string   "placeholder"
+    t.integer  "rows"
+    t.integer  "cols"
+    t.boolean  "required"
+    t.boolean  "revenue"
+    t.string   "widget"
+    t.string   "extra"
+    t.string   "embed"
+    t.decimal  "unit_amount"
+    t.string   "unit_name"
+    t.integer  "position"
+    t.text     "options",       default: [],              array: true
+    t.text     "labels",        default: [],              array: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "responses", force: :cascade do |t|

@@ -2,37 +2,12 @@
 # of describing arbitrary forms.
 #
 # @see http://api.drupal.org/api/drupal/developer!topics!forms_api_reference.html/7
-class Question
-  include Mongoid::Document
-
+class Question < ActiveRecord::Base
   WIDGETS = %w(checkbox checkboxes onoff radio option readonly scaler select slider static text textarea)
 
   NONBUDGETARY_WIDGETS = %w(checkbox checkboxes radio readonly select static text textarea)
 
-  embedded_in :section
-
-  # Drupal Form API keys
-  field :title, type: String
-  field :description, type: String
-  field :options, type: Array # nonbudgetary widgets still use options as labels for backwards compatibility
-  field :labels, type: Array # labels are for display only
-  field :default_value # default_value needs to be cast before use
-  field :size, type: Integer
-  field :maxlength, type: Integer
-  field :placeholder, type: String # no #placeholder in Drupal FAPI: http://drupal.org/project/elements
-  field :rows, type: Integer
-  field :cols, type: Integer
-  field :required, type: Boolean
-  field :revenue, type: Boolean
-  field :criteria, type: String
-
-  field :widget, type: String
-  field :extra, type: String
-  field :embed, type: String
-  field :unit_amount, type: Float
-  field :unit_name, type: String
-  field :position, type: Integer
-  index position: 1
+  belongs_to :section
 
   attr_accessor :minimum_units, :maximum_units, :step, :options_as_list, :labels_as_list
 
