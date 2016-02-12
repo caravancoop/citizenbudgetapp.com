@@ -14,8 +14,8 @@ class Section
   field :position, type: Integer
   index position: 1
 
-  validates_presence_of :group
-  validates_inclusion_of :group, in: GROUPS, allow_blank: true
+  validates :group, presence: true
+  validates :group, inclusion: { in: GROUPS, allow_blank: true }
 
   accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
 
