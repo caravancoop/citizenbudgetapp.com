@@ -10,8 +10,8 @@ gem 'dotenv-rails'
 gem 'unicorn'
 
 # Database
-gem 'mongoid', '5.1'
-gem 'mongoid_paranoia'
+gem 'pg'
+gem 'paranoia', '~> 2.0'
 
 # Admin
 gem 'activeadmin', '1.0.0.pre2'
@@ -26,7 +26,7 @@ gem 'mustache'
 # Image uploads
 gem 'fog'
 gem 'rmagick'
-gem 'carrierwave-mongoid'
+gem 'carrierwave'
 
 # Views
 gem 'haml-rails'

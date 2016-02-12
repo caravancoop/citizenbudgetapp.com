@@ -1,29 +1,14 @@
-# coding: utf-8
+class Response < ActiveRecord::Base
+  acts_as_paranoid
 
-class Response
-  include Mongoid::Document
-  include Mongoid::Paranoia
-  include Mongoid::Timestamps
-
-  default_scope -> { where(deleted_at: nil, comments: {'$in' => ['', nil]}) }
-
-  # Don't embed, as a popular questionnaire may be over 16MB in size.
   belongs_to :questionnaire
 
-  field :initialized_at, type: Time
   field :answers, type: Hash
-  field :ip, type: String
-  field :assessment, type: Float
-
-  # This is a honeypot field.
-  field :comments, type: String
-
-  # The social sharing feature requires email and name.
-  field :email, type: String
-  field :name, type: String
 
   validates :questionnaire_id, :initialized_at, :ip, presence: true  # Answers can be blank if all radio buttons
   # We don't do more ambitious validation to avoid excluding valid responses.
+
+  default_scope -> { where(deleted_at: nil, comments: {'$in' => ['', nil]}) }
 
   # @return [Float] the time to submit the response in seconds
   def time_to_complete
