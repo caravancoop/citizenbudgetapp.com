@@ -40,16 +40,16 @@ class Questionnaire < ActiveRecord::Base
   before_save :add_domain
   before_create :set_authorization_token
 
-  scope :current, lambda { where(:starts_at.ne => nil, :ends_at.ne => nil, :starts_at.lte => Time.now, :ends_at.gte => Time.now) }
-  scope :future, lambda { where(:starts_at.ne => nil, :starts_at.gt => Time.now) }
-  scope :past, lambda { where(:ends_at.ne => nil, :ends_at.lt => Time.now) }
-  scope :active, lambda { where(:ends_at.ne => nil, :ends_at.gte => Time.now) }
+  scope :current, -> { where.not(starts_at: nil).where.not(ends_at: nil).where('starts_at <= ?', Time.now).where('ends_at >= ?', Time.now) }
+  scope :future, -> { where.not(starts_at: nil).where('starts_at > ?', Time.now) }
+  scope :past, -> { where.not(ends_at: nil).where('ends_at < ?', Time.now) }
+  scope :active, -> { where.not(ends_at: nil).where('ends_at >= ?', Time.now) }
 
   # @param [String] domain a domain name
   # @return [Enumerable] questionnaires whose domain name matches
   # @note No two active questionnaires should have the same domain.
   def self.by_domain(domain)
-    any_in(domain: [domain, sanitize_domain(domain)])
+    where('domain = ? OR domain = ?', domain, sanitize_domain(domain))
   end
 
   # @param [String] domain a domain name

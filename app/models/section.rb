@@ -13,10 +13,10 @@ class Section < ActiveRecord::Base
   after_initialize :set_default_group
   after_save :touch_questionnaire # @see https://github.com/mongoid/mongoid/pull/2195
 
-  scope :simulator, ->{ where(:group.in => %w(simulator custom)) }
+  scope :simulator, ->{ where(group: ['simulator', 'custom']) }
   scope :budgetary, ->{ where(group: 'simulator') }
   scope :nonbudgetary, ->{ where(group: 'other') }
-  default_scope ->{ asc(:position) }
+  default_scope ->{ order(position: :asc) }
 
   # @return [String] the name to display in the administrative interface
   def name

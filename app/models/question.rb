@@ -42,9 +42,9 @@ class Question < ActiveRecord::Base
   before_validation :set_options, :set_labels, :set_unit_amount
   before_save :strip_title_and_extra
 
-  scope :budgetary, ->{ where(:widget.nin => NONBUDGETARY_WIDGETS) }
-  scope :nonbudgetary, ->{ where(:widget.in => NONBUDGETARY_WIDGETS) }
-  default_scope ->{ asc(:position) }
+  scope :budgetary, ->{ where.not(widget: NONBUDGETARY_WIDGETS) }
+  scope :nonbudgetary, ->{ where(widget: NONBUDGETARY_WIDGETS) }
+  default_scope ->{ order(position: :asc) }
 
   # @return [String] the name to display in the administrative interface
   def name
