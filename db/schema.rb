@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211230035) do
+ActiveRecord::Schema.define(version: 20160212015228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 20160211230035) do
   end
 
   add_index "questionnaires", ["deleted_at"], name: "index_questionnaires_on_deleted_at", using: :btree
+  add_index "questionnaires", ["domain"], name: "index_questionnaires_on_domain", using: :btree
   add_index "questionnaires", ["organization_id"], name: "index_questionnaires_on_organization_id", using: :btree
 
   create_table "questions", force: :cascade do |t|
@@ -131,6 +132,7 @@ ActiveRecord::Schema.define(version: 20160211230035) do
     t.datetime "updated_at",                 null: false
   end
 
+  add_index "questions", ["position"], name: "index_questions_on_position", using: :btree
   add_index "questions", ["section_id"], name: "index_questions_on_section_id", using: :btree
 
   create_table "responses", force: :cascade do |t|
@@ -160,6 +162,7 @@ ActiveRecord::Schema.define(version: 20160211230035) do
     t.datetime "updated_at",       null: false
   end
 
+  add_index "sections", ["position"], name: "index_sections_on_position", using: :btree
   add_index "sections", ["questionnaire_id"], name: "index_sections_on_questionnaire_id", using: :btree
 
 end
