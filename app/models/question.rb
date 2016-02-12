@@ -154,7 +154,7 @@ class Question < ActiveRecord::Base
   end
 
   def position
-    read_attribute(:position) || _index
+    read_attribute(:position)
   end
 
 private
