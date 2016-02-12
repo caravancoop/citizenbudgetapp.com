@@ -20,3 +20,4 @@
 # CarrierWave saves files to this directory in the development environment.
 /public/uploads
 
+.env.local
