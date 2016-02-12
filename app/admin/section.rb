@@ -27,7 +27,7 @@ ActiveAdmin.register Section do
     column :questions do |s|
       s.questions.count
     end
-    default_actions
+    actions
   end
 
   form do |f|

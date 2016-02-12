@@ -72,7 +72,7 @@ ActiveAdmin.register Questionnaire do
     column :sections do |q|
       link_to_if authorized?(:read, Section), q.sections.count, [:admin, q, :sections]
     end
-    default_actions
+    actions
   end
 
   form partial: 'form'
