@@ -12,7 +12,7 @@ class AdminUser
   field :email,              :type => String, :default => ""
   field :encrypted_password, :type => String, :default => ""
 
-  validates_presence_of :email
+  validates :email, presence: true
   # validates_presence_of :encrypted_password
 
   ## Recoverable
@@ -48,10 +48,10 @@ class AdminUser
   field :role, type: String
   field :locale, type: String
 
-  validates_presence_of :role
-  validates_presence_of :organization_id, unless: ->(a){a.role == 'superuser'}
-  validates_inclusion_of :role, in: ROLES, allow_blank: true
-  validates_inclusion_of :locale, in: Locale.available_locales, allow_blank: true
+  validates :role, presence: true
+  validates :organization_id, presence: true, unless: ->(a){a.role == 'superuser'}
+  validates :role, inclusion: { in: ROLES }, allow_blank: true
+  validates :locale, inclusion: { in: Locale.available_locales }, allow_blank: true
 
   before_save :set_locale
 

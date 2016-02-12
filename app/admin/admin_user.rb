@@ -8,7 +8,7 @@ ActiveAdmin.register AdminUser do
     column :locale do |a|
       Locale.locale_name(a.locale) if a.locale?
     end
-    default_actions
+    actions
   end
 
   form partial: 'form'

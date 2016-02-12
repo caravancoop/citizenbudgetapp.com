@@ -80,19 +80,19 @@ class Questionnaire
 
   index domain: 1
 
-  validates_presence_of :title, :organization_id, :mode
-  validates_presence_of :default_assessment, :tax_rate, if: ->(q){q.mode == 'taxes'}
-  validates_presence_of :tax_revenue, if: ->(q){q.mode == 'services' && q.tax_rate?}
-  validates_inclusion_of :mode, in: MODES, allow_blank: true
-  validates_inclusion_of :locale, in: Locale.available_locales, allow_blank: true
-  validates_inclusion_of :time_zone, in: ActiveSupport::TimeZone.all.map(&:name), allow_blank: true
-  validates_numericality_of :starting_balance, only_integer: true, allow_blank: true
-  validates_numericality_of :maximum_deviation, greater_than_or_equal_to: 0, only_integer: true, allow_blank: true
-  validates_numericality_of :default_assessment, :tax_revenue, greater_than: 0, only_integer: true, allow_blank: true
-  validates_numericality_of :tax_rate, greater_than: 0, less_than: 1, allow_blank: true
-  validates_length_of :twitter_text, maximum: 140, allow_blank: true
-  validates_length_of :twitter_share_text, maximum: 140, allow_blank: true
-  validates_uniqueness_of :domain, allow_blank: true
+  validates :title, :organization_id, :mode, presence: true
+  validates :default_assessment, :tax_rate, presence: true, if: ->(q){q.mode == 'taxes'}
+  validates :tax_revenue, presence: true, if: ->(q){q.mode == 'services' && q.tax_rate?}
+  validates :mode, inclusion: { in: MODES }, allow_blank: true
+  validates :locale, inclusion: { in: Locale.available_locales }, allow_blank: true
+  validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }, allow_blank: true
+  validates :starting_balance, numericality: { only_integer: true, allow_blank: true }
+  validates :maximum_deviation, numericality: { greater_than_or_equal_to: 0, only_integer: true }, allow_blank: true
+  validates :default_assessment, :tax_revenue, numericality: { greater_than: 0, only_integer: true }, allow_blank: true
+  validates :tax_rate, numericality: { greater_than: 0, less_than: 1 }, allow_blank: true
+  validates :twitter_text, length: { maximum: 140 }, allow_blank: true
+  validates :twitter_share_text, length: { maximum: 140 }, allow_blank: true
+  validates :domain, uniqueness: true, allow_blank: true
   validates :reply_to, email: true, allow_blank: true
   validate :ends_at_must_be_greater_than_starts_at
   validate :domain_must_be_active

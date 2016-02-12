@@ -7,5 +7,5 @@ class Organization
 
   field :name, type: String
 
-  validates_presence_of :name
+  validates :name, presence: true
 end

@@ -1,4 +1,11 @@
-@import "bootstrap";
+// Variables
+@import "variables";
+
+// Bootstrap
+$icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
+@import "bootstrap-sass/assets/stylesheets/bootstrap-sprockets";
+@import "bootstrap-sass/assets/stylesheets/bootstrap";
+
 
 // Chromium < 20 doesn't render check boxes and radio buttons.
 //

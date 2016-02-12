@@ -19,3 +19,9 @@
 
 # CarrierWave saves files to this directory in the development environment.
 /public/uploads
+
+# Ignore bower and node packages
+/bower_components
+/node_modules
+
+.env.local

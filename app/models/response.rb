@@ -5,7 +5,7 @@ class Response
   include Mongoid::Paranoia
   include Mongoid::Timestamps
 
-  default_scope where(deleted_at: nil, comments: {'$in' => ['', nil]})
+  default_scope -> { where(deleted_at: nil, comments: {'$in' => ['', nil]}) }
 
   # Don't embed, as a popular questionnaire may be over 16MB in size.
   belongs_to :questionnaire
@@ -22,7 +22,7 @@ class Response
   field :email, type: String
   field :name, type: String
 
-  validates_presence_of :questionnaire_id, :initialized_at, :ip  # Answers can be blank if all radio buttons
+  validates :questionnaire_id, :initialized_at, :ip, presence: true  # Answers can be blank if all radio buttons
   # We don't do more ambitious validation to avoid excluding valid responses.
 
   # @return [Float] the time to submit the response in seconds

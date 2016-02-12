@@ -14,18 +14,18 @@ class Section
   field :position, type: Integer
   index position: 1
 
-  validates_presence_of :group
-  validates_inclusion_of :group, in: GROUPS, allow_blank: true
+  validates :group, presence: true
+  validates :group, inclusion: { in: GROUPS, allow_blank: true }
 
   accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
 
   after_initialize :set_default_group
   after_save :touch_questionnaire # @see https://github.com/mongoid/mongoid/pull/2195
 
-  scope :simulator, where(:group.in => %w(simulator custom))
-  scope :budgetary, where(group: 'simulator')
-  scope :nonbudgetary, where(group: 'other')
-  default_scope asc(:position)
+  scope :simulator, ->{ where(:group.in => %w(simulator custom)) }
+  scope :budgetary, ->{ where(group: 'simulator') }
+  scope :nonbudgetary, ->{ where(group: 'other') }
+  default_scope ->{ asc(:position) }
 
   # @return [String] the name to display in the administrative interface
   def name

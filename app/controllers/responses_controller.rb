@@ -29,7 +29,7 @@ class ResponsesController < ApplicationController
       params[:response][:assessment].gsub!(/[^0-9.-]/, '')
     end
 
-    @response = @questionnaire.responses.build(params[:response])
+    @response = @questionnaire.responses.build(response_params)
     @response.answers = params.select{|k,_| k[/\A[a-f0-9]{24}\z/]}
     @response.ip      = request.ip
     @response.save! # There shouldn't be errors.
@@ -61,6 +61,10 @@ class ResponsesController < ApplicationController
 
 private
 
+  def response_params
+    params[:response].permit(:answers, :assessment, :comments, :email, :initialized_at, :name)
+  end
+
   def set_locale
     I18n.locale = locale_from_record(@questionnaire) || super
   end
@@ -68,7 +72,14 @@ private
   def find_questionnaire
     if params[:token]
       @questionnaire = Questionnaire.where(authorization_token: params[:token]).first
-      if @questionnaire && @questionnaire.current? && @questionnaire.domain? && ![@questionnaire.domain, ENV['ACTION_MAILER_HOST']].include?(request.host) && params[:action] == 'new' && !Rails.env.development?
+
+      if @questionnaire.present? &&
+        @questionnaire.current? &&
+        @questionnaire.domain? &&
+        ![@questionnaire.domain, ENV['ACTION_MAILER_HOST']].include?(request.host) &&
+        params[:action] == 'new' &&
+        !Rails.env.development?
+
         redirect_to root_url(host: @questionnaire.domain, port: nil)
       end
     end
