@@ -513,7 +513,6 @@ DEPENDENCIES
   foreman
   google-api-client (= 0.9)
   haml-rails
-  jquery-rails
   jwt
   libv8 (= 3.16.14.7)
   mechanize
