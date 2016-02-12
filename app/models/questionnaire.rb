@@ -1,8 +1,8 @@
 require 'mail'
 
-  include Mongoid::Paranoia
   include Mongoid::MultiParameterAttributes
 class Questionnaire < ActiveRecord::Base
+  acts_as_paranoid
 
   MODES = %w(services taxes)
   ASSESSMENT_PERIODS = %w(month year)
