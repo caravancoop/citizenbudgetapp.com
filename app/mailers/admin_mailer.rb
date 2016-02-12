@@ -6,12 +6,14 @@
 # @see config/initializers/devise.rb
 class AdminMailer < Devise::Mailer
   default from: ENV['ACTION_MAILER_FROM']
+  default reply_to: ENV['ACTION_MAILER_REPLY_TO']
 
-  def reset_password_instructions(record) # @see https://github.com/plataformatec/devise/wiki/How-To:-Upgrade-to-Devise-2.2
+  def reset_password_instructions(record, token, opts={})
     I18n.with_locale(record.locale) do
       initialize_from_record(record)
 
       @host = ActionMailer::Base.default_url_options[:host] || I18n.t('app.host')
+
       if record.organization
         questionnaire = record.organization.questionnaires.last
         if questionnaire && questionnaire.domain?
@@ -19,10 +21,7 @@ class AdminMailer < Devise::Mailer
         end
       end
 
-      headers = headers_for(:reset_password_instructions)
-      headers.merge! reply_to: ENV['ACTION_MAILER_REPLY_TO']
-      headers.delete :template_path
-      mail headers
+      super
     end
   end
 end
