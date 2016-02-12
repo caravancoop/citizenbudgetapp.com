@@ -15,6 +15,7 @@
 //
 //= require jquery/dist/jquery
 //= require jquery-ujs/src/rails
+//= require bootstrap-sass/assets/javascripts/bootstrap-sprockets
 //= require_tree ./libs
 //= require_tree ./plugins
 //= require i18n
