@@ -39,26 +39,26 @@ class Question
   # @todo Somehow, undeletable empty, invalid questions appear in sections.
   # validates_presence_of :widget
   # validates_presence_of :title, unless: ->(q){q.widget == 'readonly'}
-  validates_inclusion_of :widget, in: WIDGETS, allow_blank: true
-  validates_numericality_of :unit_amount, allow_blank: true
+  validates :widget, inclusion: { in: WIDGETS }, allow_blank: true
+  validates :unit_amount, numericality: true, allow_blank: true
   validates_inclusion_of :criteria, in: ->(q) { q.section.criterion }, allow_blank: true
 
   # HTML attribute validations.
-  validates_numericality_of :size, :maxlength, greater_than: 0, only_integer: true, allow_blank: true, if: ->(q){q.widget == 'text'}
-  validates_numericality_of :rows, :cols, greater_than: 0, only_integer: true, allow_blank: true, if: ->(q){q.widget == 'textarea'}
+  validates :size, :maxlength, numericality: { greater_than: 0, only_integer: true }, allow_blank: true, if: ->(q){q.widget == 'text'}
+  validates :rows, :cols, numericality: { greater_than: 0, only_integer: true }, allow_blank: true, if: ->(q){q.widget == 'textarea'}
 
   # Budgetary widget validations.
-  validates_presence_of :unit_amount, if: ->(q){%w(onoff option scaler slider static).include?(q.widget)}
-  validates_presence_of :default_value, if: ->(q){%w(onoff option scaler slider).include?(q.widget)}
-  validates_numericality_of :unit_amount, allow_blank: true, if: ->(q){%w(onoff option scaler slider static).include?(q.widget)}
-  validates_numericality_of :default_value, allow_blank: true, if: ->(q){%w(onoff option scaler slider).include?(q.widget)}
-  validates_presence_of :options, if: ->(q){%w(checkboxes onoff option radio scaler select slider).include?(q.widget)}
-  validates_presence_of :labels, if: ->(q){q.widget == 'option'}
+  validates :unit_amount, presence: true, if: ->(q){%w(onoff option scaler slider static).include?(q.widget)}
+  validates :default_value, presence: true, if: ->(q){%w(onoff option scaler slider).include?(q.widget)}
+  validates :unit_amount, numericality: true, allow_blank: true, if: ->(q){%w(onoff option scaler slider static).include?(q.widget)}
+  validates :default_value, numericality: true, allow_blank: true, if: ->(q){%w(onoff option scaler slider).include?(q.widget)}
+  validates :options, presence: true, if: ->(q){%w(checkboxes onoff option radio scaler select slider).include?(q.widget)}
+  validates :labels, presence: true, if: ->(q){q.widget == 'option'}
 
   # Slider validations.
-  validates_presence_of :minimum_units, :maximum_units, :step, if: ->(q){%w(scaler slider).include?(q.widget)}
-  validates_numericality_of :minimum_units, :maximum_units, allow_blank: true, if: ->(q){%w(scaler slider).include?(q.widget)}
-  validates_numericality_of :step, greater_than: 0, allow_blank: true, if: ->(q){%w(scaler slider).include?(q.widget)}
+  validates :minimum_units, :maximum_units, :step, presence: true, if: ->(q){%w(scaler slider).include?(q.widget)}
+  validates :minimum_units, :maximum_units, numericality: true, allow_blank: true, if: ->(q){%w(scaler slider).include?(q.widget)}
+  validates :step, numericality: { greater_than: 0 }, allow_blank: true, if: ->(q){%w(scaler slider).include?(q.widget)}
   validate :maximum_units_must_be_greater_than_minimum_units, if: ->(q){%w(scaler slider).include?(q.widget)}
   validate :default_value_must_be_between_minimum_and_maximum, if: ->(q){%w(scaler slider).include?(q.widget)}
   validate :default_value_must_be_an_option, if: ->(q){%w(scaler slider option).include?(q.widget)}
