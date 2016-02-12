@@ -29,7 +29,7 @@ class ResponsesController < ApplicationController
       params[:response][:assessment].gsub!(/[^0-9.-]/, '')
     end
 
-    @response = @questionnaire.responses.build(params[:response])
+    @response = @questionnaire.responses.build(response_params)
     @response.answers = params.select{|k,_| k[/\A[a-f0-9]{24}\z/]}
     @response.ip      = request.ip
     @response.save! # There shouldn't be errors.
@@ -60,6 +60,10 @@ class ResponsesController < ApplicationController
   end
 
 private
+
+  def response_params
+    params[:response].permit(:answers, :assessment, :comments, :email, :initialized_at, :name)
+  end
 
   def set_locale
     I18n.locale = locale_from_record(@questionnaire) || super
