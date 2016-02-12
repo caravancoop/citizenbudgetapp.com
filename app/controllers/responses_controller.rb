@@ -73,12 +73,12 @@ private
     if params[:token]
       @questionnaire = Questionnaire.where(authorization_token: params[:token]).first
 
-      if @questionnaire
-        && @questionnaire.current?
-        && @questionnaire.domain?
-        && ![@questionnaire.domain, ENV['ACTION_MAILER_HOST']].include?(request.host)
-        && params[:action] == 'new'
-        && !Rails.env.development?
+      if @questionnaire.present? &&
+        @questionnaire.current? &&
+        @questionnaire.domain? &&
+        ![@questionnaire.domain, ENV['ACTION_MAILER_HOST']].include?(request.host) &&
+        params[:action] == 'new' &&
+        !Rails.env.development?
 
         redirect_to root_url(host: @questionnaire.domain, port: nil)
       end
