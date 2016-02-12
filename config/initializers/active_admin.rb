@@ -1,5 +1,4 @@
 ActiveAdmin.setup do |config|
-
   # == Site Title
   #
   # Set the title that is displayed on the main layout
@@ -15,9 +14,9 @@ ActiveAdmin.setup do |config|
   # Set an optional image to be displayed for the header
   # instead of a string (overrides :site_title)
   #
-  # Note: Recommended image height is 21px to properly fit in the header
+  # Note: Aim for an image that's 21px high so it fits in the header.
   #
-  # config.site_title_image = "/images/logo.png"
+  # config.site_title_image = "logo.png"
 
   # == Default Namespace
   #
@@ -54,9 +53,31 @@ ActiveAdmin.setup do |config|
   # ensure that there is a currently logged in admin user.
   #
   # This setting changes the method which Active Admin calls
-  # within the controller.
+  # within the application controller.
   config.authentication_method = :authenticate_admin_user!
 
+  # == User Authorization
+  #
+  # Active Admin will automatically call an authorization
+  # method in a before filter of all controller actions to
+  # ensure that there is a user with proper rights. You can use
+  # CanCanAdapter or make your own. Please refer to documentation.
+  config.authorization_adapter = ActiveAdmin::CanCanAdapter
+
+  # In case you prefer Pundit over other solutions you can here pass
+  # the name of default policy class. This policy will be used in every
+  # case when Pundit is unable to find suitable policy.
+  # config.pundit_default_policy = "MyDefaultPunditPolicy"
+
+  # You can customize your CanCan Ability class name here.
+  # config.cancan_ability_class = "Ability"
+
+  # You can specify a method to be called on unauthorized access.
+  # This is necessary in order to prevent a redirect loop which happens
+  # because, by default, user gets redirected to Dashboard. If user
+  # doesn't have access to Dashboard, he'll end up in a redirect loop.
+  # Method provided here should be defined in application_controller.rb.
+  # config.on_unauthorized_access = :access_denied
 
   # == Current User
   #
@@ -64,9 +85,8 @@ ActiveAdmin.setup do |config|
   # user performing them.
   #
   # This setting changes the method which Active Admin calls
-  # to return the currently logged in user.
+  # (within the application controller) to return the currently logged in user.
   config.current_user_method = :current_admin_user
-
 
   # == Logging Out
   #
@@ -96,27 +116,26 @@ ActiveAdmin.setup do |config|
 
   # == Admin Comments
   #
-  # Admin comments allow you to add comments to any model for admin use.
-  # Admin comments are enabled by default.
+  # This allows your users to comment on any resource registered with Active Admin.
   #
-  # Default:
-  # config.allow_comments = true
+  # You can completely disable comments:
+  # config.comments = true
+
+  # You can disable the menu item for the comments index page:
+  # config.show_comments_in_menu = false
   #
-  # You can turn them on and off for any given namespace by using a
-  # namespace config block.
+  # You can change the name under which comments are registered:
+  # config.comments_registration_name = 'AdminComment'
   #
-  # Eg:
-  #   config.namespace :without_comments do |without_comments|
-  #     without_comments.allow_comments = false
-  #   end
-  config.allow_comments = false
+  # You can change the order for the comments and you can change the column
+  # to be used for ordering
+  # config.comments_order = 'created_at ASC'
 
   # == Batch Actions
   #
   # Enable and disable Batch Actions
   #
   config.batch_actions = false
-
 
   # == Controller Filters
   #
@@ -125,6 +144,37 @@ ActiveAdmin.setup do |config|
   #
   # config.before_filter :do_something_awesome
 
+  # == Localize Date/Time Format
+  #
+  # Set the localize format to display dates and times.
+  # To understand how to localize your app with I18n, read more at
+  # https://github.com/svenfuchs/i18n/blob/master/lib%2Fi18n%2Fbackend%2Fbase.rb#L52
+  #
+  config.localize_format = :long
+
+  # == Setting a Favicon
+  #
+  # config.favicon = 'favicon.ico'
+
+  # == Meta Tags
+  #
+  # Add additional meta tags to the head element of active admin pages.
+  #
+  # Add tags to all pages logged in users see:
+  #   config.meta_tags = { author: 'My Company' }
+
+  # By default, sign up/sign in/recover password pages are excluded
+  # from showing up in search engine results by adding a robots meta
+  # tag. You can reset the hash of meta tags included in logged out
+  # pages:
+  #   config.meta_tags_for_logged_out_pages = {}
+
+  # == Removing Breadcrumbs
+  #
+  # Breadcrumbs are enabled by default. You can customize them for individual
+  # resources or you can disable them globally from here.
+  #
+  # config.breadcrumb = false
 
   # == Register Stylesheets & Javascripts
   #
@@ -134,24 +184,22 @@ ActiveAdmin.setup do |config|
   #
   # To load a stylesheet:
   #   config.register_stylesheet 'my_stylesheet.css'
-
+  #
   # You can provide an options hash for more control, which is passed along to stylesheet_link_tag():
-  #   config.register_stylesheet 'my_print_stylesheet.css', :media => :print
+  #   config.register_stylesheet 'my_print_stylesheet.css', media: :print
   #
   # To load a javascript file:
   #   config.register_javascript 'my_javascript.js'
   config.register_javascript 'https://www.google.com/jsapi'
   config.register_javascript 'https://apis.google.com/js/client.js'
 
-
   # == CSV options
   #
-  # Set the CSV builder separator (default is ",")
-  # config.csv_column_separator = ','
+  # Set the CSV builder separator
+  # config.csv_options = { col_sep: ';' }
   #
-  # Set the CSV builder options (default is {})
-  # config.csv_options = {}
-
+  # Force the use of quotes
+  # config.csv_options = { force_quotes: true }
 
   # == Menu System
   #
@@ -173,6 +221,7 @@ ActiveAdmin.setup do |config|
   #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: :blank }
   #     end
   #   end
+
   config.namespace :admin do |admin|
     admin.build_menu :default do |menu|
       menu.add(label: '⚐', url: '#', priority: 100) do |locales|
@@ -198,7 +247,12 @@ ActiveAdmin.setup do |config|
   #     # Only show XML & PDF options
   #     admin.download_links = [:xml, :pdf]
   #
+  #     # Enable/disable the links based on block
+  #     #   (for example, with cancan)
+  #     admin.download_links = proc { can?(:view_download_links) }
+  #
   #   end
+
   config.download_links = false
 
   # == Pagination
@@ -207,19 +261,16 @@ ActiveAdmin.setup do |config|
   # You can control the default per page count for all resources here.
   #
   # config.default_per_page = 30
-
+  #
+  # You can control the max per page count too.
+  #
+  # config.max_per_page = 10_000
 
   # == Filters
   #
-  # By default the index screen includes a “Filters” sidebar on the right
+  # By default the index screen includes a "Filters" sidebar on the right
   # hand side with a filter for each attribute of the registered model.
   # You can enable or disable them for all resources here.
-  #
-  # config.filters = true
+
   config.filters = false
-
-  config.authorization_adapter = ActiveAdmin::CanCanAdapter
-
-  # Useful for debugging.
-  # config.on_unauthorized_access = :access_denied
 end
