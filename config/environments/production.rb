@@ -54,6 +54,13 @@ Rails.application.configure do
   # Use a different logger for distributed setups.
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
+  # Use lograge
+  config.lograge.enabled = true
+  config.lograge.custom_options = lambda do |event|
+    params = event.payload[:params].reject { |k| %w(controller action).include?(k) }
+    { "params" => params }
+  end
+
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
   config.cache_store = :dalli_store
