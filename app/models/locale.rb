@@ -1,4 +1,3 @@
-# coding: utf-8
 class Locale
   LOCALES = {
     'en' => 'English (United States)',
