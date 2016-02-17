@@ -63,6 +63,7 @@ CitizenBudget::Application.configure do
     simulators/deviation_simulator.js
     simulators/impact_simulator.js
     simulators/tax_simulator.js
+    mobile.css
     print.css
   )
 
