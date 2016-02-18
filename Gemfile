@@ -61,12 +61,19 @@ group :assets do
 end
 
 group :development, :test do
-  gem 'rspec-rails'
+  gem 'foreman'
+
   gem 'pry-rails'
   gem 'byebug'
+
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'ffaker'
+
+  gem 'brakeman', require: false
+  gem 'dawnscanner', require: false
 end
 
-# For maintenance scripts to run in development console.
 group :development do
   gem 'mechanize'
   gem 'odf-report'
@@ -79,6 +86,10 @@ group :production do
   unless ENV['HEROKU']
     gem 'foreman'
   end
+group :test do
+  gem 'database_cleaner'
+  gem 'shoulda-matchers', '~> 3.1'
+end
 
   # Error logging
   gem 'airbrake', '~> 3.1.15'
