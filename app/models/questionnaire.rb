@@ -35,7 +35,6 @@ class Questionnaire < ActiveRecord::Base
   validate :mode_must_match_options
 
   before_validation :sanitize_domain
-  before_save :add_domain
   before_create :set_authorization_token
 
   scope :current, -> { where.not(starts_at: nil).where.not(ends_at: nil).where('starts_at <= ?', Time.now).where('ends_at >= ?', Time.now) }
@@ -457,38 +456,6 @@ private
     loop do
       self.authorization_token = SecureRandom.base64(15).tr('+/=lIO0', 'pqrsxyz')
       break unless self.class.where(authorization_token: authorization_token).first
-    end
-  end
-
-  # Adds the questionnaire's domain to the app's custom domains list on Heroku.
-  # @todo Will not add a "www" subdomain to domains ending in "co.uk"
-  def add_domain
-    if HerokuClient.configured? && domain_changed?
-      domains = HerokuClient.list_domains
-
-      if domain_was.present?
-        queue = [domain_was]
-        if domain_was.split('.').size == 2
-          queue << "www.#{domain_was}"
-        end
-        queue.each do |d|
-          if domains.include?(d)
-            HerokuClient.remove_domain(d)
-          end
-        end
-      end
-
-      if domain.present?
-        queue = [domain]
-        if domain.split('.').size == 2
-          queue << "www.#{domain}"
-        end
-        queue.each do |d|
-          unless domains.include?(d)
-            HerokuClient.add_domain(d)
-          end
-        end
-      end
     end
   end
 end
