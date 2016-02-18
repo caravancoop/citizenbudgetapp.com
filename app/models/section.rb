@@ -4,7 +4,6 @@ class Section < ActiveRecord::Base
   belongs_to :questionnaire
   has_many :questions
 
-
   validates :group, presence: true
   validates :group, inclusion: { in: GROUPS, allow_blank: true }
 
