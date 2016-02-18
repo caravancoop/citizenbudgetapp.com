@@ -81,11 +81,6 @@ group :development do
   gem 'binding_of_caller'
 end
 
-group :production do
-  # Non-Heroku deployments
-  unless ENV['HEROKU']
-    gem 'foreman'
-  end
 group :test do
   gem 'database_cleaner'
   gem 'shoulda-matchers', '~> 3.1'
@@ -99,9 +94,4 @@ end
   gem 'action_dispatch-gz_static'
   gem 'memcachier'
   gem 'dalli'
-
-  # Heroku deployments
-  if ENV['HEROKU']
-    gem 'newrelic_rpm'
-  end
 end
