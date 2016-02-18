@@ -146,11 +146,9 @@ class Question < ActiveRecord::Base
     cast_value(default_value)
   end
 
-  def position
-    read_attribute(:position)
-  end
 
 private
+
   def get_options
     if %w(scaler slider).include?(widget) && options.present?
       @minimum_units = options.first.to_f
