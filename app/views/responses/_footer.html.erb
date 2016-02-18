@@ -1,0 +1,58 @@
+<footer>
+  <% if @questionnaire && @questionnaire.attribution.present? %>
+    <%= @questionnaire.attribution %>
+  <% else %>
+    <%= t '.attribution' %>
+  <% end %>
+  <%= link_to t('app.product_name'), t('app.product_url') %>
+</footer>
+<% content_for :footer do %>
+  <% if @questionnaire.mode == 'taxes' %>
+    <%= javascript_include_tag 'simulators/tax_simulator' %>
+    <script>
+      var klass = TaxSimulator;
+    </script>
+  <% elsif @questionnaire.maximum_deviation? %>
+    <%= javascript_include_tag 'simulators/deviation_simulator' %>
+    <script>
+      var klass = DeviationSimulator;
+    </script>
+  <% elsif @questionnaire.tax_rate? %>
+    <%= javascript_include_tag 'simulators/impact_simulator' %>
+    <script>
+      var klass = ImpactSimulator;
+    </script>
+  <% else %>
+    <%= javascript_include_tag 'simulators/default_simulator' %>
+    <script>
+      var klass = DefaultSimulator;
+    </script>
+  <% end %>
+
+  <script>
+    var simulator_options = {
+      questionnaire_id: '<%= @questionnaire.id.to_s} %>',
+      disabled: <%= disabled %>,
+      change_required: <%= !!@questionnaire.change_required %>,
+      maximum_difference: <%= @maximum_difference %>,
+      starting_balance: <%= @questionnaire.starting_balance.to_i %>,
+      maximum_deviation: <%= @questionnaire.maximum_deviation.to_i %>,
+      default_assessment: <%= @questionnaire.default_assessment.to_i %>,
+      assessment_period: '<%= @questionnaire.assessment_period %>',
+      tax_rate: <%= @questionnaire.tax_rate.to_f %>,
+      tax_revenue: <%= @questionnaire.tax_revenue.to_i %>
+    };
+  </script>
+
+  <% if @questionnaire.javascript? %>
+    <coffeescript>
+      <%= @questionnaire.javascript %>
+    </coffeescript>
+  <% end %>
+  <script>
+    if (typeof CustomSimulator !== 'undefined') {
+      klass = CustomSimulator;
+    }
+    var main_simulator = new klass(simulator_options)
+  </script>
+<% end %>

@@ -1,0 +1,13 @@
+<script>
+  google.load('visualization', '1', { language: '#{iso639_locale}' });
+</script>
+
+<% if @questionnaires.future.count.nonzero? %>
+  <%= render partial: 'future', collection: @questionnaires.future, as: :questionnaire %>
+<% end %>
+<% if @questionnaires.current.count.nonzero? %>
+  <%= render partial: 'current', collection: @questionnaires.current, as: :questionnaire %>
+<% end %>
+<% unless authorized?(:manage, :all) || @questionnaires.past.count.zero? %>
+  <%= render partial: 'current', collection: @questionnaires.past, as: :questionnaire %>
+<% end %>
