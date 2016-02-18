@@ -1,5 +1,14 @@
 class QuestionnairePresenter < Bourgeois::Presenter
 
+
+  def logo_image
+    options = {alt: ''}
+    if self.logo_height?
+      options[:height] = [self.logo_height, 100].min
+    end
+    link_to_unless_current image_tag(self.logo.large.url, options), root_path
+  end
+
   # @return [Integer] the number of days elapsed
   def days_elapsed
     (today - starts_on).to_i

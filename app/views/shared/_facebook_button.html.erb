@@ -1,0 +1,13 @@
+<% html_options = {
+  'class'           => 'fb-like',
+  'data-send'       => 'true',
+  'data-layout'     => 'button_count',
+  'data-show-faces' => 'false',
+  'data-width'      => t(:facebook_width),
+} %>
+
+<%  if questionnaire %>
+  <% html_options['data-href'] = questionnaire.domain_url %>
+<% end %>
+
+<%= content_tag(:div, nil, html_options) %>
