@@ -31,6 +31,7 @@ gem 'carrierwave'
 # Views
 gem 'rdiscount'
 gem 'unicode_utils'
+gem 'bourgeois'
 
 # Export
 gem 'spreadsheet'
