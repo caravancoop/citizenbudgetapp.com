@@ -1,0 +1,32 @@
+<header>
+  <% if @questionnaire.logo? %>
+    <div id="logo">
+      <%= logo %>
+    </div>
+  <% end %>
+
+  <h1 class="clearfix">
+    <% if local_assigns[:header] %>
+      <%= header %>
+    <% else %>
+      <% if @questionnaire.title_image? %>
+        <%= image_tag @questionnaire.title_image.medium.url, height: '100', alt: '' %>
+      <% end %>
+
+      <markdown>
+        <%= @questionnaire.title %>
+      </markdown>
+    <% end %>
+  </h1>
+
+  <!--[if gt IE 7]><!-->
+  <div id="facebook">
+    <%= facebook_button %>
+  </div>
+  <!--<![endif]-->
+  <!--[if gt IE 8]><!-->
+  <div id="twitter">
+    <%= twitter_button %>
+  </div>
+  <!--<![endif]-->
+</header>

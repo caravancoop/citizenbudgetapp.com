@@ -1,0 +1,36 @@
+<div class="panel">
+  <h3>
+    <%= auto_link questionnaire.organization %>
+    –
+    <%= auto_link questionnaire %>
+  </h3>
+  <div class="panel_contents">
+    <div class="attributes_table">
+      <table>
+        <tbody>
+          <% if questionnaire.starts_at? %>
+            <tr>
+              <th>
+                <%= t '.table.starts_at' %>
+              </th>
+              <td>
+                <%= l questionnaire.local_starts_at, format: :short %>
+              </td>
+            </tr>
+          <% end %>
+          <tr>
+            <th>
+              <%= t '.table.url' %>
+            </th>
+            <td>
+              <span rel="tooltip" title="<%= t('.copy_hint') %>" id="<%= dom_id(questionnaire) %>">
+                <span class="clippy" data-text="<%= token_url questionnaire %>" data-tooltip="<%= dom_id(questionnaire) %>"></span>
+              </span>
+              <%= link_to token_url(questionnaire), token_url(questionnaire) %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

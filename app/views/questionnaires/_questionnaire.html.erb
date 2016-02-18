@@ -1,0 +1,283 @@
+<% if @questionnaire.stylesheet? %>
+  <% content_for :head do %>
+    <style>
+      <%= @questionnaire.stylesheet.html_safe %>
+    </style>
+  <% end %>
+<% end %>
+
+<% @simulator.each do |section| %>
+  <table id="<%= table_id(section) %>" class="<%= section.group %>">
+    <thead>
+      <% unless section.title.blank? && section.nonbudgetary? %>
+        <tr>
+          <th class="category">
+            <%= render partial: 'title', locals: { object: section, placement: 'bottom' } %>
+          </th>
+          <th class="column highlight">
+            <% unless section.nonbudgetary? %>
+              <%= t '.your_choice' %>
+            <% end %>
+          </th>
+        </tr>
+      <% end %>
+      <% if section.description? %>
+        <tr>
+          <td class="description" colspan="2">
+            <markdown>
+              <%= section.description %>
+            </markdown>
+          </td>
+        </tr>
+      <% end %>
+    </thead>
+
+    <tbody>
+      <% section.questions.each do |q| %>
+        <% unless @response.persisted? && %w(text textarea).include?(q.widget) %>
+          <tr id="question-<%= q.id %>">
+            <% if q.readonly? %>
+              <td class="description" colspan="2">
+                <% if q.title? %>
+                  <div class="header">
+                    <%= render partial: 'title', locals: { object: q, placement: 'bottom' } %>
+                  </div>
+                <% end %>
+                <% if q.description? %>
+                  <markdown>
+                    <%= q.description %>
+                  </markdown>
+                <% end %>
+              </td>
+            <% elsif q.widget == 'static' %>
+              <td class="description">
+                <div class="header">
+                  <%= render partial: 'title', locals: { object: q, placement: 'top' } %>
+                </div>
+                <% if q.description? %>
+                  <markdown>
+                    <%= q.description %>
+                  </markdown>
+                <% end %>
+              </td>
+              <td class="highlight">
+                <div class="widget widget-<%= q.widget %>">
+                  <div class="control control-static" data-widget="<%= q.widget %>" data-value="<%= q.unit_amount %>"></div>
+                </div>
+              </td>
+            <% elsif q.nonbudgetary? %>
+              <td class="description" colspan="2">
+                <div class="header">
+                  <%= render partial: 'title', locals: { object: q, placement: 'bottom' } %>
+                </div>
+                <% if q.description? %>
+                  <markdown>
+                    <%= q.description %>
+                  </markdown>
+                <% end %>
+                <% # @todo Implement checkbox widget. %>
+                <% if %w(checkboxes radio).include?(q.widget) %>
+                  <fieldset>
+                    <div class="control-group">
+                      <div class="controls">
+                        <% if q.widget == 'checkboxes' %>
+                          <% q.options.each do |option| %>
+                            <%= label_tag nil, class: 'checkbox' do %>
+                              <% if @response.persisted? %>
+                                <%= check_box_tag "#{q.id}[]", option, @response.answer(q).include?(option), disabled: true %>
+                              <% else %>
+                                <%= check_box_tag "#{q.id}[]", option %>
+                              <% end %>
+                              <%= option %>
+                            <% end %>
+                          <% end %>
+                        <% elsif q.widget == 'radio' %>
+                          <% q.options.each do |option| %>
+                            <%= label_tag nil, class: 'radio' do %>
+                              <% if @response.persisted? %>
+                                <%= radio_button_tag q.id, option, @response.answer(q) == option, disabled: true %>
+                              <% else %>
+                                <%= radio_button_tag q.id, option %>
+                              <% end %>
+                              <%= option %>
+                            <% end %>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    </div>
+                  </fieldset>
+                <% elsif %w(select text textarea).include?(q.widget) %>
+                  <% if q.widget == 'select' %>
+                    <%= select_tag q.id, options_for_select(q.options, @response.answer(q)), html_attributes(q) %>
+                  <% elsif q.widget == 'text' %>
+                    <%= text_field_tag q.id, nil, html_attributes(q) %>
+                  <% elsif q.widget == 'textarea' %>
+                    <%= text_area_tag q.id, nil, html_attributes(q) %>
+                  <% end %>
+                <% end %>
+              </td>
+            <% elsif q.widget == 'option' %>
+              <td class="description" colspan="2">
+                <div class="header">
+                  <%= render partial: 'title', locals: { object: q, placement: 'top' } %>
+                </div>
+                <% if q.description? %>
+                  <markdown>
+                    <%= q.description %>
+                  </markdown>
+                <% end %>
+                <fieldset>
+                  <div class="control-group">
+                    <div class="controls">
+                      <% q.options.each_with_index do |option,i| %>
+                        <div class="control control-option">
+                          <%= label_tag nil, class: 'radio' do %>
+                            <% if @response.persisted? %>
+                              <%= radio_button_tag q.id, option, @response.answer(q) == option, 'class' => 'option', 'data-initial' => q.default_value, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled' %>
+                            <% else %>
+                              <%= radio_button_tag q.id, option, q.selected?(option), 'class' => 'option', 'data-initial' => q.default_value, 'data-revenue' => q.revenue? %>
+                            <% end %>
+                            <markdown>
+                              <%= q.labels[i] %>
+                            </markdown>
+                          <% end %>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                </fieldset>
+              </td>
+            <% else # budgetary %>
+              <td class="description">
+                <div class="header">
+                  <%= render partial: 'title', locals: { object: q, placement: 'top' } %>
+                </div>
+                <% if q.description? %>
+                  <markdown>
+                    <%= q.description %>
+                  </markdown>
+                <% end %>
+              </td>
+              <td class="highlight">
+                <div class="widget widget-<%= q.widget %>">
+                  <% if %w(scaler slider).include?(q.widget) %>
+                    <div class="impact">
+                      <span class="key"></span>
+                      <span class="value">
+                        <%= number_to_currency 0 %>
+                      </span>
+                    </div>
+                    <% if q.widget == 'scaler' %>
+                      <% if @questionnaire.mode == 'taxes' %>
+                        <div class="note">
+                          <%= t @questionnaire.assessment_period, scope: :assessment_unit %>
+                        </div>
+                        <div class="meta maximum taxes">+</div>
+                        <div class="meta minimum taxes">-</div>
+                      <% else %>
+                        <div class="meta maximum">
+                          <%= number_to_percentage(q.maximum_units * 100) %>
+                        </div>
+                        <div class="meta minimum">
+                          <%= number_to_percentage(q.minimum_units * 100) %>
+                        </div>
+                      <% end %>
+                    <% elsif q.yes_no? %>
+                      <div class="meta maximum">
+                        <%= t :yes_label %>
+                      </div>
+                      <div class="meta minimum">
+                        <%= t :no_label %>
+                      </div>
+                    <% else %>
+                      <div class="meta maximum">
+                        <%= number_with_precision(q.maximum_units) %>
+                      </div>
+                      <div class="meta minimum">
+                        <%= [number_with_precision(q.minimum_units), q.unit_name].compact.join(' ') %>
+                      </div>
+                    <% end %>
+                    <% if @response.persisted? %>
+                      <div class="control control-slider slider"
+                        data-widget="<%= q.widget %>"
+                        data-value="<%= q.unit_amount %>"
+                        data-initial="<%= q.default_value %>"
+                        data-minimum="<%= q.minimum_units %>"
+                        data-maximum="<%= q.maximum_units %>"
+                        data-step="<%= q.step %>"
+                        data-yes-no="<%= q.yes_no? && 1 %>"
+                        data-revenue="<%= q.revenue? %>"
+                        data-actual="<%= @response.answer(q) %>"
+                        disabled="disabled">
+
+                        <%= hidden_field_tag q.id, @response.answer(q) %>
+                        <div class="tick lowest"></div>
+                        <div class="tick initial"></div>
+                        <div class="tick highest"></div>
+                      </div>
+                    <% else %>
+                      <div class="control control-slider slider"
+                        data-widget="<%= q.widget %>"
+                        data-value="<%= q.unit_amount %>"
+                        data-initial="<%= q.default_value %>"
+                        data-minimum="<%= q.minimum_units %>"
+                        data-maximum="<%= q.maximum_units %>"
+                        data-step="<%= q.step %>"
+                        data-yes-no="<%= q.yes_no? && 1 %>"
+                        data-revenue="<%= q.revenue? %>">
+
+                        <%= hidden_field_tag q.id, q.default_value %>
+                        <div class="tick lowest"></div>
+                        <div class="tick initial"></div>
+                        <div class="tick highest"></div>
+                      </div>
+                    <% end %>
+                    <% if q.omit_amounts? %>
+                      <div class="meta maximum maximum-amount">&nbsp;</div>
+                      <div class="meta minimum minimum-amount">&nbsp;</div>
+                    <% else %>
+                      <div class="meta maximum maximum-amount">
+                        <%= currency q.maximum_amount %>
+                      </div>
+                      <div class="meta minimum minimum-amount">
+                        <%= currency q.minimum_amount %>
+                      </div>
+                    <% end %>
+                  <% elsif q.widget == 'onoff' %>
+                    <div class="impact">
+                      <span class="key"></span>
+                      <span class="value">
+                        <%= number_to_currency 0 %>
+                      </span>
+                    </div>
+                    <div class="control control-onoff">
+                      <%= hidden_field_tag q.id, '0' # Mimic an unchecked box. %>
+                      <% if @response.persisted? %>
+                        <%= check_box_tag q.id, '1', @response.answer(q) == '1', 'class' => 'onoff', 'data-value' => q.unit_amount, 'data-initial' => q.default_value, 'data-no-label' => q.no_label, 'data-yes-label' => q.yes_label, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled' %>
+                      <% else %>
+                        <%= check_box_tag q.id, '1', q.checked?, 'class' => 'onoff', 'data-value' => q.unit_amount, 'data-initial' => q.default_value, 'data-no-label' => q.no_label, 'data-yes-label' => q.yes_label, 'data-revenue' => q.revenue? %>
+                      <% end %>
+                    </div>
+                    <div class="meta maximum maximum-amount <%= 'changed' if q.unchecked? %>">
+                      <%= currency q.maximum_amount %>
+                    </div>
+                    <div class="meta minimum minimum-amount <%= 'changed' if q.checked? %>">
+                      <%= currency q.minimum_amount %>
+                    </div>
+                  <% end %>
+                </div>
+              </td>
+            <% end %>
+          </tr>
+          <% if @response.persisted? && @questionnaire.starts_at && @questionnaire.starts_at > Time.new(2014, 5, 15) # @todo Remove conditional %>
+            <tr class="graph-container">
+              <td colspan="2">
+                <div class="graph" id="graph_<%= q.id %>"></div>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -1,0 +1,80 @@
+<div class="container disabled">
+  <% if @response.name? %>
+    <%= render partial: 'header', locals: { header: t(@questionnaire.mode == 'taxes' ? :taxes : :default, scope: [:responses, :show, :header], name: @response.display_name) } %>
+  <% else %>
+    <%= render partial: 'header' %>
+  <% end %>
+
+  <% if flash[:notice] %>
+    <div class="alert alert-success fade in">
+      <%= link_to '×', '#', 'data-dismiss' => 'alert', 'class' => 'close' %>
+      <%= flash[:notice] %>
+    </div>
+  <% else %>
+    <div class="alert invitation">
+      <%= t('.invitation', url: root_path).html_safe %>
+    </div>
+  <% end %>
+
+  <div id="preamble">
+    <% if @questionnaire.response_preamble.present? %>
+      <markdown>
+        <%= @questionnaire.response_preamble %>
+      </markdown>
+    <% else %>
+      <p>
+        <%= t '.share' %>
+      </p>
+    <% end %>
+  </div>
+  <div class="well share-well">
+    <p>
+      <%= t '.share_link' %>
+      <span class="input-prepend"><
+        <span class="add-on" id="clippy" rel="tooltip" title="<%= t('.copy_hint') %>">
+          <span class="clippy"></span>
+        </span>
+        <%= text_field_tag 'url', Bitly.shorten(response_url(@response)), id: 'url-field' %>
+      </span>
+    </p>
+  </div>
+
+  <% if @questionnaire.twitter_share_text? %>
+    <div class="well share-well" id="share-twitter">
+      <p>
+        <%= curly_quote @questionnaire.twitter_share_text %>
+        <%= twitter_button 'data-count' => 'none', 'data-size' => 'large', 'data-text' => @questionnaire.twitter_share_text, 'data-url' => response_url(@response) %>
+      </p>
+    </div>
+  <% end %>
+
+  <% if @questionnaire.response_body.present? %>
+    <markdown>
+      <%= @questionnaire.response_body %>
+    </markdown>
+  <% end %>
+
+  <nav>
+    <ul class="nav nav-pills">
+      <% unless simple_navigation? %>
+        <%= render partial: 'nav' %>
+      <% end %>
+    </ul>
+  </nav>
+
+  <div id="whitespace"></div>
+
+  <%= render @questionnaire %>
+
+  <% unless flash[:notice] %>
+    <div class="alert invitation">
+      <%= t('.invitation', url: root_path).html_safe %>
+    </div>
+  <% end %>
+
+  <%= render 'footer', disabled: 'true' %>
+</div>
+
+<% content_for :footer do %>
+  <%= render partial: 'hidden' %>
+<% end %>

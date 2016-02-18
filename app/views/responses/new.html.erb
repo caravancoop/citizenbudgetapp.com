@@ -1,0 +1,166 @@
+<div class="container">
+  <%= render partial: 'header' %>
+
+  <section id="introduction">
+    <markdown>
+      <%= Mustache.render(@questionnaire.introduction || String.new, number_of_participants: @questionnaire.responses.count) %>
+    </markdown>
+  </section>
+
+  <%= bootstrap_form_for @response, html: {class: 'form-horizontal'} do |f| %>
+    <% if !@questionnaire.current? || params[:token] %>
+      <%= hidden_field_tag :token, @questionnaire.authorization_token %>
+    <% end %>
+
+    <section id="questionnaire">
+      <% unless simple_navigation? %>
+        <nav>
+          <ul class="nav nav-pills">
+            <%= render partial: 'nav' %>
+          </ul>
+        </nav>
+      <% end %>
+
+      <div id="message" class="message <%= 'simple' if simple_navigation? %>">
+        <% if @questionnaire.instructions.present? %>
+          <markdown>
+            <div><%= @questionnaire.instructions %></div>
+          </markdown>
+        <% elsif @questionnaire.starting_balance && @questionnaire.starting_balance.nonzero? %>
+          <% if @questionnaire.starting_balance > 0 %>
+            <%= t '.positive_balance_instructions', starting_balance: number_to_currency(@questionnaire.starting_balance) %>
+          <% else %>
+            <%= t '.negative_balance_instructions', starting_balance: number_to_currency(-@questionnaire.starting_balance) %>
+          <% end %>
+        <% else %>
+          <%= t '.instructions' %>
+        <% end %>
+      </div>
+
+      <div id="whitespace"></div>
+
+      <!--  -->
+      <!--  -->
+      <!--  -->
+      <!--  -->
+      <!--  -->
+      <!--  -->
+      <!--  -->
+
+      <%= render @questionnaire %>
+    </section>
+
+    <% if @questionnaire.tax_rate? %>
+      <div class="message hide" id="reminder"></div>
+    <% end %>
+
+    <section id="identification">
+      <%= f.input :initialized_at, as: :hidden %>
+      <% if @fields.any? %>
+        <% @fields.each_with_index do |section,index| %>
+          <%= f.inputs name: section.title do %>
+            <% # @todo It's not very flexible to add email and name like this, but it works for now. %>
+            <% if index.zero? %>
+              <%= f.input :comments, wrapper_html: {class: 'hide'} %>
+              <% if section.description? %>
+                <div class="control-group">
+                  <div class="controls">
+                    <markdown>
+                      <%= section.description %>
+                    </markdown>
+                  </div>
+                </div>
+              <% end %>
+
+              <% if @questionnaire.email_required? %>
+                <%= f.input :email, wrapper_html: {id: 'group-email'}, required: true, input_html: {class: 'validate[required,custom[email]]'} %>
+              <% else %>
+                <%= f.input :email, wrapper_html: {id: 'group-email'}, input_html: {class: 'validate[custom[email]]'} %>
+              <% end %>
+
+              <%= f.input :name, wrapper_html: {id: 'group-name'} %>
+            <% end %>
+
+            <% section.questions.each do |q| %>
+              <div class="control-group" id="group-<%= q.id %>">
+                <% unless %w(checkbox readonly).include?(q.widget) %>
+                  <label class="control-label" for="<%= q.id %>">
+                    <%= q.title %>
+                    <% if q.required? %>
+                      <abbr title="<%= t '.required' %>">*</abbr>
+                    <% end %>
+                  </label>
+                <% end %>
+
+                <div class="controls">
+                  <% if q.widget == 'checkbox' %>
+                    <% # Mimic an unchecked box.  %>
+                    <%= hidden_field_tag(q.id, '0') %>
+                    <label class="checkbox">
+                      <%= check_box_tag(q.id, '1', q.checked?, html_attributes(q)) %>
+                      <%= q.title %>
+
+                      <% if q.required? %>
+                        <abbr title="<%= t '.required' %>">*</abbr>
+                      <% end %>
+                    </label>
+                  <% elsif q.widget == 'checkboxes' %>
+                    <% q.options.each do |option| %>
+                      <label class="checkbox inline">
+                        <%= check_box_tag "#{q.id}[]", option, q.default_value == option, html_attributes(q) %>
+                        <%= option %>
+                      </label>
+                    <% end %>
+                  <% elsif q.widget == 'radio' %>
+                    <% q.options.each do |option| %>
+                      <label class="<%= q.options.size > 4 ? "radio" : "radio inline" %>">
+                        <%= radio_button_tag q.id, option, q.default_value == option, html_attributes(q) %>
+                        <%= option %>
+                      </label>
+                    <% end %>
+                  <% elsif q.widget == 'select' %>
+                    <%= select_tag q.id, options_for_select([nil] + q.options, q.default_value), html_attributes(q) %>
+                  <% elsif q.widget == 'text' %>
+                    <%= text_field_tag q.id, nil, html_attributes(q) %>
+                  <% elsif q.widget == 'textarea' %>
+                    <%= text_area_tag q.id, nil, html_attributes(q) %>
+                  <% elsif q.widget == 'readonly' %>
+                    <% if q.title? %>
+                      <h3>
+                        <%= q.title %>
+                      </h3>
+                    <% end %>
+                  <% end %>
+                  <% if q.description? %>
+                    <% if q.widget == 'readonly' %>
+                      <markdown>
+                        <%= q.description %>
+                      </markdown>
+                    <% else %>
+                      <markdown>
+                        <p class="inline-hints"><%= q.description %></p>
+                      </markdown>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= f.actions do %>
+        <p>
+          <%= t '.submit_text' %>
+        </p>
+        <%= f.action :submit, label: t('.submit') %>
+      <% end %>
+    </section>
+  <% end %>
+
+  <%= render 'footer', disabled: 'false' %>
+</div>
+
+<% content_for :footer do %>
+  <%= render partial: 'hidden' %>
+<% end %>
