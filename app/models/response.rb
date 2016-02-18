@@ -3,7 +3,7 @@ class Response < ActiveRecord::Base
 
   belongs_to :questionnaire
 
-  field :answers, type: Hash
+  # field :answers, type: Hash
 
   validates :questionnaire_id, :initialized_at, :ip, presence: true  # Answers can be blank if all radio buttons
   # We don't do more ambitious validation to avoid excluding valid responses.

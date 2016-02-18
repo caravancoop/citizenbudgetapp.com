@@ -1,6 +1,5 @@
 require 'mail'
 
-  include Mongoid::MultiParameterAttributes
 class Questionnaire < ActiveRecord::Base
   acts_as_paranoid
 
@@ -14,7 +13,6 @@ class Questionnaire < ActiveRecord::Base
 
   mount_uploader :logo, ImageUploader
   mount_uploader :title_image, ImageUploader
-
 
   validates :title, :organization_id, :mode, presence: true
   validates :default_assessment, :tax_rate, presence: true, if: ->(q){q.mode == 'taxes'}
