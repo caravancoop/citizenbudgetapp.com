@@ -46,6 +46,10 @@ gem 'faraday'
 # Rake
 gem 'ruby-progressbar'
 
+# Reporting
+gem "skylight"
+gem 'sentry-raven'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -86,8 +90,6 @@ group :test do
   gem 'shoulda-matchers', '~> 3.1'
 end
 
-  # Error logging
-  gem 'airbrake', '~> 3.1.15'
 group :production do
   gem 'rails_12factor'
   gem 'lograge'
