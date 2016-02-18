@@ -10,8 +10,8 @@ class Questionnaire < ActiveRecord::Base
 
   belongs_to :organization
   has_one :google_api_authorization
-  has_many :sections
-  has_many :responses
+  has_many :sections, dependent: :destroy
+  has_many :responses, dependent: :destroy
 
   mount_uploader :logo, ImageUploader
   mount_uploader :title_image, ImageUploader
