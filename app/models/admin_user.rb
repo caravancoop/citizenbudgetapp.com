@@ -13,7 +13,7 @@ class AdminUser < ActiveRecord::Base
   # validates_presence_of :encrypted_password
 
   validates :role, presence: true
-  validates :organization_id, presence: true, unless: ->(a){a.role == 'superuser'}
+  validates :organization, presence: true, unless: ->(a){a.role == 'superuser'}
   validates :role, inclusion: { in: ROLES }, allow_blank: true
   validates :locale, inclusion: { in: Locale.available_locales }, allow_blank: true
 
