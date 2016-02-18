@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160212015228) do
+ActiveRecord::Schema.define(version: 20160212191312) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 20160212015228) do
     t.boolean  "change_required"
     t.string   "logo"
     t.string   "title_image"
-    t.string   "introduction"
+    t.text     "introduction"
     t.string   "instructions"
     t.string   "read_more"
     t.string   "content_before"
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 20160212015228) do
     t.string   "javascript"
     t.string   "reply_to"
     t.string   "thank_you_subject"
-    t.string   "thank_you_template"
+    t.text     "thank_you_template"
     t.string   "response_notice"
     t.string   "response_preamble"
     t.string   "response_body"
@@ -111,7 +111,7 @@ ActiveRecord::Schema.define(version: 20160212015228) do
   create_table "questions", force: :cascade do |t|
     t.integer  "section_id"
     t.string   "title"
-    t.string   "description"
+    t.text     "description"
     t.integer  "default_value"
     t.integer  "size"
     t.integer  "maxlength"
@@ -121,8 +121,8 @@ ActiveRecord::Schema.define(version: 20160212015228) do
     t.boolean  "required"
     t.boolean  "revenue"
     t.string   "widget"
-    t.string   "extra"
-    t.string   "embed"
+    t.text     "extra"
+    t.text     "embed"
     t.decimal  "unit_amount"
     t.string   "unit_name"
     t.integer  "position"
