@@ -29,7 +29,6 @@ gem 'rmagick'
 gem 'carrierwave'
 
 # Views
-gem 'haml-rails'
 gem 'rdiscount'
 gem 'unicode_utils'
 
