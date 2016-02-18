@@ -32,9 +32,6 @@ class Section < ActiveRecord::Base
     questions.all?(&:nonbudgetary?)
   end
 
-  def position
-    read_attribute(:position)
-  end
 
 private
 

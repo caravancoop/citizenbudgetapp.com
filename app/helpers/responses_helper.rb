@@ -40,7 +40,7 @@ module ResponsesHelper
   def table_id(section)
     parts = []
     parts << 'section'
-    parts << section.position + 1
+    parts << section.position.to_i + 1
     parts << section.title.parameterize if section.title.present?
     parts.map(&:to_s) * '-'
   end
