@@ -43,11 +43,6 @@ class Question < ActiveRecord::Base
   scope :nonbudgetary, ->{ where(widget: NONBUDGETARY_WIDGETS) }
   default_scope ->{ order(position: :asc) }
 
-  # @return [String] the name to display in the administrative interface
-  def name
-    title? && title || I18n.t(:untitled)
-  end
-
   # @return [Boolean] whether the "Read more" content is a URL
   def extra_url?
     extra? && extra[%r{\Ahttps?://\S+\z}]
