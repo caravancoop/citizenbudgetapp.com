@@ -251,7 +251,8 @@
                       </span>
                     </div>
                     <div class="control control-onoff">
-                      <%= hidden_field_tag q.id, '0' # Mimic an unchecked box. %>
+                      <% # Mimic an unchecked box. %>
+                      <%= hidden_field_tag q.id, '0' %>
                       <% if @response.persisted? %>
                         <%= check_box_tag q.id, '1', @response.answer(q) == '1', 'class' => 'onoff', 'data-value' => q.unit_amount, 'data-initial' => q.default_value, 'data-no-label' => q.no_label, 'data-yes-label' => q.yes_label, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled' %>
                       <% else %>
@@ -269,7 +270,8 @@
               </td>
             <% end %>
           </tr>
-          <% if @response.persisted? && @questionnaire.starts_at && @questionnaire.starts_at > Time.new(2014, 5, 15) # @todo Remove conditional %>
+          <% # @todo Remove conditional %>
+          <% if @response.persisted? && @questionnaire.starts_at && @questionnaire.starts_at > Time.new(2014, 5, 15) %>
             <tr class="graph-container">
               <td colspan="2">
                 <div class="graph" id="graph_<%= q.id %>"></div>
