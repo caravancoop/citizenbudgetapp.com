@@ -4,6 +4,7 @@ class Question < ActiveRecord::Base
   NONBUDGETARY_WIDGETS = %w(checkbox checkboxes radio readonly select static text textarea)
 
   belongs_to :section
+  has_many :answers
 
   attr_accessor :minimum_units, :maximum_units, :step, :options_as_list, :labels_as_list
 
