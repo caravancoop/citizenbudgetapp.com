@@ -9,4 +9,14 @@ class ResponsePresenter < Bourgeois::Presenter
       parts.join ' '
     end
   end
+
+  # @param [Section] section a questionnaire section
+  # @return [String] the value of the HTML `id` attribute for the section
+  def table_id(section)
+    parts = []
+    parts << 'section'
+    parts << section.position.to_i + 1
+    parts << section.title.parameterize if section.title.present?
+    parts.map(&:to_s) * '-'
+  end
 end
