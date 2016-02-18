@@ -2,7 +2,7 @@ class Response < ActiveRecord::Base
   acts_as_paranoid
 
   belongs_to :questionnaire
-  has_many :answers
+  has_many :answers, dependent: :destroy
 
   validates :questionnaire_id, :initialized_at, :ip, presence: true  # Answers can be blank if all radio buttons
   # We don't do more ambitious validation to avoid excluding valid responses.
