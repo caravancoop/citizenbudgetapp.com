@@ -19,6 +19,3 @@
 
 # CarrierWave saves files to this directory in the development environment.
 /public/uploads
-
-# exclude sass-cache
-app/assets/.sass-cache/*
