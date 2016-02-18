@@ -1,7 +1,3 @@
-# Keys are based on the Drupal Form API, one of the best thought-out methods
-# of describing arbitrary forms.
-#
-# @see http://api.drupal.org/api/drupal/developer!topics!forms_api_reference.html/7
 class Question < ActiveRecord::Base
   WIDGETS = %w(checkbox checkboxes onoff radio option readonly scaler select slider static text textarea)
 
@@ -15,24 +11,24 @@ class Question < ActiveRecord::Base
   # validates_presence_of :widget
   # validates_presence_of :title, unless: ->(q){q.widget == 'readonly'}
   validates :widget, inclusion: { in: WIDGETS }, allow_blank: true
-  validates :unit_amount, numericality: true, allow_blank: true
+  validates :unit_amount, numericality: true, allow_nil: true
 
   # HTML attribute validations.
-  validates :size, :maxlength, numericality: { greater_than: 0, only_integer: true }, allow_blank: true, if: ->(q){q.widget == 'text'}
-  validates :rows, :cols, numericality: { greater_than: 0, only_integer: true }, allow_blank: true, if: ->(q){q.widget == 'textarea'}
+  validates :size, :maxlength, numericality: { greater_than: 0, only_integer: true }, allow_nil: true, if: ->(q){q.widget == 'text'}
+  validates :rows, :cols, numericality: { greater_than: 0, only_integer: true }, allow_nil: true, if: ->(q){q.widget == 'textarea'}
 
   # Budgetary widget validations.
   validates :unit_amount, presence: true, if: ->(q){%w(onoff option scaler slider static).include?(q.widget)}
   validates :default_value, presence: true, if: ->(q){%w(onoff option scaler slider).include?(q.widget)}
-  validates :unit_amount, numericality: true, allow_blank: true, if: ->(q){%w(onoff option scaler slider static).include?(q.widget)}
-  validates :default_value, numericality: true, allow_blank: true, if: ->(q){%w(onoff option scaler slider).include?(q.widget)}
+  validates :unit_amount, numericality: true, allow_nil: true, if: ->(q){%w(onoff option scaler slider static).include?(q.widget)}
+  validates :default_value, numericality: true, allow_nil: true, if: ->(q){%w(onoff option scaler slider).include?(q.widget)}
   validates :options, presence: true, if: ->(q){%w(checkboxes onoff option radio scaler select slider).include?(q.widget)}
   validates :labels, presence: true, if: ->(q){q.widget == 'option'}
 
   # Slider validations.
   validates :minimum_units, :maximum_units, :step, presence: true, if: ->(q){%w(scaler slider).include?(q.widget)}
-  validates :minimum_units, :maximum_units, numericality: true, allow_blank: true, if: ->(q){%w(scaler slider).include?(q.widget)}
-  validates :step, numericality: { greater_than: 0 }, allow_blank: true, if: ->(q){%w(scaler slider).include?(q.widget)}
+  validates :minimum_units, :maximum_units, numericality: true, allow_nil: true, if: ->(q){%w(scaler slider).include?(q.widget)}
+  validates :step, numericality: { greater_than: 0 }, allow_nil: true, if: ->(q){%w(scaler slider).include?(q.widget)}
   validate :maximum_units_must_be_greater_than_minimum_units, if: ->(q){%w(scaler slider).include?(q.widget)}
   validate :default_value_must_be_between_minimum_and_maximum, if: ->(q){%w(scaler slider).include?(q.widget)}
   validate :default_value_must_be_an_option, if: ->(q){%w(scaler slider option).include?(q.widget)}
