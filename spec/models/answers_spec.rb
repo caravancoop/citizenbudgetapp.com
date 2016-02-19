@@ -20,6 +20,8 @@ RSpec.describe Answer, type: :model do
 
   describe 'Validations' do
     it { should validate_presence_of(:value) }
+    it { should validate_presence_of(:response) }
+    it { should validate_presence_of(:question) }
   end
 
   describe 'Callbacks' do
