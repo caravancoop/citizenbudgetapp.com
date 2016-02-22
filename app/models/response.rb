@@ -7,7 +7,7 @@ class Response < ActiveRecord::Base
   validates :questionnaire_id, :initialized_at, :ip, presence: true  # Answers can be blank if all radio buttons
   # We don't do more ambitious validation to avoid excluding valid responses.
 
-  default_scope -> { where(deleted_at: nil, comments: {'$in' => ['', nil]}) }
+  default_scope -> { where(deleted_at: nil, comments: nil) }
 
   # @return [Float] the time to submit the response in seconds
   def time_to_complete
