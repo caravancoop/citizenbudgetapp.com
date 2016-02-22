@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160218180549) do
+ActiveRecord::Schema.define(version: 20160222160801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,7 +123,7 @@ ActiveRecord::Schema.define(version: 20160218180549) do
     t.integer  "section_id"
     t.string   "title"
     t.text     "description"
-    t.integer  "default_value"
+    t.decimal  "default_value"
     t.integer  "size"
     t.integer  "maxlength"
     t.string   "placeholder"
