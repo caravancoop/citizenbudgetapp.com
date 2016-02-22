@@ -85,8 +85,8 @@ namespace :citizen_budget do
     ActiveRecord::Base.transaction do
       # Answers
       p "Creating Answers"
-      MongoQuestionnaire.all.each do |mongo_questionnaire|
-        mongo_questionnaire.responses.all.each do |mongo_response|
+      MongoQuestionnaire.all.no_timeout.each do |mongo_questionnaire|
+        mongo_questionnaire.responses.all.no_timeout.each do |mongo_response|
           mongo_response.answers.each do |mongo_answer|
             question_id = @questions_map[mongo_answer[0]]
             response_id = @responses_map[mongo_response.id.to_s]
