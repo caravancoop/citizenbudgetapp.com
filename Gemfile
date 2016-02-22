@@ -38,11 +38,6 @@ gem 'spreadsheet'
 gem 'axlsx', '2.1.0.pre'
 gem 'rubyzip', '>= 1.0.0'
 
-# Heroku API
-gem 'oj'
-gem 'multi_json'
-gem 'faraday'
-
 # Rake
 gem 'ruby-progressbar'
 
