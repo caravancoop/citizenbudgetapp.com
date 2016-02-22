@@ -199,29 +199,29 @@ private
   end
 
   def maximum_units_must_be_greater_than_minimum_units
-    if %w(scaler slider).include?(widget) && minimum_units.present? && maximum_units.present? && minimum_units.to_f >= maximum_units.to_f
+    if minimum_units.present? && maximum_units.present? && minimum_units > maximum_units
       errors.add :maximum_units, I18n.t('errors.messages.maximum_units_must_be_greater_than_minimum_units')
     end
   end
 
   def default_value_must_be_between_minimum_and_maximum
-    if %w(scaler slider).include?(widget) && minimum_units.present? && maximum_units.present? && default_value.present? && minimum_units.to_f < maximum_units.to_f
       if default_value.to_f < minimum_units.to_f || default_value.to_f > maximum_units.to_f
+    if minimum_units.present? && maximum_units.present? && default_value.present? && minimum_units < maximum_units
         errors.add :default_value, I18n.t('errors.messages.default_value_must_be_between_minimum_and_maximum')
       end
     end
   end
 
   def default_value_must_be_an_option
-    if %w(checkboxes onoff option radio scaler select slider).include?(widget) && options.present? && default_value.present?
       unless options.include?(default_value) || options.include?(default_value.to_f)
+    if options.present? && default_value.present?
         errors.add :default_value, I18n.t('errors.messages.default_value_must_be_an_option')
       end
     end
   end
 
   def options_and_labels_must_agree
-    if widget == 'option' && labels.present? && options.present?
+    if labels.present? && options.present?
       unless labels.size == options.size
         errors.add :labels_as_list, I18n.t('errors.messages.options_and_labels_must_agree')
       end
