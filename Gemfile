@@ -25,7 +25,7 @@ gem 'mustache'
 
 # Image uploads
 gem 'fog'
-gem 'rmagick'
+gem 'mini_magick'
 gem 'carrierwave'
 
 # Views
