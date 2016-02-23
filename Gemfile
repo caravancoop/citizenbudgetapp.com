@@ -94,9 +94,4 @@ end
 group :production do
   gem 'rails_12factor'
   gem 'lograge'
-
-  # Performance
-  gem 'action_dispatch-gz_static'
-  gem 'memcachier'
-  gem 'dalli'
 end
