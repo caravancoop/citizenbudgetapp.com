@@ -73,7 +73,7 @@ gem 'ruby-progressbar'
 group :assets do
   # Non-Heroku deployments
   unless ENV['HEROKU']
-    gem 'therubyracer', require: 'v8'
+    # gem 'therubyracer', require: 'v8'
     gem 'libv8', '3.16.14.7'
   end
 
