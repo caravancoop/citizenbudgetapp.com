@@ -127,28 +127,7 @@ module ApplicationHelper
     RDiscount.new(string).to_html.html_safe
   end
 
-  # @see http://speakerdeck.com/assets/embed.js
-  def speakerdeck_or_markdown(html)
-    if html['speakerdeck.com/assets/embed.js']
-      id = html[/data-id="([0-9a-f]+)"/, 1]
-      ratio = html[/data-ratio="([0-9.]+)"/, 1].to_f
-
-      properties = {}
-      if ratio >= 1
-        properties['width']  = MAX_DIMENSION
-        properties['height'] = ((properties['width'] - 2) / ratio + 64).round
-      else
-        properties['height'] = MAX_DIMENSION
-        properties['width']  = ((properties['height'] - 64) * ratio + 2).round
-        properties['margin-left'] = ((MAX_DIMENSION - properties['width']) / 2.0).round
-      end
-
-      content_tag(:div,
-        content_tag(:div, nil,
-          'class' => 'speakerdeck-embed', 'data-id' => id, 'data-ratio' => ratio),
-        'style' => properties.map{|k,v| "#{k}:#{v}px"}.join(';'))
-    else
-      content_tag(:div, markdown(html), class: 'extra clearfix')
-    end
+  def markdown_embed(html)
+    content_tag(:div, markdown(html), class: 'extra clearfix')
   end
 end

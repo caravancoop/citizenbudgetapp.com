@@ -97,7 +97,7 @@ ActiveAdmin.register Section do
         RDiscount.new(s.extra).to_html.html_safe if s.extra?
       end
       row :embed do |s|
-        speakerdeck_or_markdown(s.embed) if s.embed?
+        markdown_embed(s.embed) if s.embed?
       end
       row :criterion do |s|
         ul do
