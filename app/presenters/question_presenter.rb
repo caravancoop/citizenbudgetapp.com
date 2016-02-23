@@ -7,7 +7,7 @@ class QuestionPresenter < Bourgeois::Presenter
 
   # @param [Question] question a questionnaire question
   # @return [Hash] the HTML attributes for the question's `input` tag
-  def html_attributes(question)
+  def html_attributes
     attributes = {}
     classes = []
 
@@ -43,7 +43,7 @@ class QuestionPresenter < Bourgeois::Presenter
       classes << span if span
     end
 
-    if question.required?
+    if required?
       attributes[:required] = Formtastic::FormBuilder.use_required_attribute
       classes << 'validate[required]'
     end

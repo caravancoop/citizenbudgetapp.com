@@ -35,6 +35,7 @@
 
     <tbody>
       <% section.questions.each do |q| %>
+      <% present q do |q| %>
         <% unless @response.persisted? && %w(text textarea).include?(q.widget) %>
           <tr id="question-<%= q.id %>">
             <% if q.readonly? %>
@@ -109,11 +110,11 @@
                   </fieldset>
                 <% elsif %w(select text textarea).include?(q.widget) %>
                   <% if q.widget == 'select' %>
-                    <%= select_tag q.id, options_for_select(q.options, @response.answer(q)), html_attributes(q) %>
+                    <%= select_tag q.id, options_for_select(q.options, @response.answer(q)), q.html_attributes %>
                   <% elsif q.widget == 'text' %>
-                    <%= text_field_tag q.id, nil, html_attributes(q) %>
+                    <%= text_field_tag q.id, nil, q.html_attributes %>
                   <% elsif q.widget == 'textarea' %>
-                    <%= text_area_tag q.id, nil, html_attributes(q) %>
+                    <%= text_area_tag q.id, nil, q.html_attributes %>
                   <% end %>
                 <% end %>
               </td>
@@ -280,6 +281,7 @@
             </tr>
           <% end %>
         <% end %>
+      <% end %>
       <% end %>
     </tbody>
   </table>
