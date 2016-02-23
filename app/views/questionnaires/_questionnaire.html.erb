@@ -7,7 +7,8 @@
 <% end %>
 
 <% @simulator.each do |section| %>
-  <table id="<%= table_id(section) %>" class="<%= section.group %>">
+<% present section do |section| %>
+  <table id="<%= section.table_id %>" class="<%= section.group %>">
     <thead>
       <% unless section.title.blank? && section.nonbudgetary? %>
         <tr>
@@ -282,4 +283,5 @@
       <% end %>
     </tbody>
   </table>
+<% end %>
 <% end %>

@@ -5,7 +5,9 @@
   <% end %>
 
   <ul class="dropdown-menu">
-    <%= render @simulator %>
+    <% present @simulator do |section| %>
+      <%= render section %>
+    <% end %>
   </ul>
 </li>
 
