@@ -35,13 +35,16 @@
 
       <div id="whitespace"></div>
 
-      <!--  -->
-      <!--  -->
-      <!--  -->
-      <!--  -->
-      <!--  -->
-      <!--  -->
-      <!--  -->
+      <% if @questionnaire.assessment? %>
+        <div class="alert alert-info" id="assessment">
+          <label for="response_assessment">
+            <%= t '.assessment'  %> <!--[if lt IE 10]><%= t '.default_assessment', number: number_to_currency(@questionnaire.default_assessment) %><![endif]--> <%= t :colon %>
+          </label>
+          <%= t '.currency_unit_pre' %>
+          <%= f.text_field :assessment, placeholder: number_with_delimiter(@questionnaire.default_assessment), class: 'span2' %>
+          <%= t '.currency_unit_post' %>
+        </div>
+      <% end %>
 
       <%= render @questionnaire %>
     </section>
