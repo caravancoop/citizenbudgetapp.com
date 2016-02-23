@@ -25,9 +25,7 @@
       <% if section.description? %>
         <tr>
           <td class="description" colspan="2">
-            <markdown>
-              <%= section.description %>
-            </markdown>
+            <%= markdown section.description %>
           </td>
         </tr>
       <% end %>
@@ -46,9 +44,7 @@
                   </div>
                 <% end %>
                 <% if q.description? %>
-                  <markdown>
-                    <%= q.description %>
-                  </markdown>
+                  <%= markdown q.description %>
                 <% end %>
               </td>
             <% elsif q.widget == 'static' %>
@@ -57,9 +53,7 @@
                   <%= render partial: 'title', locals: { object: q, placement: 'top' } %>
                 </div>
                 <% if q.description? %>
-                  <markdown>
-                    <%= q.description %>
-                  </markdown>
+                  <%= markdown q.description %>
                 <% end %>
               </td>
               <td class="highlight">
@@ -73,9 +67,7 @@
                   <%= render partial: 'title', locals: { object: q, placement: 'bottom' } %>
                 </div>
                 <% if q.description? %>
-                  <markdown>
-                    <%= q.description %>
-                  </markdown>
+                  <%= markdown q.description %>
                 <% end %>
                 <% # @todo Implement checkbox widget. %>
                 <% if %w(checkboxes radio).include?(q.widget) %>
@@ -124,9 +116,7 @@
                   <%= render partial: 'title', locals: { object: q, placement: 'top' } %>
                 </div>
                 <% if q.description? %>
-                  <markdown>
-                    <%= q.description %>
-                  </markdown>
+                  <%= markdown q.description %>
                 <% end %>
                 <fieldset>
                   <div class="control-group">
@@ -139,9 +129,8 @@
                             <% else %>
                               <%= radio_button_tag q.id, option, q.selected?(option), 'class' => 'option', 'data-initial' => q.default_value, 'data-revenue' => q.revenue? %>
                             <% end %>
-                            <markdown>
-                              <%= q.labels[i] %>
-                            </markdown>
+
+                            <%= markdown q.labels[i] %>
                           <% end %>
                         </div>
                       <% end %>
@@ -155,9 +144,7 @@
                   <%= render partial: 'title', locals: { object: q, placement: 'top' } %>
                 </div>
                 <% if q.description? %>
-                  <markdown>
-                    <%= q.description %>
-                  </markdown>
+                  <%= markdown q.description %>
                 <% end %>
               </td>
               <td class="highlight">

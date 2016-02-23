@@ -14,9 +14,7 @@
           <%= image_tag questionnaire.title_image.medium.url, height: '100', alt: '' %>
         <% end %>
 
-        <markdown>
-          <%= questionnaire.title %>
-        </markdown>
+        <%= markdown questionnaire.title %>
       <% end %>
     </h1>
 

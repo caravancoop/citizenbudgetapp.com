@@ -2,9 +2,7 @@
   <%= render partial: 'header' %>
 
   <section id="introduction">
-    <markdown>
-      <%= Mustache.render(@questionnaire.introduction || String.new, number_of_participants: @questionnaire.responses.count) %>
-    </markdown>
+    <%= markdown Mustache.render(@questionnaire.introduction || String.new, number_of_participants: @questionnaire.responses.count) %>
   </section>
 
   <%= bootstrap_form_for @response, html: {class: 'form-horizontal'} do |f| %>
@@ -23,9 +21,7 @@
 
       <div id="message" class="message <%= 'simple' if simple_navigation? %>">
         <% if @questionnaire.instructions.present? %>
-          <markdown>
-            <div><%= @questionnaire.instructions %></div>
-          </markdown>
+          <div><%= markdown @questionnaire.instructions %></div>
         <% elsif @questionnaire.starting_balance && @questionnaire.starting_balance.nonzero? %>
           <% if @questionnaire.starting_balance > 0 %>
             <%= t '.positive_balance_instructions', starting_balance: number_to_currency(@questionnaire.starting_balance) %>
@@ -65,9 +61,7 @@
               <% if section.description? %>
                 <div class="control-group">
                   <div class="controls">
-                    <markdown>
-                      <%= section.description %>
-                    </markdown>
+                    <%= markdown section.description %>
                   </div>
                 </div>
               <% end %>
@@ -134,13 +128,9 @@
                   <% end %>
                   <% if q.description? %>
                     <% if q.widget == 'readonly' %>
-                      <markdown>
-                        <%= q.description %>
-                      </markdown>
+                      <%= markdown q.description %>
                     <% else %>
-                      <markdown>
-                        <p class="inline-hints"><%= q.description %></p>
-                      </markdown>
+                      <p class="inline-hints"><%= markdown q.description %></p>
                     <% end %>
                   <% end %>
                 </div>
