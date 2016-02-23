@@ -1,6 +1,6 @@
 <% if section.title? %>
-  <li id="<%= table_id(section) %>_link">
-    <%= link_to "##{table_id(section)}" do %>
+  <li id="<%= section.table_id %>_link">
+    <%= link_to "##{section.table_id}" do %>
       <span></span>
       <%= section.title %>
     <% end %>
