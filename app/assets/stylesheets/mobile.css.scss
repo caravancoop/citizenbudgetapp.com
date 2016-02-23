@@ -1,0 +1,211 @@
+@media (max-width: 600px) {
+    body {
+        font-size: 32px;
+        line-height: 1.5;
+    }
+
+    .container {
+        margin: 0;
+
+        > header > h1 {
+            margin-top: 0;
+        }
+    }
+
+    #facebook,
+    #twitter {
+        display: none;
+    }
+
+    #introduction {
+        padding-left: 20px;
+        padding-right: 20px;
+
+        li {
+            line-height: 1.5;
+        }
+    }
+
+    h3 {
+        font-size: 42px;
+        line-height: 1.5;
+        margin-bottom: 30px;
+        margin-top: 80px;
+    }
+
+    .description .header {
+        font-size: 36px;
+    }
+
+    .simulator,
+    .simulator > thead,
+    .simulator > tbody,
+    .simulator tr,
+    .simulator img,
+    .simulator td { display: block; }
+
+    .simulator > thead .highlight {
+        display: none;
+    }
+
+    .simulator td,
+    .simulator th,
+    .simulator .impact-text > td {
+        padding: 10px 20px;
+    }
+
+    .description {
+        overflow: hidden;
+    }
+
+    tbody .highlight .widget{
+        margin: 0 auto;
+    }
+
+    tbody .highlight {
+        padding: 30px;
+    }
+
+    .form-horizontal .control-label {
+        font-size: 48px;
+        padding-left: 20px;
+        font-size: 32px;
+        line-height: 1.5;
+        font-weight: bold;
+        width: 90%;
+        text-align: left;
+    }
+
+    .control-group {
+        label {
+            display: block;
+            float: none;
+            text-align: left;
+            padding: 20px;
+        }
+
+        .controls {
+            margin-left: 20px;
+
+            input[type='text'],
+            input[type='email'],
+            input[type='password'] {
+                width: calc(100% - 80px);
+                padding: 20px;
+                height: 60px;
+                font-size: 32px;
+                line-height: 1.5;
+            }
+
+            select {
+                width: calc(100% - 40px) !important;
+                height: 80px;
+                padding: 20px;
+            }
+
+            label {
+                font-size: 32px;
+                line-height: 1.5;
+                width: 100%;
+                margin: 0 0 0 10px;
+                padding-left: 80px;
+            }
+
+            input[type='checkbox'], input[type='radio'] {
+                width: 20px;
+                height: 20px;
+                margin: 13px 0 0 -70px;
+                transform: scale(3);
+            }
+
+            input[type='text'] {
+                font-size: 32px;
+                padding: 20px;
+                line-height: 1.4;
+                margin-top: 10px;
+            }
+
+            textarea {
+                width: calc(100% - 40px);
+            }
+        }
+    }
+
+    .tip {
+        transform: scale(2.2);
+    }
+
+    .form-horizontal .form-actions {
+        padding-left: 20px;
+
+        .btn {
+            font-size: 36px;
+            padding: 25px;
+        }
+    }
+
+    .simulator input[type='text'] {
+        font-size: 32px;
+        padding: 20px;
+        line-height: 1.4;
+        margin: 20px 0;
+        width: 90%;
+    }
+
+    td.description textarea {
+        font-size: 30px;
+        padding: 25px;
+        width: calc(100% - 50px);
+        min-height: 140px;
+    }
+
+    .alert.alert-infos {
+        width: calc(100% - 40px);
+        padding: 20px;
+    }
+
+    td.description img {
+        float: none;
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #identification fieldset legend span {
+        font-size: 50px;
+        display: inline-block;
+        padding: 0 30px;
+        width: calc(100% - 60px);
+        text-align: center;
+    }
+
+    #assessment {
+        > label {
+            display: block;
+        }
+
+        > input {
+            font-size: 32px;
+            padding: 20px;
+            line-height: 1.4;
+            margin-top: 10px;
+        }
+    }
+
+    select {
+        font-size: 32px;
+        padding: 30px 50px;
+        height: 60px;
+        width: 50%;
+        margin: 20px;
+    }
+
+    #questionnaire {
+        .nav-fixed {
+            height: 110px;
+        }
+        .message-fixed {
+            top: 111px;
+        }
+    }
+}
