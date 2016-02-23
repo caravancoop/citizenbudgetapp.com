@@ -18,9 +18,7 @@
 
   <div id="preamble">
     <% if @questionnaire.response_preamble.present? %>
-      <markdown>
-        <%= @questionnaire.response_preamble %>
-      </markdown>
+      <%= markdown @questionnaire.response_preamble %>
     <% else %>
       <p>
         <%= t '.share' %>
@@ -49,9 +47,7 @@
   <% end %>
 
   <% if @questionnaire.response_body.present? %>
-    <markdown>
-      <%= @questionnaire.response_body %>
-    </markdown>
+    <%= markdown @questionnaire.response_body %>
   <% end %>
 
   <nav>
