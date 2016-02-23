@@ -16,11 +16,9 @@ Rails.application.config.assets.precompile += %w(
   active_admin.js
   active_admin/application.js
   active_admin/print.css
-  individual/jquery.min.js
-  individual/jquery-ui.min.js
-  individual/jquery.validationEngine-en.js
-  individual/jquery.validationEngine-fr.js
-  individual/jquery.validationEngine-uk.js
+  validationEngine/js/languages/jquery.validationEngine-en.js
+  validationEngine/js/languages/jquery.validationEngine-fr.js
+  validationEngine/js/languages/jquery.validationEngine-uk.js
   individual/modernizr.min.js
   simulators/default_simulator.js
   simulators/deviation_simulator.js
