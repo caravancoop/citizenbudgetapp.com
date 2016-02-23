@@ -2,9 +2,6 @@ GEM
   remote: https://rubygems.org/
   specs:
     CFPropertyList (2.3.2)
-    action_dispatch-gz_static (0.0.3)
-      actionpack (>= 3.1.0)
-      railties (>= 3.1.0)
     actionmailer (4.2.5.1)
       actionpack (= 4.2.5.1)
       actionview (= 4.2.5.1)
@@ -108,7 +105,6 @@ GEM
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.0)
     cvss (0.99.0)
-    dalli (2.7.6)
     data_mapper (1.2.0)
       dm-aggregates (~> 1.2.0)
       dm-constraints (~> 1.2.0)
@@ -394,7 +390,6 @@ GEM
       nokogiri (~> 1.6)
       ntlm-http (~> 0.1, >= 0.1.1)
       webrobots (>= 0.0.9, < 0.2)
-    memcachier (0.0.2)
     memoist (0.14.0)
     method_source (0.8.2)
     mime-types (2.99)
@@ -582,7 +577,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  action_dispatch-gz_static
   actionpack-action_caching
   activeadmin (= 1.0.0.pre2)
   axlsx (= 2.1.0.pre)
@@ -594,7 +588,6 @@ DEPENDENCIES
   cancan
   carrierwave
   coffee-rails (~> 4.1.0)
-  dalli
   database_cleaner
   dawnscanner
   devise
@@ -609,7 +602,6 @@ DEPENDENCIES
   libv8 (= 3.16.14.7)
   lograge
   mechanize
-  memcachier
   mini_magick
   mustache
   odf-report
