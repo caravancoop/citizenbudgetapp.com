@@ -47,9 +47,9 @@ class Section
     read_attribute(:position) || _index
   end
 
-  # @param array [Array]
-  def criterion_as_list=(array)
-    self.criterion = array.split("\n").map(&:strip).reject(&:empty?)
+  # @param text [String]
+  def criterion_as_list=(text)
+    self.criterion = text.split("\n").map(&:strip).reject(&:empty?)
   end
 
   def criterion_as_list
