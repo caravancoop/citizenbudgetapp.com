@@ -12,6 +12,7 @@ class Section
   field :embed, type: String
   field :group, type: String
   field :position, type: Integer
+  field :criterion, type: Array, default: []
   index position: 1
 
   validates_presence_of :group
@@ -44,6 +45,15 @@ class Section
 
   def position
     read_attribute(:position) || _index
+  end
+
+  # @param array [Array]
+  def criterion_as_list=(array)
+    self.criterion = array.split("\n").map(&:strip).reject(&:empty?)
+  end
+
+  def criterion_as_list
+    criterion.join("\n")
   end
 
 private

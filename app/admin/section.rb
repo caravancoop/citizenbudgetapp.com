@@ -37,6 +37,7 @@ ActiveAdmin.register Section do
       f.input :description, as: :text, input_html: {rows: 3}
       f.input :extra, as: :text, input_html: {rows: 3}
       f.input :embed, as: :text, input_html: {rows: 3}
+      f.input :criterion_as_list, as: :text, label: 'Criterion', input_html: {rows: 10}
     end
 
     # @see https://github.com/gregbell/active_admin/pull/1391
@@ -53,6 +54,7 @@ ActiveAdmin.register Section do
         g.input :widget, collection: Question::WIDGETS.map{|w| [t(w, scope: :widget), w]}
         g.input :options_as_list, as: :text, input_html: {rows: 5}
         g.input :labels_as_list, as: :text, input_html: {rows: 5}
+        g.input :criteria, collection: f.object.criterion
       end
 
       g.inputs t('legend.widget'), class: 'inputs inline' do
@@ -96,6 +98,15 @@ ActiveAdmin.register Section do
       end
       row :embed do |s|
         speakerdeck_or_markdown(s.embed) if s.embed?
+      end
+      row :criterion do |s|
+        ul do
+          s.criterion.each do |criteria|
+            li do
+              criteria
+            end
+          end
+        end
       end
       row :questions do |s|
         if s.questions.present?
