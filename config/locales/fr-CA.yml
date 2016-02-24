@@ -23,6 +23,8 @@ fr-CA:
     month: $/mois
     year: $/année
 
+  criterion_select_label: "Veuillez sélectionner l'une des options suivantes"
+
   questionnaires:
     questionnaire:
       your_choice: Votre choix
@@ -115,6 +117,7 @@ fr-CA:
         description: Vous pouvez utiliser la syntaxe Markdown.
         extra: Ce texte apparaîtra dans une bulle quand l'utilisateur clique pour savoir plus. Vous pouvez utiliser la syntaxe Markdown.
         embed: Ce contenu apparaîtra dans une fenêtre modale. Collez le code embed de Speaker Deck, etc.
+        criterion_as_list: Mettez chaque critère sur une nouvelle ligne.
       question:
         description: Vous pouvez utiliser la syntaxe Markdown.
         extra: Ce texte apparaîtra dans une bulle quand l'utilisateur clique pour savoir plus. Vous pouvez utiliser la syntaxe Markdown.

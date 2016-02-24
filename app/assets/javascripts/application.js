@@ -18,3 +18,12 @@
 //= require ./simulators/simulator
 //= require reports/graphs
 //= require scripts
+
+$(document).ready(function() {
+  $('.js-criteria-select').on('change', function(e) {
+    var table = $(e.target.closest('table'));
+
+    table.find("tbody tr:not([data-criteria='" + e.target.value + "'])").addClass('hidden');
+    table.find("tbody tr[data-criteria='" + e.target.value + "']").removeClass('hidden');
+  })
+});

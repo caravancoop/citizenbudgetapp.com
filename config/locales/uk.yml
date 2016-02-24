@@ -40,6 +40,8 @@ uk:
     month: грн/місяць
     year: грн/рік
 
+  criterion_select_label: "Please select one of the following options"
+
   questionnaires:
     questionnaire:
       your_choice: Ваш вибір
@@ -135,6 +137,7 @@ uk:
         description: Ви можете використовувати синтакс розмітки.
         extra: Цей текст буде показано коли користвуач натискатиме на посилання «Більше інформації». Ви можете використовувати синтакс розмітки.
         embed: Цей контент буде показано в модальному вікні. Скопіюйте embed код сюди.
+        criterion_as_list: Put each criteria on a separate line.
       question:
         description: Ви можете використовувати синтакс розмітки.
         extra: Цей текст буде показано коли користвуач натискатиме на посилання «Більше інформації». Ви можете використовувати синтакс розмітки.
