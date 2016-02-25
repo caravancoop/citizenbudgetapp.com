@@ -17,10 +17,15 @@
           %td.description(colspan="2")
             :markdown
               #{section.description}
+      - if section.criterion?
+        %tr
+          %td(colspan="2")
+            %label= t :criterion_select_label
+            = select_tag :criteria, options_for_select(section.criterion), class: 'js-criteria-select', prompt: ''
     %tbody
       - section.questions.each do |q|
         - unless @response.persisted? && %w(text textarea).include?(q.widget)
-          %tr(id="question-#{q.id}")
+          %tr(class="#{'hidden' if q.criteria?}" id="question-#{q.id}" data-criteria="#{q.criteria}")
             - if q.readonly?
               %td.description(colspan="2")
                 - if q.title?

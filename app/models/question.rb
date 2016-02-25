@@ -24,6 +24,7 @@ class Question
   field :cols, type: Integer
   field :required, type: Boolean
   field :revenue, type: Boolean
+  field :criteria, type: String
 
   field :widget, type: String
   field :extra, type: String
@@ -40,6 +41,7 @@ class Question
   # validates_presence_of :title, unless: ->(q){q.widget == 'readonly'}
   validates_inclusion_of :widget, in: WIDGETS, allow_blank: true
   validates_numericality_of :unit_amount, allow_blank: true
+  validates_inclusion_of :criteria, in: ->(q) { q.section.criterion }, allow_blank: true
 
   # HTML attribute validations.
   validates_numericality_of :size, :maxlength, greater_than: 0, only_integer: true, allow_blank: true, if: ->(q){q.widget == 'text'}
