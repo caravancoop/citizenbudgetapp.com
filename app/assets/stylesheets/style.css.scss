@@ -450,9 +450,6 @@ label.iOSCheckLabelOff.reverse {
 
 /* Submit --------------------------------------------------------------------*/
 
-legend span {
-  padding-left: 160px;
-}
 #identification {
   select {
     width: auto; // override Bootstrap
@@ -579,7 +576,6 @@ footer {
 }
 
 nav {
-  width: 938px;
   height: 50px;
   background-color: #eeeeee; /* Old browsers */
   background-repeat: repeat-x; /* Repeat the gradient */
