@@ -23,7 +23,12 @@ $(document).ready(function() {
   $('.js-criteria-select').on('change', function(e) {
     var table = $(e.target.closest('table'));
 
-    table.find("tbody tr:not([data-criteria='" + e.target.value + "'])").addClass('hidden');
-    table.find("tbody tr[data-criteria='" + e.target.value + "']").removeClass('hidden');
+    var inactive = table.find("tbody tr:not([data-criteria='" + e.target.value + "'])")
+    inactive.find('input').prop('disabled', true)
+    inactive.addClass('hidden');
+
+    var active = table.find("tbody tr[data-criteria='" + e.target.value + "']")
+    active.find('input').prop('disabled', false)
+    active.removeClass('hidden');
   })
 });
