@@ -1,3 +1,7 @@
+@media (min-width: 1200px) {
+.container { width: 940px; } // Setting the width back to 940px
+}
+
 @media (max-width: 769px) {
     body {
         padding: 0;
@@ -36,6 +40,10 @@
     #introduction {
         padding-left: 20px;
         padding-right: 20px;
+
+        * {
+            max-width: 100% !important;
+        }
 
         li {
             line-height: 1.5;
@@ -188,7 +196,7 @@
     }
 
     .alert.alert-infos {
-        width: calc(100% - 40px);
+        width: 100%;
         padding: 20px;
     }
 
@@ -221,12 +229,14 @@
             padding: 20px;
             line-height: 1.4;
             margin-top: 10px;
+            color: #444;
         }
     }
 
     #questionnaire {
         nav {
             width: auto;
+            max-width: 100%;
         }
 
         .nav-fixed {
@@ -234,6 +244,10 @@
                 li a {
                     padding: 10px;
                 }
+            }
+
+            .message-fixed {
+                max-width: 100vw;
             }
         }
 
