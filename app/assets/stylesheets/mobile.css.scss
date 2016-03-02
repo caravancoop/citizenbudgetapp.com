@@ -48,6 +48,15 @@
         li {
             line-height: 1.5;
         }
+
+        .custom-chart {
+            display: block;
+            width: 100%;
+        }
+
+        #arrow {
+            display: none;
+        }
     }
 
     h3 {
@@ -176,14 +185,22 @@
         transform: scale(2.2);
     }
 
-    .form-horizontal .form-actions {
-        padding-left: 20px;
-        text-align: center;
-        border-top-width: 0;
+    .form-horizontal {
+        .form-actions {
+            padding-left: 20px;
+            text-align: center;
+            border-top-width: 0;
 
-        .btn {
-            font-size: 32px;
-            padding: 20px;
+            .btn {
+                font-size: 32px;
+                padding: 20px;
+            }
+        }
+
+        .control-label {
+            float: none;
+            width: auto;
+            text-align: left;
         }
     }
 
@@ -225,10 +242,12 @@
         }
 
         > input {
-            font-size: 32px;
-            padding: 20px;
-            line-height: 1.4;
-            margin-top: 10px;
+            width: 200px;
+            height: 40px;
+            margin: 20px auto;
+            padding: 0px 20px;
+            font-size: 20px;
+            line-height: 1.5;
             color: #444;
         }
     }
