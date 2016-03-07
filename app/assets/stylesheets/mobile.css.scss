@@ -257,5 +257,18 @@
     }
 
     #logo img { width: 100%; }
+
+    #summary-table {
+        table { width: 100%; }
+        tr { display: table-row;}
+        th { font-size: 14px; }
+        td { 
+            display: table-cell;
+            padding: 5px;
+        }
+
+        th:not(:first-child), 
+        td:not(:first-child) { text-align: right; }
+    }
 }
 
