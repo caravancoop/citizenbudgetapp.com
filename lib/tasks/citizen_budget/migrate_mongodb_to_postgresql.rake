@@ -1,5 +1,18 @@
+#
+# Usage
+#
+# 1. Prepare PG database
+# rake db:drop
+# rake db:create
+# rake db:schema:load
+#
+# 2. Start redis and mongod
+#
+# 3. rake citizen_budget:migrate_mongodb_to_postgresql
+#
 # MongoDB configuration: mongoid.yml
 # Potsgresql configuration: database.yml
+
 namespace :citizen_budget do
   desc "Import all records from a MongoDB database to a PostgreSQL database"
   task :migrate_mongodb_to_postgresql => :environment do
