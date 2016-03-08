@@ -2,6 +2,8 @@
 .container { width: 940px; } // Setting the width back to 940px
 }
 
+#logo img { width: 100%; }
+
 @media (max-width: 769px) {
     body {
         padding: 0;
@@ -279,13 +281,16 @@
         }
     }
 
-    #logo img { width: 100%; }
-
     #summary-table {
-        table { width: 100%; }
+        table {
+            width: 100%;
+        }
         tr { display: table-row;}
-        th { font-size: 14px; }
-        td {
+        th {
+            font-size: 12px;
+            padding: 5px;
+        }
+        td { 
             display: table-cell;
             padding: 5px;
         }
