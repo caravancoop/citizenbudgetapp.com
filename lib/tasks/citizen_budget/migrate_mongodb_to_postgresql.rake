@@ -1,14 +1,13 @@
-require File.dirname(__FILE__) + '/mongoid.rb'
-
 # MongoDB configuration: mongoid.yml
 # Potsgresql configuration: database.yml
 namespace :citizen_budget do
   desc "Import all records from a MongoDB database to a PostgreSQL database"
   task :migrate_mongodb_to_postgresql => :environment do
+    require 'redis'
+    require File.dirname(__FILE__) + '/mongoid.rb'
 
-    # MongoDB & PostgreSQL id mapping
-    @questions_map = {}
-    @responses_map = {}
+    redis = Redis.new
+    database_name = ActiveRecord::Base.connection.current_database
 
     ActiveRecord::Base.transaction do
 
@@ -58,7 +57,7 @@ namespace :citizen_budget do
             p "Creating Questions: #{mongo_section.questions.all.count}"
             mongo_section.questions.all.each do |mongo_question|
               @question = @section.questions.create!(mongo_question.attributes.except(:_id))
-              @questions_map[mongo_question.id.to_s] = @question.id
+              redis.hset("#{database_name}_questions", mongo_question.id.to_s, @question.id)
             end
           end
 
@@ -67,7 +66,7 @@ namespace :citizen_budget do
           mongo_questionnaire.responses.all.each do |mongo_response|
             # Seems like some attributes were once used but not anymore
             @response = @questionnaire.responses.create!(mongo_response.attributes.except(:_id, :answers, :postal_code, :age, :gender, :newsletter, :subscribe))
-            @responses_map[mongo_response.id.to_s] = @response.id
+            redis.hset("#{database_name}_responses", mongo_response.id.to_s, @response.id)
           end
 
           # Google API auth
@@ -79,8 +78,6 @@ namespace :citizen_budget do
     end # transaction
 
 
-    @questions_map.freeze
-    @responses_map.freeze
 
     ActiveRecord::Base.transaction do
       # Answers
