@@ -48,7 +48,7 @@ gem 'rack-protection' # Protects against typical web attacks
 gem 'rack-attack'     # Handles blocking & throttling
 
 # Reporting
-gem "skylight"
+gem 'skylight'
 gem 'sentry-raven'
 
 # Gems used only for assets and not required
