@@ -83,36 +83,35 @@ namespace :citizen_budget do
     end # transaction
 
 
+    # Answers
+    p "Creating Answers"
+    answers = MongoQuestionnaire.all.no_timeout.map do |mongo_questionnaire|
+      mongo_questionnaire.responses.all.no_timeout.map do |mongo_response|
+        mongo_response.answers.map do |mongo_answer|
+          question_id = redis.hget("#{database_name}_questions", mongo_answer[0])
+          response_id = redis.hget("#{database_name}_responses", mongo_response.id.to_s)
+          value       = mongo_answer[1]
 
-    ActiveRecord::Base.transaction do
-      # Answers
-      p "Creating Answers"
-      MongoQuestionnaire.all.no_timeout.each do |mongo_questionnaire|
-        mongo_questionnaire.responses.all.no_timeout.each do |mongo_response|
-          mongo_response.answers.each do |mongo_answer|
-            question_id = @questions_map[mongo_answer[0]]
-            response_id = @responses_map[mongo_response.id.to_s]
-            value       = mongo_answer[1]
+          next unless question_id
+          next unless response_id
 
-            next unless question_id
-            next unless response_id
-
-            if value.is_a?(Array)
-              clean = value.map(&:scrub)
-            elsif value
-              clean = value.scrub
-            end
-
-            begin
-              Answer.create!(value: [clean || value], question_id: question_id, response: Response.unscoped.find(response_id))
-            rescue ActiveRecord::RecordInvalid => e
-              binding.pry
-              raise e
-            end
+          if value.is_a?(Array)
+            clean = value.map { |v| v.respond_to?(:scrub) ? v.scrub : v }
+          elsif value
+            clean = value.scrub
           end
+
+          [Array.wrap(clean || value), question_id, response_id]
         end
       end
-    end # transaction
+    end.flatten(2).compact
+
+    p "Total Answers: #{answers.count}"
+    Answer.bulk_insert(:value, :question_id, :response_id) do |worker|
+      answers.each do |answer|
+        worker.add(answer)
+      end
+    end
 
   end
 end
