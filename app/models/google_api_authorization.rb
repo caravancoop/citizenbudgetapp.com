@@ -118,7 +118,16 @@ private
   # @see https://github.com/sporkmonger/signet/blob/master/lib/signet/oauth_2/client.rb#L581
   def refresh_access_token!
     # If we have no refresh token, we wait for the API to raise an authorization error.
-    if client.authorization.expired? && client.authorization.refresh_token
+    expires_at = Proc.new do |auth|
+      if auth.issued_at && auth.expires_in
+        DateTime.parse(auth.issued_at) + auth.expires_in
+      else
+        nil
+      end
+    end
+    expired = expires_at.call(client.authorization) != nil && Time.now >= expires_at.call(client.authorization)
+
+    if expired && client.authorization.refresh_token
       begin
         fetch_access_token!
       rescue Signet::AuthorizationError
