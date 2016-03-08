@@ -25,4 +25,5 @@ Rails.application.config.assets.precompile += %w(
   simulators/impact_simulator.js
   simulators/tax_simulator.js
   print.css
+  mobile.css
 )
