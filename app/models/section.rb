@@ -32,7 +32,6 @@ class Section < ActiveRecord::Base
     questions.all?(&:nonbudgetary?)
   end
 
-
   # @param text [String]
   def criterion_as_list=(text)
     self.criterion = text.split("\n").map(&:strip).reject(&:empty?)

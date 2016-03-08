@@ -13,7 +13,7 @@ class Question < ActiveRecord::Base
   # validates_presence_of :title, unless: ->(q){q.widget == 'readonly'}
   validates :widget, inclusion: { in: WIDGETS }, allow_blank: true
   validates :unit_amount, numericality: true, allow_nil: true
-  validates_inclusion_of :criteria, in: ->(q) { q.section.criterion }, allow_blank: true
+  validates :criteria, inclusion: { in: ->(q) { q.section.criterion } }, allow_blank: true
 
   # HTML attribute validations.
   validates :size, :maxlength, numericality: { greater_than: 0, only_integer: true }, allow_nil: true, if: ->(q){q.widget == 'text'}
