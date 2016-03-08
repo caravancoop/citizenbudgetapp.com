@@ -32,6 +32,11 @@ namespace :citizen_budget do
 
         # Questionnaires
         p "Creating Questionnaires: #{mongo_organization.questionnaires.all.count}"
+
+        # Disable problematic validations
+        rejected_validations = [:domain_must_be_active, :domain_must_not_be_blacklisted]
+        Questionnaire._validate_callbacks.instance_variable_set(:@chain, Questionnaire._validate_callbacks.instance_variable_get(:@chain).reject {|c| rejected_validations.include?(c.raw_filter)})
+
         mongo_organization.questionnaires.all.each do |mongo_questionnaire|
           excluded_keys = []
           excluded_keys << mongo_questionnaire.attributes.keys.find {|k| k.match(/{:starts_at=>(.+)}/) }
