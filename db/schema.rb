@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160222174817) do
+ActiveRecord::Schema.define(version: 20160308170226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,6 +144,7 @@ ActiveRecord::Schema.define(version: 20160222174817) do
     t.integer  "minimum_units"
     t.integer  "maximum_units"
     t.integer  "step"
+    t.string   "criteria"
   end
 
   add_index "questions", ["position"], name: "index_questions_on_position", using: :btree
