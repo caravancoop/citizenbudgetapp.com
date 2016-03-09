@@ -26,6 +26,8 @@ namespace :citizen_budget do
 
       # AdminUsers without organization
       p "Creating AdminUsers without Organization"
+      AdminUser._create_callbacks.instance_variable_set(:@chain, [])
+
       MongoAdminUser.where(organization_id: nil).all.each do |mongo_admin_user|
         AdminUser.create!(mongo_admin_user.attributes.except(:_id))
       end unless AdminUser.any?
