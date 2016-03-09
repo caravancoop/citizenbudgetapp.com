@@ -17,8 +17,6 @@ class AdminUser < ActiveRecord::Base
   validates :role, inclusion: { in: ROLES }, allow_blank: true
   validates :locale, inclusion: { in: Locale.available_locales }, allow_blank: true
 
-  before_save :set_locale
-
   after_create do |admin|
     admin.send_reset_password_instructions
   end
@@ -33,9 +31,5 @@ class AdminUser < ActiveRecord::Base
 
   def password_required?
     new_record? ? false : super
-  end
-
-  def set_locale
-    self.locale = nil if locale.blank?
   end
 end
