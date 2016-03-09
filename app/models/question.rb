@@ -81,17 +81,17 @@ class Question < ActiveRecord::Base
 
   # @return [Boolean] whether the widget is checked by default
   def checked?
-    %w(checkbox onoff).include?(widget) && default_value.to_f == 1
+    %w(checkbox onoff).include?(widget) && default_value == 1
   end
 
   # @return [Boolean] whether the widget is unchecked by default
   def unchecked?
-    %w(checkbox onoff).include?(widget) && default_value.to_f == 0
+    %w(checkbox onoff).include?(widget) && default_value == 0
   end
 
   # @return [Boolean] whether the widget option is selected by default
   def selected?(option)
-    widget == 'option' && default_value.to_f == option.to_f
+    widget == 'option' && default_value == BigDecimal(option)
   end
 
   # @return [String] the "No" label for an on-off widget
@@ -108,9 +108,9 @@ class Question < ActiveRecord::Base
   def maximum_amount
     case widget
     when 'onoff', 'scaler', 'slider'
-      (maximum_units - default_value.to_f) * unit_amount
+      (maximum_units - default_value) * unit_amount
     when 'option'
-      options.map(&:to_f).max
+      options.max {|o| BigDecimal(o)}
     end
   end
 
@@ -118,9 +118,9 @@ class Question < ActiveRecord::Base
   def minimum_amount
     case widget
     when 'onoff', 'scaler', 'slider'
-      (minimum_units - default_value.to_f) * unit_amount
+      (minimum_units - default_value) * unit_amount
     when 'option'
-      options.map(&:to_f).min
+      options.min {|o| BigDecimal(o)}
     end
   end
 
@@ -130,10 +130,8 @@ class Question < ActiveRecord::Base
   # @return the cast value
   def cast_value(value)
     case widget
-    when 'onoff'
-      Integer value.to_s rescue value
-    when 'scaler', 'slider', 'option'
-      Float value.to_s rescue value
+    when 'onoff', 'scaler', 'slider', 'option'
+      BigDecimal(value)
     else
       value
     end
@@ -151,13 +149,13 @@ private
 
   def get_options
     if %w(scaler slider).include?(widget) && options.present?
-      @minimum_units = options.first.to_f
-      @maximum_units = options.last.to_f
-      @step = (options[1] - options[0]).round(4)
+      @minimum_units = BigDecimal(options.first)
+      @maximum_units = BigDecimal(options.last)
+      @step =  (BigDecimal(options[1]) - BigDecimal(options[0])).zero? ? 1 : (BigDecimal(options[1]) - BigDecimal(options[0])).round(4)
     elsif widget == 'onoff'
-      @minimum_units = 0
-      @maximum_units = 1
-      @step = 1
+      @minimum_units = BigDecimal(0)
+      @maximum_units = BigDecimal(1)
+      @step = BigDecimal(1)
     elsif %w(checkboxes option radio select).include?(widget) && options.present?
       @options_as_list = options.join("\n")
     end
@@ -171,10 +169,10 @@ private
 
   def set_options
     if %w(scaler slider).include?(widget) && minimum_units.present? && maximum_units.present? && step.present?
-      self.options = (BigDecimal(minimum_units.to_s)..BigDecimal(maximum_units.to_s)).step(BigDecimal(step.to_s)).map(&:to_f)
-      self.options << maximum_units.to_f unless options.last == maximum_units.to_f
+      self.options = (minimum_units..maximum_units).step(step).map(&:to_s)
+      self.options << maximum_units.to_s unless options.last == maximum_units
     elsif widget == 'onoff'
-      self.options = [0, 1]
+      self.options = [BigDecimal(0), BigDecimal(1)].map(&:to_s)
     elsif %w(checkboxes option radio select).include?(widget) && options_as_list.present?
       self.options = options_as_list.split("\n").map(&:strip).reject(&:empty?)
     else
@@ -206,16 +204,16 @@ private
   end
 
   def default_value_must_be_between_minimum_and_maximum
-      if default_value.to_f < minimum_units.to_f || default_value.to_f > maximum_units.to_f
-    if minimum_units.present? && maximum_units.present? && default_value.present? && minimum_units < maximum_units
+    if default_value < minimum_units || default_value > maximum_units
+      if minimum_units.present? && maximum_units.present? && default_value.present? && minimum_units < maximum_units
         errors.add :default_value, I18n.t('errors.messages.default_value_must_be_between_minimum_and_maximum')
       end
     end
   end
 
   def default_value_must_be_an_option
-      unless options.include?(default_value) || options.include?(default_value.to_f)
-    if options.present? && default_value.present?
+    unless options.map {|o| BigDecimal(o)}.include?(default_value)
+      if options.present? && default_value.present?
         errors.add :default_value, I18n.t('errors.messages.default_value_must_be_an_option')
       end
     end
