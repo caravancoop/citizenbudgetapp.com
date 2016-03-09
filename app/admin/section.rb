@@ -112,11 +112,13 @@ ActiveAdmin.register Section do
         if s.questions.present?
           ul(class: authorized?(:update, s) ? 'sortable' : '') do
             s.questions.each_with_index do |q,index|
-              li(id: dom_id(q)) do
-                if authorized?(:update, q)
-                  i(class: 'icon-move')
+              present q do |q|
+                li(id: dom_id(q)) do
+                  if authorized?(:update, q)
+                    i(class: 'icon-move')
+                  end
+                  text_node link_to_if authorized?(:update, q), q.name, edit_admin_questionnaire_section_path(s.questionnaire, s, anchor: "section_questions_attributes_#{index}__destroy_input")
                 end
-                text_node link_to_if authorized?(:update, q), q.name, edit_admin_questionnaire_section_path(s.questionnaire, s, anchor: "section_questions_attributes_#{index}__destroy_input")
               end
             end
           end
