@@ -28,7 +28,7 @@ namespace :citizen_budget do
       p "Creating AdminUsers without Organization"
       MongoAdminUser.where(organization_id: nil).all.each do |mongo_admin_user|
         AdminUser.create!(mongo_admin_user.attributes.except(:_id))
-      end if AdminUser.none?
+      end unless AdminUser.any?
 
       # Organizations
       p "Creating Organizations: #{MongoOrganization.all.count}"
@@ -92,7 +92,7 @@ namespace :citizen_budget do
             @questionnaire.create_google_api_authorization!(mongo_questionnaire.google_api_authorization.attributes.except(:_id))
           end
         end
-      end if Organization.none?
+      end unless Organization.any?
     end # transaction
 
 
