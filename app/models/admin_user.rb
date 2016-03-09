@@ -19,7 +19,6 @@ class AdminUser < ActiveRecord::Base
 
   before_save :set_locale
 
-  # https://github.com/gregbell/active_admin/wiki/Your-First-Admin-Resource%3A-AdminUser
   after_create do |admin|
     admin.send_reset_password_instructions
   end
