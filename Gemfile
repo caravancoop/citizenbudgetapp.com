@@ -21,6 +21,7 @@ gem 'devise'
 gem 'devise-i18n'
 gem 'google-api-client', '0.9'
 gem 'jwt'
+gem 'i18n-timezones'
 gem 'mustache'
 
 # Image uploads

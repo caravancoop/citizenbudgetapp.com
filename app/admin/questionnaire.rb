@@ -115,7 +115,7 @@ ActiveAdmin.register Questionnaire do
           l(q.local_ends_at, format: :long) if q.ends_at?
         end
         row :time_zone do |q|
-          TimeZoneI18n[q.time_zone].human if q.time_zone?
+          t("timezones.#{ActiveSupport::TimeZone[q.time_zone].name}" ) if q.time_zone?
         end
         row :domain do |q|
           link_to(q.domain, q.domain_url) if q.domain?
