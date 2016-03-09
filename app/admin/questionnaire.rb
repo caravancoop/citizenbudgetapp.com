@@ -3,13 +3,13 @@ ActiveAdmin.register Questionnaire do
   scope :future
   scope :past
 
-  action_item only: :show do
+  action_item(:show) do
     if resource.google_api_authorization.try(:authorized?) && resource.domain?
       link_to t(:link_google_analytics), link_google_analytics_admin_questionnaire_path(resource), method: :post
     end
   end
 
-  action_item only: :show do
+  action_item(:show) do
     if resource.google_api_authorization.try(:configured?)
       if resource.google_api_authorization.authorized?
         link_to t(:deauthorize_google_api), deauthorize_google_api_admin_questionnaire_path(resource), method: :post
