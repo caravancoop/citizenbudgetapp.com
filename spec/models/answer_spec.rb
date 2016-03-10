@@ -3,12 +3,12 @@ require 'rails_helper'
 RSpec.describe Answer, type: :model do
   describe 'Factories' do
     context 'Valid factory' do
-      subject { create(:answers) }
+      subject { create(:answer) }
       specify { should be_valid }
     end
 
     context 'Invalid factory' do
-      subject { build(:invalid_answers) }
+      subject { build(:invalid_answer) }
       specify { is_expected.not_to be_valid }
     end
   end
