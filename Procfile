@@ -1,1 +1,1 @@
-web: bundle exec dotenv -f .env.local unicorn -c config/unicorn.rb
+web: bundle exec dotenv -f .env.local puma -C config/puma.rb

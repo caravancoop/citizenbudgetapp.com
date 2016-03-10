@@ -7,7 +7,7 @@ gem 'rails-i18n'
 gem 'dotenv-rails'
 
 # Server
-gem 'unicorn'
+gem 'puma'
 
 # Database
 gem 'pg'
