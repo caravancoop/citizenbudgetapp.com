@@ -5,8 +5,8 @@ class Question < ActiveRecord::Base
   has_many :answers
 
   composed_of :widget, mapping: [%w(widget_type type), %w(options options), %w(labels labels),
-    %(unit_amount unit_amount), %(unit_name unit_name), %(default_value default_value),
-    %(size size), %(maxlength maxlength), %(placeholder placeholder), %(rows rows), %(cols cols)]
+    %w(placeholder placeholder), %w(cols cols), %w(rows rows), %w(size size), %w(maxlength maxlength),
+    %w(default_value default_value), %w(unit_amount unit_amount), %w(unit_name unit_name)]
 
   validates_associated :widget
 

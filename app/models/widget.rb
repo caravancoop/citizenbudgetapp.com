@@ -30,42 +30,31 @@ class Widget
   validate :default_value_must_be_an_option,                                     if: ->(w){%w(scaler slider option).include?(type)}
   validate :options_and_labels_must_agree,                                       if: ->(w){type == 'option'}
 
-  attr_reader :type
-  attr_reader :options, :labels, :default_value, :size, :maxlength, :placeholder, :rows, :cols, :unit_amount, :unit_name
-  attr_reader :minimum_units, :maximum_units, :step
+  attr_accessor :type
+  attr_accessor :options, :labels, :default_value, :size, :maxlength, :placeholder, :rows, :cols, :unit_amount, :unit_name
+  attr_accessor :minimum_units, :maximum_units, :step
   attr_reader :readonly # ?
 
 
   # @param type [String]
   # @param options [Array]
   # @param labels [Array]
-  # @param default_value [BigDecimal]
+  # @param placeholder [String]
+  # @param cols [Integer]
+  # @param rows [Integer]
   # @param size [Integer]
   # @param maxlength [Integer]
-  # @param placeholder [String]
-  # @param rows [Integer]
-  # @param cols [Integer]
+  # @param default_value [BigDecimal]
   # @param unit_amount [BigDecimal]
   # @param unit_name [String]
-  def initialize(type, options=[], labels=[], unit_amount=nil, unit_name=nil, default_value=nil, size=nil, maxlength=nil, placeholder=nil, rows=nil, cols=nil)
-    @type = type
+  def initialize(type, options=[], labels=[], placeholder=nil, cols=nil, rows=nil, size=nil, maxlength=nil, default_value=nil, unit_amount=nil, unit_name=nil)
+    super(type: type, options: options, labels: labels, placeholder: placeholder,
+      cols: cols, rows: rows, size: size, maxlength: maxlength, default_value: default_value,
+      unit_amount: unit_amount, unit_name: unit_name)
 
-    @options, @labels = options, labels
-    @unit_amount, @unit_name = unit_amount, unit_name
-    @default_value, @size, @maxlength, @placeholder, @rows, @cols = default_value, size, maxlength, placeholder, rows, cols
+    set_virtual_attributes!
 
-    case type
-    when *%w(scaler slider)
-      @minimum_units = BigDecimal(options.first)
-      @maximum_units = BigDecimal(options.last)
-      @step =  (BigDecimal(options[1]) - BigDecimal(options[0])).zero? ? 1 : (BigDecimal(options[1]) - BigDecimal(options[0])).round(4)
-    when 'onoff'
-      @minimum_units = BigDecimal(0)
-      @maximum_units = BigDecimal(1)
-      @step = BigDecimal(1)
-    # when 'option' REALLY?
-    #   @unit_amount = BigDecimal(1)
-    end
+    self
   end
 
   # @return [String, nil]
@@ -156,6 +145,21 @@ class Widget
 
 
   private
+
+  def set_virtual_attributes!
+    case type
+    when *%w(scaler slider)
+      self.minimum_units = BigDecimal(options.first)
+      self.maximum_units = BigDecimal(options.last)
+      self.step =  (BigDecimal(options[1]) - BigDecimal(options[0])).zero? ? 1 : (BigDecimal(options[1]) - BigDecimal(options[0])).round(4)
+    when 'onoff'
+      self.minimum_units = BigDecimal(0)
+      self.maximum_units = BigDecimal(1)
+      self.step = BigDecimal(1)
+    # when 'option' REALLY?
+    #   @unit_amount = BigDecimal(1)
+    end
+  end
 
   def maximum_units_must_be_greater_than_minimum_units
     if minimum_units.present? && maximum_units.present? && minimum_units > maximum_units
