@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160314153002) do
+ActiveRecord::Schema.define(version: 20160314154043) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,7 +131,7 @@ ActiveRecord::Schema.define(version: 20160314153002) do
     t.integer  "cols"
     t.boolean  "required"
     t.boolean  "revenue"
-    t.string   "widget"
+    t.string   "widget_type"
     t.text     "extra"
     t.text     "embed"
     t.decimal  "unit_amount"

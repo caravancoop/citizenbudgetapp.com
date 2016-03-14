@@ -76,7 +76,10 @@ namespace :citizen_budget do
             # Questions
             p "Creating Questions: #{mongo_section.questions.all.count}"
             mongo_section.questions.all.each do |mongo_question|
-              @question = @section.questions.create!(mongo_question.attributes.except(:_id))
+              params = mongo_question.attributes.except(:_id)
+              params['widget_type'] = params.delete('widget') # Rename attribute
+
+              @question = @section.questions.create!(params)
               redis.hset("#{database_name}_questions", mongo_question.id.to_s, @question.id)
             end
           end

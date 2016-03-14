@@ -4,7 +4,7 @@ class Question < ActiveRecord::Base
   belongs_to :section
   has_many :answers
 
-  composed_of :widget, mapping: [%w(widget type), %w(options options), %w(labels labels),
+  composed_of :widget, mapping: [%w(widget_type type), %w(options options), %w(labels labels),
     %(unit_amount unit_amount), %(unit_name unit_name), %(default_value default_value),
     %(size size), %(maxlength maxlength), %(placeholder placeholder), %(rows rows), %(cols cols)]
 
