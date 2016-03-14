@@ -78,6 +78,8 @@ namespace :citizen_budget do
             mongo_section.questions.all.each do |mongo_question|
               params = mongo_question.attributes.except(:_id)
               params['widget_type'] = params.delete('widget') # Rename attribute
+              params['options'] = Array.wrap(params['options'])
+              params['labels'] = Array.wrap(params['labels'])
 
               @question = @section.questions.create!(params)
               redis.hset("#{database_name}_questions", mongo_question.id.to_s, @question.id)
