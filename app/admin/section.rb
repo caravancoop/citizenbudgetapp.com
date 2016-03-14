@@ -51,7 +51,7 @@ ActiveAdmin.register Section do
         g.input :description, as: :text, input_html: {rows: 4}
         g.input :extra, as: :text, input_html: {rows: 2}
         g.input :embed, as: :text, input_html: {rows: 2}
-        g.input :widget, collection: Question::WIDGETS.map{|w| [t(w, scope: :widget), w]}
+        g.input :widget, collection: Widget::TYPES.map{|w| [t(w, scope: :widget), w]}
         g.input :options_as_list, as: :text, input_html: {rows: 5}
         g.input :labels_as_list, as: :text, input_html: {rows: 5}
         g.input :criteria, collection: f.object.criterion

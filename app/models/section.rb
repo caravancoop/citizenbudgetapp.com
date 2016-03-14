@@ -29,7 +29,7 @@ class Section < ActiveRecord::Base
 
   # @return [Boolean] whether all questions are nonbudgetary questions
   def nonbudgetary?
-    questions.all?(&:nonbudgetary?)
+    questions.all? {|q| q.widget.nonbudgetary?}
   end
 
   # @param text [String]

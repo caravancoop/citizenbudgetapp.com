@@ -61,7 +61,7 @@
                   <div class="control control-static" data-widget="<%= q.widget %>" data-value="<%= q.unit_amount %>"></div>
                 </div>
               </td>
-            <% elsif q.nonbudgetary? %>
+            <% elsif q.widget.nonbudgetary? %>
               <td class="description" colspan="2">
                 <div class="header">
                   <%= render partial: 'title', locals: { object: q, placement: 'bottom' } %>
