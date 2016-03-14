@@ -17,13 +17,7 @@ class Response < ActiveRecord::Base
   # @param [Question] question a question
   # @return the answer to the question
   def answer(question)
-    if answers.present? && answers.key?(question.id.to_s)
-      answers[question.id.to_s]
-    elsif ['checkbox', 'onoff', 'option', 'slider', 'scaler'].include?(question.widget)
-      question.default_value
-    elsif question.widget == 'checkboxes'
-      []
-    end
+    answers.where(question: question).first.try(:value)
   end
 
   # @param [Question] question a question
