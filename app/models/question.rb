@@ -10,7 +10,7 @@ class Question < ActiveRecord::Base
 
   validates_associated :widget
 
-  validates :title, :presence, unless: ->(q){q.widget.type == 'readonly'}
+  validates :title, presence: true, unless: ->(q){q.widget.type == 'readonly'}
   validates :criteria, inclusion: { in: ->(q) { q.section.criterion } }, allow_blank: true
 
   before_save :strip_title_and_extra
