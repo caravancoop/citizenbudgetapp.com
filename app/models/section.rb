@@ -10,7 +10,6 @@ class Section < ActiveRecord::Base
   accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
 
   after_initialize :set_default_group
-  after_save :touch_questionnaire # @see https://github.com/mongoid/mongoid/pull/2195
 
   scope :simulator, ->{ where(group: ['simulator', 'custom']) }
   scope :budgetary, ->{ where(group: 'simulator') }
@@ -41,13 +40,10 @@ class Section < ActiveRecord::Base
     criterion.join("\n")
   end
 
-private
+
+  private
 
   def set_default_group
     self.group ||= 'simulator'
-  end
-
-  def touch_questionnaire
-    questionnaire.touch
   end
 end
