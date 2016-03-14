@@ -3,6 +3,7 @@ class Widget
   include ActiveModel::Serialization
 
   TYPES = %w(checkbox checkboxes onoff radio option readonly scaler select slider static text textarea)
+  BUDGETARY = %w(onoff option scaler slider)
   NONBUDGETARY = %w(checkbox checkboxes radio readonly select static text textarea)
 
   validates :type, inclusion: { in: TYPES }
@@ -54,7 +55,7 @@ class Widget
     @default_value, @size, @maxlength, @placeholder, @rows, @cols = default_value, size, maxlength, placeholder, rows, cols
 
     case type
-    when %w(scaler slider)
+    when *%w(scaler slider)
       @minimum_units = BigDecimal(options.first)
       @maximum_units = BigDecimal(options.last)
       @step =  (BigDecimal(options[1]) - BigDecimal(options[0])).zero? ? 1 : (BigDecimal(options[1]) - BigDecimal(options[0])).round(4)
@@ -84,7 +85,7 @@ class Widget
 
   # @return [Boolean] whether it is a budgetary question
   def budgetary?
-    !nonbudgetary?
+    BUDGETARY.include?(type)
   end
 
   # @return [Boolean] whether multiple values can be selected
