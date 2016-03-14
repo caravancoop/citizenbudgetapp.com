@@ -15,8 +15,8 @@ class Question < ActiveRecord::Base
 
   scope :budgetary, ->{ where('widget IN (?)', Widget::BUDGETARY) }
   scope :nonbudgetary, ->{ where('widget IN (?)', Widget::NONBUDGETARY) }
-  # default_scope ->{ order(position: :asc) }
-  
+  default_scope ->{ order(position: :asc) }
+
 
   private
 
