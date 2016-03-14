@@ -11,6 +11,7 @@ class Questionnaire < ActiveRecord::Base
   belongs_to :organization
   has_one :google_api_authorization
   has_many :sections, dependent: :destroy
+  has_many :questions, through: :sections
   has_many :responses, dependent: :destroy
 
   mount_uploader :logo, ImageUploader
@@ -183,26 +184,18 @@ class Questionnaire < ActiveRecord::Base
     ends_at? && ends_at < Time.now
   end
 
-  # @return [Float] the largest surplus possible
+  # @return [BigDecimal] the largest surplus possible
   def maximum_amount
-    sum = 0
-    sections.budgetary.each do |section|
-      section.questions.budgetary.each do |question|
-        sum += question.maximum_amount
-      end
+    questions.where(section: sections.budgetary).to_a.sum do |q|
+      q.widget.maximum_amount ? q.widget.maximum_amount : 0
     end
-    sum
   end
 
-  # @return [Float] the largest deficit possible
+  # @return [BigDecimal] the largest deficit possible
   def minimum_amount
-    sum = 0
-    sections.budgetary.each do |section|
-      section.questions.budgetary.each do |question|
-        sum += question.minimum_amount
-      end
+    questions.where(section: sections.budgetary).to_a.sum do |q|
+      q.widget.minimum_amount ? q.widget.minimum_amount : 0
     end
-    sum
   end
 
   def cache_key

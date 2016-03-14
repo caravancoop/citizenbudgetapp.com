@@ -130,8 +130,8 @@ class Widget
   # @return [BigDecimal] the maximum value of the widget
   def maximum_amount
     case type
-    when 'onoff', 'scaler', 'slider'
-      (maximum_units - default_value) * unit_amount
+    when *%w(onoff scaler slider)
+      unit_amount ? (maximum_units - default_value) * unit_amount : maximum_units
     when 'option'
       options.max {|o| BigDecimal(o)}
     end
@@ -140,8 +140,8 @@ class Widget
   # @return [BigDecimal] the minimum value of the widget
   def minimum_amount
     case type
-    when 'onoff', 'scaler', 'slider'
-      (minimum_units - default_value) * unit_amount
+    when *%w(onoff scaler slider)
+      unit_amount ? (minimum_units - default_value) * unit_amount : minimum_units
     when 'option'
       options.min {|o| BigDecimal(o)}
     end
