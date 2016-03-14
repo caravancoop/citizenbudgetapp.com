@@ -8,9 +8,8 @@ class Question < ActiveRecord::Base
     %w(placeholder placeholder), %w(cols cols), %w(rows rows), %w(size size), %w(maxlength maxlength),
     %w(default_value default_value), %w(unit_amount unit_amount), %w(unit_name unit_name)]
 
-  validates_associated :widget
-
   validates :criteria, inclusion: { in: ->(q) { q.section.criterion } }, allow_blank: true
+  validate :valid_widget
 
   before_save :strip_title_and_extra
 
@@ -44,5 +43,9 @@ class Question < ActiveRecord::Base
   def strip_title_and_extra
     self.title = title.strip if title?
     self.extra = extra.strip if extra?
+  end
+
+  def valid_widget
+    errors.add(:widget) unless widget.valid?
   end
 end
