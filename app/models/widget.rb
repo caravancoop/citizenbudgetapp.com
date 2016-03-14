@@ -52,6 +52,11 @@ class Widget
       cols: cols, rows: rows, size: size, maxlength: maxlength, default_value: default_value,
       unit_amount: unit_amount, unit_name: unit_name)
 
+    case type
+    when *%w(scaler slider)
+      raise ArgumentError.new('options must contain at least 2 elements') unless options.many?
+    end
+
     set_virtual_attributes!
 
     self
@@ -151,7 +156,7 @@ class Widget
     when *%w(scaler slider)
       self.minimum_units = BigDecimal(options.first)
       self.maximum_units = BigDecimal(options.last)
-      self.step =  (BigDecimal(options[1]) - BigDecimal(options[0])).zero? ? 1 : (BigDecimal(options[1]) - BigDecimal(options[0])).round(4)
+      self.step = (BigDecimal(options[1]) - BigDecimal(options[0])).round(4)
     when 'onoff'
       self.minimum_units = BigDecimal(0)
       self.maximum_units = BigDecimal(1)
