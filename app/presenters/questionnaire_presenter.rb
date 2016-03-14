@@ -83,7 +83,7 @@ class QuestionnairePresenter < Bourgeois::Presenter
           details[:labels] = question.labels
         end
       # Multiple choice survey questions.
-      elsif question.options?
+    elsif question.options.any?
         changes = responses.select{|r| r.answers[question.id.to_s]}
         number_of_changes = changes.size
 
