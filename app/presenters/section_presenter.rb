@@ -8,4 +8,9 @@ class SectionPresenter < Bourgeois::Presenter
     parts << title.parameterize if title.present?
     parts.map(&:to_s) * '-'
   end
+
+  # @return [Boolean] whether the "Read more" content is a URL
+  def extra_url?
+    extra? && extra[%r{\Ahttps?://\S+\z}]
+  end
 end

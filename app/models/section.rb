@@ -21,11 +21,6 @@ class Section < ActiveRecord::Base
     title? && title || I18n.t(:untitled)
   end
 
-  # @return [Boolean] whether the "Read more" content is a URL
-  def extra_url?
-    extra? && extra[%r{\Ahttps?://\S+\z}]
-  end
-
   # @return [Boolean] whether all questions are nonbudgetary questions
   def nonbudgetary?
     questions.all? {|q| q.widget.nonbudgetary?}

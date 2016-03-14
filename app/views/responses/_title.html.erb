@@ -1,3 +1,4 @@
+<% present object do |object| %>
 <%= object.title.html_safe %>
 
 <% if object.respond_to?(:required?) && object.required? %>
@@ -20,4 +21,5 @@
     <i class="icon-info-sign"></i>
     <%= link_to t('.view_media'), "##{object.title.parameterize}_embed", 'data-toggle' => 'modal', 'rel' => 'tooltip', 'title' => t('.view_media_tip') %>
   </span>
+<% end %>
 <% end %>

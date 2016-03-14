@@ -18,12 +18,7 @@ class Question < ActiveRecord::Base
   scope :budgetary, ->{ where('widget IN (?)', Widget::BUDGETARY) }
   scope :nonbudgetary, ->{ where('widget IN (?)', Widget::NONBUDGETARY) }
   # default_scope ->{ order(position: :asc) }
-
-  # @return [Boolean] whether the "Read more" content is a URL
-  def extra_url?
-    extra? && extra[%r{\Ahttps?://\S+\z}]
-  end
-
+  
 
   private
 

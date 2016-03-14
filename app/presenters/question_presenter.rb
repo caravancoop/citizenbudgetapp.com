@@ -51,4 +51,9 @@ class QuestionPresenter < Bourgeois::Presenter
     attributes[:class] = classes.join(' ') unless classes.empty?
     attributes
   end
+
+  # @return [Boolean] whether the "Read more" content is a URL
+  def extra_url?
+    extra? && extra[%r{\Ahttps?://\S+\z}]
+  end
 end
