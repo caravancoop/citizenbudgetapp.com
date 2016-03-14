@@ -4,7 +4,7 @@ class Response < ActiveRecord::Base
   belongs_to :questionnaire
   has_many :answers, dependent: :destroy
 
-  validates :questionnaire_id, :initialized_at, :ip, presence: true  # Answers can be blank if all radio buttons
+  validates :questionnaire, :initialized_at, :ip, presence: true  # Answers can be blank if all radio buttons
   # We don't do more ambitious validation to avoid excluding valid responses.
 
   default_scope -> { where(deleted_at: nil, comments: nil) }
