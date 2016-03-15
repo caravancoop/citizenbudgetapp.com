@@ -24,3 +24,8 @@
                 %td
                   - %w(csv tsv xls xlsx).each do |format|
                     = link_to format, admin_dashboard_raw_path(id: questionnaire, format: format)
+              %tr
+                %th=t '.table.download_comments_header'
+                %td
+                  - %w(txt docx).each do |format|
+                    = link_to format, admin_dashboard_raw_path(id: questionnaire, format: format)

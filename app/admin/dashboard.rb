@@ -79,6 +79,50 @@ ActiveAdmin.register_page 'Dashboard' do
     end
   end
 
+  page_action 'comments' do
+    @questionnaire = current_admin_user.questionnaires.find(params[:id])
+    authorize! :read, @questionnaire
+
+    filename = "data-#{Time.now.strftime('%Y-%m-%d')}.#{params[:format]}"
+
+    case params[:format]
+    when 'txt'
+      string = ""
+
+      @questionnaire.comments.each do |comment|
+        begin
+          string << comment + "\n\n"
+
+        rescue ArgumentError => e # non-UTF8 characters from spammers
+          logger.error "#{e.inspect}: #{comment.inspect}"
+        end
+      end
+
+      send_data string, filename: filename, :type => 'text/plain; charset=utf-8; header=present'
+
+    when 'docx'
+      word = Docxer::Document.new
+      document = word.document
+
+      @questionnaire.comments.each do |comment|
+        begin
+          document.p do |p|
+            p.text comment
+            p.br times: 1
+          end
+
+        rescue ArgumentError => e # non-UTF8 characters from spammers
+          logger.error "#{e.inspect}: #{comment.inspect}"
+        end
+      end
+
+      send_data word.render.string, filename: filename, type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
+    else
+      redirect_to admin_root_path, notice: t(:unknown_format)
+    end
+  end
+
   controller do
     def index
       @questionnaires = current_admin_user.questionnaires
