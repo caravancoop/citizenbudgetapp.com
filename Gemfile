@@ -57,9 +57,6 @@ gem 'sentry-raven'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'therubyracer', require: 'v8'
-  gem 'libv8', '3.16.14.7'
-
   gem 'sass-rails', '~> 5.0'
   gem 'uglifier', '>= 1.3.0'
   gem 'coffee-rails', '~> 4.1.0'
