@@ -96,3 +96,9 @@ group :production do
   gem 'rails_12factor'
   gem 'lograge'
 end
+
+group :migrate do
+  gem 'mongoid'
+  gem 'redis'
+  gem 'bulk_insert'
+end

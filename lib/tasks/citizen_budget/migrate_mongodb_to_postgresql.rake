@@ -16,6 +16,8 @@
 namespace :citizen_budget do
   desc "Import all records from a MongoDB database to a PostgreSQL database"
   task :migrate_mongodb_to_postgresql => :environment do
+    Bundler.require(:migrate)
+
     require 'redis'
     require File.dirname(__FILE__) + '/mongoid.rb'
 
