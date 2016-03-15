@@ -6,6 +6,12 @@ gem 'actionpack-action_caching'
 gem 'rails-i18n'
 gem 'dotenv-rails'
 
+gem 'cancan'
+gem 'devise'
+gem 'google-api-client', '~> 0.6.4', require: 'google/api_client'
+gem 'jwt', '~> 0.1.4' # google-api-client
+gem 'mustache'
+
 # Server
 gem 'puma'
 
@@ -16,13 +22,9 @@ gem 'paranoia', '~> 2.0'
 # Admin
 gem 'activeadmin', '1.0.0.pre2'
 
-gem 'cancan'
-gem 'devise'
+# I18n
 gem 'devise-i18n'
 gem 'i18n-timezones'
-gem 'google-api-client', '~> 0.6.4', require: 'google/api_client'
-gem 'jwt', '~> 0.1.4' # google-api-client
-gem 'mustache'
 
 # Image uploads
 gem 'fog'
@@ -59,9 +61,9 @@ group :assets do
   gem 'libv8', '3.16.14.7'
 
   gem 'sass-rails', '~> 5.0'
+  gem 'uglifier', '>= 1.3.0'
   gem 'coffee-rails', '~> 4.1.0'
   gem 'coffee-script'
-  gem 'uglifier', '>= 1.3.0'
 end
 
 group :development, :test do
