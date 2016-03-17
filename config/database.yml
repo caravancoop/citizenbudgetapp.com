@@ -1,6 +1,5 @@
 defaults: &defaults
   adapter: postgresql
-  database: <%= ENV['POSTGRESQL_DATABASE'] %>
   username: <%= ENV['POSTGRESQL_USERNAME'] %>
   password: <%= ENV['POSTGRESQL_PASSWORD'] %>
   host: <%= ENV['POSTGRESQL_ADDRESS'] %>
@@ -11,12 +10,12 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  database: <%= [ENV['POSTGRESQL_DATABASE'], 'development'].join('_') %>
+  database: <%= ENV['POSTGRESQL_DATABASE'] || 'citizen_budget_development' %>
 
 test:
   <<: *defaults
-  database: <%= [ENV['POSTGRESQL_DATABASE'], 'test'].join('_') %>
+  database: <%= ENV['POSTGRESQL_DATABASE'] || 'citizen_budget_test' %>
 
 production:
   <<: *defaults
-  database: <%= [ENV['POSTGRESQL_DATABASE'], 'production'].join('_') %>
+  database: <%= ENV['POSTGRESQL_DATABASE'] || 'citizen_budget_production' %>
