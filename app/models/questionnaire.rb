@@ -13,6 +13,7 @@ class Questionnaire < ActiveRecord::Base
   has_many :sections, dependent: :destroy
   has_many :questions, through: :sections
   has_many :responses, dependent: :destroy
+  has_many :answers, through: :responses
 
   mount_uploader :logo, ImageUploader
   mount_uploader :title_image, ImageUploader

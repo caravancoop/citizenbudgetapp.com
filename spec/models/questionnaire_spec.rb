@@ -18,6 +18,7 @@ RSpec.describe Questionnaire, type: :model do
     it { should have_one(:google_api_authorization) }
     it { should have_many(:sections) }
     it { should have_many(:responses) }
+    it { should have_many(:answers) }
   end
 
   describe 'Validations' do
