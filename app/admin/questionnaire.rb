@@ -1,4 +1,11 @@
 ActiveAdmin.register Questionnaire do
+  permit_params :assessment_period, :attribution, :change_required, :content_after, :content_before, :default_assessment,
+    :description, :domain, :email_required, :facebook_app_id, :google_analytics, :google_analytics_profile, :instructions,
+    :introduction, :javascript, :locale, :logo_cache, :maximum_deviation, :mode, :open_graph_description, :open_graph_title,
+    :organization_id, :read_more, :reply_to, :response_body, :response_notice, :response_preamble, :starting_balance,
+    :stylesheet, :tax_rate, :tax_revenue, :thank_you_subject, :thank_you_template, :time_zone, :title, :title_image_cache,
+    :twitter_screen_name, :twitter_share_text, :twitter_text, :starts_at, :ends_at
+
   scope :current
   scope :future
   scope :past
