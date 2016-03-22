@@ -46,7 +46,7 @@
 
   <% if @questionnaire.javascript? %>
     <%= javascript_tag do %>
-      <%= CoffeeScript.compile(@questionnaire.javascript) %>
+      <%= CoffeeScript.compile(@questionnaire.javascript).html_safe %>
     <% end %>
   <% end %>
 
