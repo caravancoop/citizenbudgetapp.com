@@ -42,11 +42,11 @@ ActiveAdmin.register Section do
 
     # @see https://github.com/gregbell/active_admin/pull/1391
     f.has_many :questions, header: Question.model_name.human(count: 1.1) do |g,i|
-      unless g.object.new_record?
-        g.input :_destroy, as: :boolean
-      end
+      inputs t('legend.question') do
+        unless g.object.new_record?
+          g.input :_destroy, as: :boolean
+        end
 
-      g.inputs t('legend.question') do
         g.input :title
         g.input :description, as: :text, input_html: {rows: 4}
         g.input :extra, as: :text, input_html: {rows: 2}
@@ -57,19 +57,19 @@ ActiveAdmin.register Section do
         g.input :criteria, collection: f.object.criterion
       end
 
-      g.inputs t('legend.widget'), class: 'inputs inline' do
+      inputs t('legend.widget'), class: 'inputs inline' do
         g.input :default_value, input_html: {size: 8}
         g.input :minimum_units, input_html: {size: 8}
         g.input :maximum_units, input_html: {size: 8}
         g.input :step, input_html: {size: 8}
       end
 
-      g.inputs t('legend.fiscal'), class: 'inputs inline' do
+      inputs t('legend.fiscal'), class: 'inputs inline' do
         g.input :unit_amount, as: :string, input_html: {size: 8}
         g.input :unit_name, input_html: {size: 18}
       end
 
-      g.inputs t('legend.html'), class: 'inputs inline' do
+      inputs t('legend.html'), class: 'inputs inline' do
         g.input :required
         g.input :revenue
         g.input :maxlength, as: :string, input_html: {size: 4}
@@ -81,6 +81,7 @@ ActiveAdmin.register Section do
 
       g.input :position, as: :hidden
     end
+
     f.actions
   end
 
