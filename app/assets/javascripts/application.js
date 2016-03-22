@@ -7,6 +7,7 @@
 
 // Plugins
 //= require jquery-easing-original/jquery.easing
+//= require jquery.scrollTo/jquery.scrollTo
 //= require jquery.localScroll/jquery.localScroll
 //= require jqueryui-touch-punch/jquery.ui.touch-punch
 //= require validationEngine/js/jquery.validationEngine
