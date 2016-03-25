@@ -26,7 +26,7 @@
         - else
           =t '.instructions'
 
-      #whitespace
+      #whitespace(aria-hidden="true")
 
       - if @questionnaire.assessment?
         #assessment.alert.alert-info
@@ -69,19 +69,19 @@
                 .controls
                   - if q.widget == 'checkbox'
                     = hidden_field_tag q.id, '0' # Mimic an unchecked box.
-                    %label.checkbox
+                    %label.checkbox(for="#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}")
                       = check_box_tag q.id, '1', q.checked?, html_attributes(q)
                       = q.title
                       - if q.required?
                         %abbr(title="#{t '.required'}")*
                   - elsif q.widget == 'checkboxes'
                     - q.options.each do |option|
-                      %label.checkbox.inline
+                      %label.checkbox.inline(for="#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}")
                         = check_box_tag "#{q.id}[]", option, q.default_value == option, html_attributes(q)
                         = option
                   - elsif q.widget == 'radio'
                     - q.options.each do |option|
-                      %label(class="#{q.options.size > 4 ? "radio" : "radio inline"}")
+                      %label(class="#{q.options.size > 4 ? "radio" : "radio inline"}" for="#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}")
                         = radio_button_tag q.id, option, q.default_value == option, html_attributes(q)
                         = option
                   - elsif q.widget == 'select'
