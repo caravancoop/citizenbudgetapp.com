@@ -287,6 +287,7 @@ en:
           days_left_header: Days left
           summary_report_header: Report
           download_raw_header: Download raw data
+          download_comments_header: Download comments
           view: View
           # If your language has more or fewer plural forms than English, you
           # may need to add keys for :zero, :two, :few and/or :many.

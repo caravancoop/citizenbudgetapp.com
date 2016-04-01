@@ -93,6 +93,16 @@ ActiveAdmin.register Questionnaire do
             end
           end
         end
+        li do
+          span do
+            t('admin.dashboard.current.table.download_comments_header')
+          end
+          %w(txt docx).each do |format|
+            span do
+              link_to format, admin_dashboard_comments_path(id: questionnaire, format: format)
+            end
+          end
+        end
       end
     end
 

@@ -351,6 +351,16 @@ class Questionnaire
     rows
   end
 
+  def comments
+    comments = []
+
+    responses.unscoped.where(comments: {'$gt' => ''}).each do |response|
+      comments << response.comments
+    end
+
+    comments
+  end
+
   def cache_key
     if new_record?
       "#{model_key}/new"

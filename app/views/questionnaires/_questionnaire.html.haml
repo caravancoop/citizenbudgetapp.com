@@ -14,18 +14,18 @@
               =t '.your_choice'
       - if section.description?
         %tr
-          %td.description(colspan="2")
+          %th.description(colspan="2")
             :markdown
               #{section.description}
       - if section.criterion?
         %tr
-          %td(colspan="2")
+          %th(colspan="2")
             %label= t :criterion_select_label
             = select_tag :criteria, options_for_select(section.criterion), class: 'js-criteria-select', prompt: ''
     %tbody
       - section.questions.each do |q|
         - unless @response.persisted? && %w(text textarea).include?(q.widget)
-          %tr(class="#{'hidden' if q.criteria?}" id="question-#{q.id}" data-criteria="#{q.criteria}")
+          %tr(class="#{'hidden' if q.criteria?}" id="question-#{q.id}" data-criteria="#{q.criteria}" aria-hidden="#{q.criteria?}")
             - if q.readonly?
               %td.description(colspan="2")
                 - if q.title?
@@ -36,7 +36,7 @@
                     #{q.description}
             - elsif q.widget == 'static'
               %td.description
-                .header
+                = label_tag q.id, nil, class: 'header' do
                   = render partial: 'title', locals: {object: q, placement: 'top'}
                 - if q.description?
                   :markdown
@@ -46,7 +46,7 @@
                   .control.control-static(data-widget="#{q.widget}" data-value="#{q.unit_amount}")
             - elsif q.nonbudgetary?
               %td.description(colspan="2")
-                .header
+                = label_tag q.id, nil, class: 'header' do
                   = render partial: 'title', locals: {object: q, placement: 'bottom'}
                 - if q.description?
                   :markdown
@@ -58,7 +58,7 @@
                       .controls
                         - if q.widget == 'checkboxes'
                           - q.options.each do |option|
-                            = label_tag nil, class: 'checkbox' do
+                            = label_tag nil, class: 'checkbox', for: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}" do
                               - if @response.persisted?
                                 = check_box_tag "#{q.id}[]", option, @response.answer(q).include?(option), disabled: true
                               - else
@@ -66,7 +66,7 @@
                               = option
                         - elsif q.widget == 'radio'
                           - q.options.each do |option|
-                            = label_tag nil, class: 'radio' do
+                            = label_tag nil, class: 'radio', for: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}" do
                               - if @response.persisted?
                                 = radio_button_tag q.id, option, @response.answer(q) == option, disabled: true
                               - else
@@ -81,7 +81,7 @@
                     = text_area_tag q.id, nil, html_attributes(q)
             - elsif q.widget == 'option'
               %td.description(colspan="2")
-                .header
+                = label_tag q.id, nil, class: 'header' do
                   = render partial: 'title', locals: {object: q, placement: 'top'}
                 - if q.description?
                   :markdown
@@ -91,7 +91,7 @@
                     .controls
                       - q.options.each_with_index do |option,i|
                         .control.control-option
-                          = label_tag nil, class: 'radio' do
+                          = label_tag nil, class: 'radio', for: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}" do
                             - if @response.persisted?
                               = radio_button_tag q.id, option, @response.answer(q) == option, 'class' => 'option', 'data-initial' => q.default_value, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled'
                             - else
@@ -100,7 +100,7 @@
                               #{q.labels[i]}
             - else # budgetary
               %td.description
-                .header
+                = label_tag q.id, nil, class: 'header' do
                   = render partial: 'title', locals: {object: q, placement: 'top'}
                 - if q.description?
                   :markdown
