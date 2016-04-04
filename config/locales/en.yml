@@ -512,6 +512,12 @@ en:
         created_at: Submitted
         time_to_complete: Time to complete
         comments: Anti-spam honeypot
+    errors:
+      messages:
+        image:
+          equal_to: "%{length} must be equal to %{count} pixels"
+          greater_than_or_equal_to: "%{length} must be greater or equal to %{count} pixels"
+          less_than_or_equal_to: "%{length} must be less than or equal to %{count} pixels"
 
   # --- Application branding ---------------------------------------------------
   # Only change translations in this section if you are rebranding the app.

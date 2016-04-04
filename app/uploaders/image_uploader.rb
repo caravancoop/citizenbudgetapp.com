@@ -4,15 +4,18 @@ require 'carrierwave/processing/mime_types'
 class ImageUploader < CarrierWave::Uploader::Base
   include CarrierWave::MimeTypes
 
-  process :set_content_type
-
   # Include RMagick or MiniMagick support:
   include CarrierWave::RMagick
-  # include CarrierWave::MiniMagick
 
   # Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:
   include Sprockets::Helpers::RailsHelper
   include Sprockets::Helpers::IsolatedHelper
+
+  attr_reader :width, :height
+
+  before :cache, :capture_size
+
+  process :set_content_type
 
   # Choose what kind of storage to use for this uploader:
   # storage :fog
@@ -44,8 +47,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   # end
 
   version :large do
-    process :resize_to_limit => [940, 200]
-    process :set_width_and_height
+    # Expect
   end
   version :medium do
     process :resize_to_limit => [470, 100]
@@ -66,24 +68,17 @@ class ImageUploader < CarrierWave::Uploader::Base
   #   "something.jpg" if original_filename
   # end
 
-  # https://github.com/jnicklas/carrierwave/wiki/How-to:-Get-version-image-dimensions
-  def set_width_and_height
-    if @file && set_width_and_height?
-      image = ::Magick::Image.read(@file.file).first
-      model.send(width_method, image.columns)
-      model.send(height_method, image.rows)
+  # for image size validation
+  # fetching dimensions in uploader, validating it in model
+  def capture_size(file)
+    if version_name.blank? # Only do this once, to the original version
+      if file.path.nil? # file sometimes is in memory
+        img = ::RMagick::Image::read(file.file)
+        @width = img[:width]
+        @height = img[:height]
+      else
+        @width, @height = `identify -format "%wx %h" #{file.path}`.split(/x/).map{|dim| dim.to_i }
+      end
     end
-  end
-
-  def set_width_and_height?
-    model && model.respond_to?(width_method) && model.respond_to?(height_method)
-  end
-
-  def width_method
-    @width_method ||= "#{mounted_as}_width=".to_sym
-  end
-
-  def height_method
-    @height_method ||= "#{mounted_as}_height=".to_sym
   end
 end
