@@ -3,6 +3,18 @@ window.updateTip = ($slider, value, simulator = main_simulator) ->
   content = simulator.tipSlider($slider, value)
   $slider.find('.tip-content').html(content) if content
 
+$(document).ready  ->
+  webshim.ready 'DOM forms-ext', ->
+    setTimeout (->
+      $('.slider').each ->
+        value = $(this).data('valuetext')
+        $span = $(this).find('.ws-range-thumb')
+
+        $span.append('<div class="tip"><div class="tip-content">' + value + '</div><div class="tip-arrow"></div></div>') if value
+   ),1000
+
+  return
+
 class window.Simulator
   constructor: (@options = {}, @identifier = 'simulator') ->
     # The tables belonging to this simulator.
@@ -52,7 +64,7 @@ class window.Simulator
     balance = 0
     $table.find('.slider').each ->
       $this = $(this)
-      balance += ($this.slider('value') - parseFloat($this.data('initial'))) * parseFloat($this.data('value'))
+      balance += ($this.data('value') - parseFloat($this.data('initial'))) * parseFloat($this.data('value'))
     $table.find('.onoff').each ->
       $this = $(this)
       balance += (+$this.prop('checked') - parseFloat($this.data('initial'))) * parseFloat($this.data('value'))
@@ -394,51 +406,29 @@ class window.Simulator
   initializeSliderWidgets: ->
     self = this
 
-    # `change` will be called once the respondent stops sliding.
-    slide = (event, ui) ->
-      $this = $(this)
-      value = ui.value
-      updateTip($this, value)
-      self.updateQuestion($this, value)
-
-    change = (event, ui) ->
-      self.track()
-      $this = $(this)
-      slide.call(this, event, ui)
-      $this.find('input').val(ui.value) # update the associated form element
-      self.changeSlider($this, ui)
-      self.updateSection($this)
+    $('.slider').on 'change', 'input', ->
+      $widget = $(this).parents('.slider')
+      value = $(this).val()
+      updateTip($widget, value)
+      self.updateQuestion($widget, value)
+      self.updateSection($widget)
       self.update()
 
     @scope.find('.slider').each ->
       $this   = $(this)
       initial = parseFloat($this.data('initial'))
-      minimum = parseFloat($this.data('minimum'))
-      maximum = parseFloat($this.data('maximum'))
       actual  = parseFloat($this.data('actual'))
+      content = self.tipSlider($this, initial)
 
-      $this.slider
-        animate: true
-        max: maximum
-        min: minimum
-        range: 'min'
-        step: parseFloat($this.data('step'))
-        value: initial
-        create: (event, ui) ->
-          content = self.tipSlider($this, initial)
-          $(this).find('a').append('<div class="tip"><div class="tip-content">' + content + '</div><div class="tip-arrow"></div></div>') if content
-        slide: not self.options.disabled and slide
-        change: not self.options.disabled and change
-        disabled: self.options.disabled
+      $this.data('valuetext', content)
 
-      # Place the initial tick according to the handle's default position.
-      if initial != maximum and initial != minimum
-        $this.find('.tick.initial').width($this.find('a').position().left + 1).show()
+      if $this.attr('disabled')
+        $(this).find('input').prop('disabled', 'disabled')
 
       # We place the initial tick according to the handle's default position, so
       # we can't set the value during slider initialization.
       unless isNaN(actual)
-        $this.slider('value', actual)
+        $this.find('input').val(actual)
 
     # Keyboard input can be confusing if the slider is not visible.
     @scope.find('.ui-slider-handle').unbind('keydown')
@@ -458,14 +448,16 @@ class window.Simulator
       $widget = $this.parents('.widget')
       $widget.find('.onoff').prop('checked', false).trigger('change')
       $slider = $widget.find('.slider')
-      $slider.slider('value', $slider.data('minimum')) # triggers `change`
+      $input = $slider.find('input')
+      $input.val($slider.data('minimum')).trigger('change') # triggers `change`
 
     $('.maximum').click ->
       $this = $(this)
       $widget = $this.parents('.widget')
       $widget.find('.onoff').prop('checked', true).trigger('change')
       $slider = $widget.find('.slider')
-      $slider.slider('value', $slider.data('maximum')) # triggers `change`
+      $input = $slider.find('input')
+      $input.val($slider.data('maximum')).trigger('change') # triggers `change`
 
   # @return [String] content for the tip on a slider
   tipSlider: ($widget, number) ->
@@ -496,7 +488,7 @@ class window.Simulator
 
     @scope.find('.slider').each ->
       $this = $(this)
-      value = $this.slider('value')
+      value = $this.find('input').val()
       updateTip($this, value, self)
       self.updateQuestion($this, value)
 

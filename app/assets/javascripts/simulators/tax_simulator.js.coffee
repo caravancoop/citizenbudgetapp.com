@@ -28,16 +28,17 @@ class window.TaxSimulator extends window.Simulator
       self.scope.find('.widget-scaler').each ->
         $widget = $(this)
         $control = $widget.find('.slider')
+        $input = $control.find('input')
 
         # @see Simulator#updateQuestion
-        difference = ($control.slider('value') - parseFloat($control.data('initial'))) * parseFloat($control.data('value'))
+        difference = ($input.val() - parseFloat($control.data('initial'))) * parseFloat($control.data('value'))
         $widget.find('.value').html(SimulatorHelper.number_to_currency(Math.abs(difference) * self.scale(), strip_insignificant_zeros: true))
 
         # In case we display minimum and maximum values again:
         # $widget.find('.minimum.taxes').html(SimulatorHelper.number_to_currency(taxAmount($control, $control.data('minimum'))))
         # $widget.find('.maximum.taxes').html(SimulatorHelper.number_to_currency(taxAmount($control, $control.data('maximum'))))
 
-        updateTip($control, $control.slider('value'))
+        updateTip($control, $input.val())
 
       self.scope.find('.widget-onoff').each ->
         $widget = $(this)
@@ -123,6 +124,7 @@ class window.TaxSimulator extends window.Simulator
 
   # @return [Float] the impact of a single change to the budget
   taxAmount: ($widget, number) ->
+    # console.log(parseFloat($widget.data('value')) * parseFloat(number) * @scale())
     parseFloat($widget.data('value')) * parseFloat(number) * @scale()
 
   # @return [String] content for the tip on a scaler
