@@ -7,19 +7,19 @@
     %thead
       - unless section.title.blank? && section.nonbudgetary?
         %tr
-          %th.category
+          %th.category(id="th1-#{section.id}" scope="col")
             = render partial: 'title', locals: {object: section, placement: 'bottom'}
-          %th.column.highlight
+          %th.column.highlight(id="th2-#{section.id}" scope="col")
             - unless section.nonbudgetary?
               =t '.your_choice'
       - if section.description?
         %tr
-          %th.description(colspan="2")
+          %th.description(id="th3-#{section.id}" colspan="2" scope="col")
             :markdown
               #{section.description}
       - if section.criterion?
         %tr
-          %th(colspan="2")
+          %th#th4(colspan="2" scope="col")
             %label= t :criterion_select_label
             = select_tag :criteria, options_for_select(section.criterion), class: 'js-criteria-select', prompt: ''
     %tbody
@@ -27,7 +27,7 @@
         - unless @response.persisted? && %w(text textarea).include?(q.widget)
           %tr(class="#{'hidden' if q.criteria?}" id="question-#{q.id}" data-criteria="#{q.criteria}" aria-hidden="#{q.criteria?}")
             - if q.readonly?
-              %td.description(colspan="2")
+              %td.description(colspan="2" headers="th3-#{section.id}")
                 - if q.title?
                   .header
                     = render partial: 'title', locals: {object: q, placement: 'bottom'}
@@ -35,17 +35,17 @@
                   :markdown
                     #{q.description}
             - elsif q.widget == 'static'
-              %td.description
+              %td.description(headers="th3-#{section.id}")
                 = label_tag q.id, nil, class: 'header' do
                   = render partial: 'title', locals: {object: q, placement: 'top'}
                 - if q.description?
                   :markdown
                     #{q.description}
-              %td.highlight
+              %td.highlight(headers="th2-#{section.id}")
                 %div(class="widget widget-#{q.widget}")
                   .control.control-static(data-widget="#{q.widget}" data-value="#{q.unit_amount}")
             - elsif q.nonbudgetary?
-              %td.description(colspan="2")
+              %td.description(colspan="2" headers="th3-#{section.id}")
                 = label_tag q.id, nil, class: 'header' do
                   = render partial: 'title', locals: {object: q, placement: 'bottom'}
                 - if q.description?
@@ -60,9 +60,9 @@
                           - q.options.each do |option|
                             = label_tag nil, class: 'checkbox', for: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}" do
                               - if @response.persisted?
-                                = check_box_tag "#{q.id}[]", option, @response.answer(q).include?(option), disabled: true
+                                = check_box_tag "#{q.id}[]", option, @response.answer(q).include?(option), {id: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}", disabled: true}
                               - else
-                                = check_box_tag "#{q.id}[]", option
+                                = check_box_tag "#{q.id}[]", option, false, id: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}"
                               = option
                         - elsif q.widget == 'radio'
                           - q.options.each do |option|
@@ -80,7 +80,7 @@
                   - elsif q.widget == 'textarea'
                     = text_area_tag q.id, nil, html_attributes(q)
             - elsif q.widget == 'option'
-              %td.description(colspan="2")
+              %td.description(colspan="2" headers="th3-#{section.id}")
                 = label_tag q.id, nil, class: 'header' do
                   = render partial: 'title', locals: {object: q, placement: 'top'}
                 - if q.description?
@@ -91,21 +91,21 @@
                     .controls
                       - q.options.each_with_index do |option,i|
                         .control.control-option
-                          = label_tag nil, class: 'radio', for: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}" do
+                          = label_tag nil, class: 'radio', for: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}_#{i}" do
                             - if @response.persisted?
-                              = radio_button_tag q.id, option, @response.answer(q) == option, 'class' => 'option', 'data-initial' => q.default_value, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled'
+                              = radio_button_tag q.id, option, @response.answer(q) == option, 'id' => "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}_#{i}", 'class' => 'option', 'data-initial' => q.default_value, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled'
                             - else
-                              = radio_button_tag q.id, option, q.selected?(option), 'class' => 'option', 'data-initial' => q.default_value, 'data-revenue' => q.revenue?
+                              = radio_button_tag q.id, option, q.selected?(option), 'id' => "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}_#{i}", 'class' => 'option', 'data-initial' => q.default_value, 'data-revenue' => q.revenue?
                             :markdown
                               #{q.labels[i]}
             - else # budgetary
-              %td.description
+              %td.description(headers="th3-#{section.id}")
                 = label_tag q.id, nil, class: 'header' do
                   = render partial: 'title', locals: {object: q, placement: 'top'}
                 - if q.description?
                   :markdown
                     #{q.description}
-              %td.highlight
+              %td.highlight(headers="th2-#{section.id}")
                 %div(class="widget widget-#{q.widget}")
                   - if %w(scaler slider).include?(q.widget)
                     .impact
@@ -145,7 +145,7 @@
                       %span.key
                       %span.value= number_to_currency 0
                     .control.control-onoff
-                      = hidden_field_tag q.id, '0' # Mimic an unchecked box.
+                      = hidden_field_tag q.id, '0', id: "#{q.id}_2" # Mimic an unchecked box.
                       - if @response.persisted?
                         = check_box_tag q.id, '1', @response.answer(q) == '1', 'class' => 'onoff', 'data-value' => q.unit_amount, 'data-initial' => q.default_value, 'data-no-label' => q.no_label, 'data-yes-label' => q.yes_label, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled'
                       - else

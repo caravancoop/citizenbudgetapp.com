@@ -12,4 +12,4 @@ webshim.setOptions({
   }
 });
 
-webshim.polyfill('forms-ext');
+webshim.polyfill('forms forms-ext');

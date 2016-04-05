@@ -281,6 +281,11 @@ $control-height: 25px;
 .slider .ws-range {
   width: 100% !important;
 }
+
+.ws-range .ws-range-progress {
+  background: transparent !important;
+}
+
 .slider .tip {
   position: absolute;
   width: 40px;
