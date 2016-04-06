@@ -14,12 +14,12 @@
               =t '.your_choice'
       - if section.description?
         %tr
-          %th.description(id="th3-#{section.id}" colspan="2" scope="col")
+          %td.description(colspan="2")
             :markdown
               #{section.description}
       - if section.criterion?
         %tr
-          %th#th4(colspan="2" scope="col")
+          %td(colspan="2")
             %label= t :criterion_select_label
             = select_tag :criteria, options_for_select(section.criterion), class: 'js-criteria-select', prompt: ''
     %tbody
@@ -27,7 +27,7 @@
         - unless @response.persisted? && %w(text textarea).include?(q.widget)
           %tr(class="#{'hidden' if q.criteria?}" id="question-#{q.id}" data-criteria="#{q.criteria}" aria-hidden="#{q.criteria?}")
             - if q.readonly?
-              %td.description(colspan="2" headers="th3-#{section.id}")
+              %td.description(colspan="2")
                 - if q.title?
                   .header
                     = render partial: 'title', locals: {object: q, placement: 'bottom'}
@@ -35,7 +35,7 @@
                   :markdown
                     #{q.description}
             - elsif q.widget == 'static'
-              %td.description(headers="th3-#{section.id}")
+              %td.description
                 = label_tag q.id, nil, class: 'header' do
                   = render partial: 'title', locals: {object: q, placement: 'top'}
                 - if q.description?
@@ -45,7 +45,7 @@
                 %div(class="widget widget-#{q.widget}")
                   .control.control-static(data-widget="#{q.widget}" data-value="#{q.unit_amount}")
             - elsif q.nonbudgetary?
-              %td.description(colspan="2" headers="th3-#{section.id}")
+              %td.description(colspan="2")
                 = label_tag q.id, nil, class: 'header' do
                   = render partial: 'title', locals: {object: q, placement: 'bottom'}
                 - if q.description?
@@ -80,7 +80,7 @@
                   - elsif q.widget == 'textarea'
                     = text_area_tag q.id, nil, html_attributes(q)
             - elsif q.widget == 'option'
-              %td.description(colspan="2" headers="th3-#{section.id}")
+              %td.description(colspan="2")
                 = label_tag q.id, nil, class: 'header' do
                   = render partial: 'title', locals: {object: q, placement: 'top'}
                 - if q.description?
@@ -99,7 +99,7 @@
                             :markdown
                               #{q.labels[i]}
             - else # budgetary
-              %td.description(headers="th3-#{section.id}")
+              %td.description
                 = label_tag q.id, nil, class: 'header' do
                   = render partial: 'title', locals: {object: q, placement: 'top'}
                 - if q.description?
