@@ -119,10 +119,10 @@ module ApplicationHelper
   # @see http://afarkas.github.io/webshim/demos/demos/cfgs/input-range.html
   def range(question)
     id = "#{question.id}-#{question.name.parameterize}"
-    minimum = integer(question.minimum_units)
-    maximum = integer(question.maximum_units)
-    step = integer(question.step)
-    default_value = integer(question.default_value)
+    minimum = float(question.minimum_units)
+    maximum = float(question.maximum_units)
+    step = float(question.step)
+    default_value = float(question.default_value)
 
     values_with_labels = [minimum, maximum]
     unless request.headers['X_MOBILE_DEVICE']
@@ -155,10 +155,10 @@ module ApplicationHelper
 
 private
 
-  def integer(number)
-    integer = Integer(number)
-    if integer == number
-      integer
+  def float(number)
+    float = Float(number)
+    if float == number
+      float
     else
       number
     end
