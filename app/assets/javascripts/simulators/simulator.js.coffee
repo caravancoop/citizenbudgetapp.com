@@ -64,7 +64,7 @@ class window.Simulator
     balance = 0
     $table.find('.slider').each ->
       $this = $(this)
-      balance += ($this.data('value') - parseFloat($this.data('initial'))) * parseFloat($this.data('value'))
+      balance += ($this.find('input').val() - parseFloat($this.data('initial'))) * parseFloat($this.data('value'))
     $table.find('.onoff').each ->
       $this = $(this)
       balance += (+$this.prop('checked') - parseFloat($this.data('initial'))) * parseFloat($this.data('value'))

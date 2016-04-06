@@ -69,7 +69,7 @@
                 .controls
                   - if q.widget == 'checkbox'
                     = hidden_field_tag q.id, '0' # Mimic an unchecked box.
-                    %label.checkbox(for="#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}")
+                    %label.checkbox(for="#{sanitize_to_id(q.id)}")
                       = check_box_tag q.id, '1', q.checked?, html_attributes(q)
                       = q.title
                       - if q.required?

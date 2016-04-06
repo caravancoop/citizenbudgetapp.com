@@ -124,7 +124,6 @@ class window.TaxSimulator extends window.Simulator
 
   # @return [Float] the impact of a single change to the budget
   taxAmount: ($widget, number) ->
-    # console.log(parseFloat($widget.data('value')) * parseFloat(number) * @scale())
     parseFloat($widget.data('value')) * parseFloat(number) * @scale()
 
   # @return [String] content for the tip on a scaler
