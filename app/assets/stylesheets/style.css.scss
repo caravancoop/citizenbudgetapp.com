@@ -288,8 +288,8 @@ $control-height: 25px;
 
 .slider .tip {
   position: absolute;
-  width: 40px;
-  padding: 4px 0;
+  width: 55px;
+  padding: 3px 0;
   border: 1px solid #999;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -297,7 +297,8 @@ $control-height: 25px;
   background-color: #fff;
   text-align: center;
   top: -35px;
-  left: -14px;
+  left: -21px;
+  color: #333;
 }
 .slider .ws-range-thumb {
   width: 1.2em;
