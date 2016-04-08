@@ -164,19 +164,6 @@ td.description {
     color: #000;
     font-weight: bold;
 
-    .popover-toggle {
-      font-weight: normal;
-      white-space: nowrap;
-      background-color: #ff9;
-      cursor: pointer;
-      color: #0088cc;
-
-      &:hover {
-        color: #005580;
-        text-decoration: underline;
-      }
-    }
-
     a,
     span {
       font-weight: normal;

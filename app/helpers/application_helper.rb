@@ -139,7 +139,7 @@ module ApplicationHelper
       options << content_tag('option', nil, attributes)
     end
 
-    content_tag('label', tag(:input, {
+    tag(:input, {
       id: question.id,
       name: "variables[#{question.id}]",
       type: 'range',
@@ -149,8 +149,8 @@ module ApplicationHelper
       value: default_value,
       list: id,
       style: 'display: none',
-    }), for: question.id) +
-    content_tag('datalist', content_tag('select', options, title: "datalist options"), id: id)
+    }) +
+    content_tag('datalist', content_tag('select', options), id: id)
   end
 
 private
