@@ -44,7 +44,7 @@ module ResponsesHelper
 
   # @param [Question] question a questionnaire question
   # @return [Hash] the HTML attributes for the question's `input` tag
-  def html_attributes(question)
+  def html_attributes(question, extras = {})
     attributes = {}
     classes = []
 
@@ -86,6 +86,11 @@ module ResponsesHelper
     end
 
     attributes[:class] = classes.join(' ') unless classes.empty?
+
+    if not extras.empty?
+      attributes.update(extras)
+    end
+
     attributes
   end
 
