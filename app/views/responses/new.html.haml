@@ -77,7 +77,7 @@
                   - elsif q.widget == 'checkboxes'
                     - q.options.each do |option|
                       %label.checkbox.inline(for="#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}")
-                        = check_box_tag "#{q.id}[]", option, q.default_value == option, html_attributes(q, id: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}")
+                        = check_box_tag "#{q.id}[]", option, q.default_value == option, html_attributes(q), id: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}"
                         = option
                   - elsif q.widget == 'radio'
                     - q.options.each do |option|
