@@ -7,11 +7,16 @@ $(document).ready  ->
   webshim.ready 'DOM forms-ext', ->
     setTimeout (->
       $('.slider').each ->
-        value = $(this).data('valuetext')
-        $span = $(this).find('.ws-range-thumb')
+        $this = $(this)
+        value = $this.data('valuetext')
+        $span = $this.find('.ws-range-thumb')
 
         $span.append('<div class="tip"><div class="tip-content">' + value + '</div><div class="tip-arrow"></div></div>') if value
-   ),1000
+
+        if main_simulator
+          main_simulator.update()
+
+    ),500
 
   return
 
@@ -411,6 +416,7 @@ class window.Simulator
       value = $(this).val()
       updateTip($widget, value)
       self.updateQuestion($widget, value)
+      self.changeSlider($widget, {'value': value})
       self.updateSection($widget)
       self.update()
 
@@ -423,15 +429,12 @@ class window.Simulator
       $this.data('valuetext', content)
 
       if $this.attr('disabled')
-        $(this).find('input').prop('disabled', 'disabled')
+        $this.find('input').prop('disabled', 'disabled')
 
       # We place the initial tick according to the handle's default position, so
       # we can't set the value during slider initialization.
       unless isNaN(actual)
         $this.find('input').val(actual)
-
-    # Keyboard input can be confusing if the slider is not visible.
-    @scope.find('.ui-slider-handle').unbind('keydown')
 
   # Static widgets.
   initializeStaticWidgets: ->
