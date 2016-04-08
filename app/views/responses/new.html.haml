@@ -62,10 +62,16 @@
             - section.questions.each do |q|
               .control-group(id="group-#{q.id}")
                 - unless %w(checkbox readonly).include?(q.widget)
-                  %label.control-label(for="#{q.id}")
-                    = q.title
-                    - if q.required?
-                      %abbr(title="#{t '.required'}")*
+                  - if %w(checkbox checkboxes radio).include?(q.widget)
+                    %span.control-label
+                      = q.title
+                      - if q.required?
+                        %abbr(title="#{t '.required'}")*
+                  - else
+                    %label.control-label(for="#{q.id}")
+                      = q.title
+                      - if q.required?
+                        %abbr(title="#{t '.required'}")*
                 .controls
                   - if q.widget == 'checkbox'
                     = hidden_field_tag q.id, '0' # Mimic an unchecked box.
