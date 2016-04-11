@@ -149,6 +149,7 @@ module ApplicationHelper
       value: default_value,
       list: id,
       style: 'display: none',
+      alt: t(".alt_slider"),
     }), for: question.id) +
     content_tag('datalist', content_tag('select', options, title: "datalist options"), id: id)
   end

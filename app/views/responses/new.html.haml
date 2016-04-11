@@ -33,7 +33,7 @@
           %label(for="response_assessment")
             #{t '.assessment'}<!--[if lt IE 10]> #{t '.default_assessment', number: number_to_currency(@questionnaire.default_assessment)}<![endif]-->#{t :colon}
           #{t '.currency_unit_pre'}
-          #{f.text_field :assessment, placeholder: number_with_delimiter(@questionnaire.default_assessment), class: 'span2'}
+          #{f.text_field :assessment, placeholder: number_with_delimiter(@questionnaire.default_assessment), class: 'span2', alt: t(".alt_text")}
           #{t '.currency_unit_post'}
 
       = render @questionnaire
@@ -55,10 +55,10 @@
                     :markdown
                       #{section.description}
               - if @questionnaire.email_required?
-                = f.input :email, wrapper_html: {id: 'group-email'}, required: true, input_html: {class: 'validate[required,custom[email]]'}
+                = f.input :email, wrapper_html: {id: 'group-email'}, required: true, input_html: {class: 'validate[required,custom[email]]', alt: t(".alt_text")}
               - else
-                = f.input :email, wrapper_html: {id: 'group-email'}, input_html: {class: 'validate[custom[email]]'}
-              = f.input :name, wrapper_html: {id: 'group-name'}
+                = f.input :email, wrapper_html: {id: 'group-email'}, input_html: {class: 'validate[custom[email]]', alt: t(".alt_text")}
+              = f.input :name, wrapper_html: {id: 'group-name'}, input_html: {alt: t(".alt_text")}
             - section.questions.each do |q|
               .control-group(id="group-#{q.id}")
                 - unless %w(checkbox readonly).include?(q.widget)
@@ -76,26 +76,26 @@
                   - if q.widget == 'checkbox'
                     = hidden_field_tag q.id, '0' # Mimic an unchecked box.
                     %label.checkbox(for="#{sanitize_to_id(q.id)}")
-                      = check_box_tag q.id, '1', q.checked?, html_attributes(q)
+                      = check_box_tag q.id, '1', q.checked?, html_attributes(q, alt: q.checked? ? t(".alt_checked") : t(".alt_unchecked"))
                       = q.title
                       - if q.required?
                         %abbr(title="#{t '.required'}")*
                   - elsif q.widget == 'checkboxes'
                     - q.options.each do |option|
                       %label.checkbox.inline(for="#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}")
-                        = check_box_tag "#{q.id}[]", option, q.default_value == option, html_attributes(q, id: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}")
+                        = check_box_tag "#{q.id}[]", option, q.default_value == option, html_attributes(q, {id: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}", alt: t(".alt_checkboxes")})
                         = option
                   - elsif q.widget == 'radio'
                     - q.options.each do |option|
                       %label(class="#{q.options.size > 4 ? "radio" : "radio inline"}" for="#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}")
-                        = radio_button_tag q.id, option, q.default_value == option, html_attributes(q)
+                        = radio_button_tag q.id, option, q.default_value == option, html_attributes(q, alt: t(".alt_radio"))
                         = option
                   - elsif q.widget == 'select'
-                    = select_tag q.id, options_for_select([nil] + q.options, q.default_value), html_attributes(q)
+                    = select_tag q.id, options_for_select([nil] + q.options, q.default_value), html_attributes(q, alt: t(".alt_select"))
                   - elsif q.widget == 'text'
-                    = text_field_tag q.id, nil, html_attributes(q)
+                    = text_field_tag q.id, nil, html_attributes(q, alt: t(".alt_text"))
                   - elsif q.widget == 'textarea'
-                    = text_area_tag q.id, nil, html_attributes(q)
+                    = text_area_tag q.id, nil, html_attributes(q, alt: t(".alt_text"))
                   - elsif q.widget == 'readonly'
                     - if q.title?
                       %h3= q.title
