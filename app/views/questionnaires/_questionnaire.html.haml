@@ -7,11 +7,16 @@
     %thead
       - unless section.title.blank? && section.nonbudgetary?
         %tr
-          %th.category(id="th1-#{section.id}" scope="col")
-            = render partial: 'title', locals: {object: section, placement: 'bottom'}
-          %th.column.highlight(id="th2-#{section.id}" scope="col")
-            - unless section.nonbudgetary?
+          - if section.nonbudgetary?
+            %th.category(id="th1-#{section.id}" colspan="2" scope="col")
+              = render partial: 'title', locals: {object: section, placement: 'bottom'}
+
+          - else
+            %th.category(id="th1-#{section.id}" scope="col")
+              = render partial: 'title', locals: {object: section, placement: 'bottom'}
+            %th.column.highlight(id="th2-#{section.id}" scope="col")
               =t '.your_choice'
+
       - if section.description?
         %tr
           %td.description(colspan="2")
@@ -20,7 +25,7 @@
       - if section.criterion?
         %tr
           %td(colspan="2")
-            %label= t :criterion_select_label
+            %label(for="criteria")= t :criterion_select_label
             = select_tag :criteria, options_for_select(section.criterion), class: 'js-criteria-select', prompt: ''
     %tbody
       - section.questions.each do |q|
@@ -36,7 +41,7 @@
                     #{q.description}
             - elsif q.widget == 'static'
               %td.description
-                = label_tag q.id, nil, class: 'header' do
+                .header
                   = render partial: 'title', locals: {object: q, placement: 'top'}
                 - if q.description?
                   :markdown
@@ -46,14 +51,20 @@
                   .control.control-static(data-widget="#{q.widget}" data-value="#{q.unit_amount}")
             - elsif q.nonbudgetary?
               %td.description(colspan="2")
-                = label_tag q.id, nil, class: 'header' do
-                  = render partial: 'title', locals: {object: q, placement: 'bottom'}
+                - if %w(select text textarea).include?(q.widget)
+                  = label_tag nil, class: 'header', for: "#{sanitize_to_id(q.id)}" do
+                    = render partial: 'title', locals: {object: q, placement: 'bottom'}
+                - else
+                  .header
+                    = render partial: 'title', locals: {object: q, placement: 'bottom'}
                 - if q.description?
                   :markdown
                     #{q.description}
                 - # @todo Implement checkbox widget.
                 - if %w(checkboxes radio).include?(q.widget)
                   %fieldset
+                    %legend(style="display: none")
+                      "#{q.title}"
                     .control-group
                       .controls
                         - if q.widget == 'checkboxes'
@@ -81,12 +92,14 @@
                     = text_area_tag q.id, nil, html_attributes(q)
             - elsif q.widget == 'option'
               %td.description(colspan="2")
-                = label_tag q.id, nil, class: 'header' do
+                .header
                   = render partial: 'title', locals: {object: q, placement: 'top'}
                 - if q.description?
                   :markdown
                     #{q.description}
                 %fieldset
+                  %legend(style="display: none")
+                    "#{q.title}"
                   .control-group
                     .controls
                       - q.options.each_with_index do |option,i|
@@ -100,7 +113,7 @@
                               #{q.labels[i]}
             - else # budgetary
               %td.description
-                = label_tag q.id, nil, class: 'header' do
+                .header
                   = render partial: 'title', locals: {object: q, placement: 'top'}
                 - if q.description?
                   :markdown
@@ -146,10 +159,11 @@
                       %span.value= number_to_currency 0
                     .control.control-onoff
                       = hidden_field_tag q.id, '0', id: "#{q.id}_2" # Mimic an unchecked box.
-                      - if @response.persisted?
-                        = check_box_tag q.id, '1', @response.answer(q) == '1', 'class' => 'onoff', 'data-value' => q.unit_amount, 'data-initial' => q.default_value, 'data-no-label' => q.no_label, 'data-yes-label' => q.yes_label, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled'
-                      - else
-                        = check_box_tag q.id, '1', q.checked?, 'class' => 'onoff', 'data-value' => q.unit_amount, 'data-initial' => q.default_value, 'data-no-label' => q.no_label, 'data-yes-label' => q.yes_label, 'data-revenue' => q.revenue?
+                      = label_tag q.id do
+                        - if @response.persisted?
+                          = check_box_tag q.id, '1', @response.answer(q) == '1', 'class' => 'onoff', 'data-value' => q.unit_amount, 'data-initial' => q.default_value, 'data-no-label' => q.no_label, 'data-yes-label' => q.yes_label, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled'
+                        - else
+                          = check_box_tag q.id, '1', q.checked?, 'class' => 'onoff', 'data-value' => q.unit_amount, 'data-initial' => q.default_value, 'data-no-label' => q.no_label, 'data-yes-label' => q.yes_label, 'data-revenue' => q.revenue?
                     %div(class="meta maximum maximum-amount#{' changed' if q.unchecked?}")
                       = currency q.maximum_amount
                     %div(class="meta minimum minimum-amount#{' changed' if q.checked?}")

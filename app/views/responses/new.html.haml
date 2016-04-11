@@ -62,10 +62,16 @@
             - section.questions.each do |q|
               .control-group(id="group-#{q.id}")
                 - unless %w(checkbox readonly).include?(q.widget)
-                  %label.control-label(for="#{q.id}")
-                    = q.title
-                    - if q.required?
-                      %abbr(title="#{t '.required'}")*
+                  - if %w(checkbox checkboxes radio).include?(q.widget)
+                    %span.control-label
+                      = q.title
+                      - if q.required?
+                        %abbr(title="#{t '.required'}")*
+                  - else
+                    %label.control-label(for="#{q.id}")
+                      = q.title
+                      - if q.required?
+                        %abbr(title="#{t '.required'}")*
                 .controls
                   - if q.widget == 'checkbox'
                     = hidden_field_tag q.id, '0' # Mimic an unchecked box.
@@ -77,7 +83,7 @@
                   - elsif q.widget == 'checkboxes'
                     - q.options.each do |option|
                       %label.checkbox.inline(for="#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}")
-                        = check_box_tag "#{q.id}[]", option, q.default_value == option, html_attributes(q), id: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}"
+                        = check_box_tag "#{q.id}[]", option, q.default_value == option, html_attributes(q, id: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}")
                         = option
                   - elsif q.widget == 'radio'
                     - q.options.each do |option|
