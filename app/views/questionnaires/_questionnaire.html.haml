@@ -26,7 +26,7 @@
         %tr
           %td(colspan="2")
             %label(for="criteria")= t :criterion_select_label
-            = select_tag :criteria, options_for_select(section.criterion), class: 'js-criteria-select', prompt: ''
+            = select_tag :criteria, options_for_select(section.criterion), class: 'js-criteria-select', alt: t(".alt_select"), prompt: ''
     %tbody
       - section.questions.each do |q|
         - unless @response.persisted? && %w(text textarea).include?(q.widget)
@@ -71,25 +71,25 @@
                           - q.options.each do |option|
                             = label_tag nil, class: 'checkbox', for: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}" do
                               - if @response.persisted?
-                                = check_box_tag "#{q.id}[]", option, @response.answer(q).include?(option), {id: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}", disabled: true}
+                                = check_box_tag "#{q.id}[]", option, @response.answer(q).include?(option), {id: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}", disabled: true, alt: t(".alt_checkboxes")}
                               - else
-                                = check_box_tag "#{q.id}[]", option, false, id: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}"
+                                = check_box_tag "#{q.id}[]", option, false, id: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}", alt: t(".alt_checkboxes")
                               = option
                         - elsif q.widget == 'radio'
                           - q.options.each do |option|
                             = label_tag nil, class: 'radio', for: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}" do
                               - if @response.persisted?
-                                = radio_button_tag q.id, option, @response.answer(q) == option, disabled: true
+                                = radio_button_tag q.id, option, @response.answer(q) == option, disabled: true, alt: t(".alt_radio")
                               - else
-                                = radio_button_tag q.id, option
+                                = radio_button_tag q.id, option, false, alt: t(".alt_radio")
                               = option
                 - elsif %w(select text textarea).include?(q.widget)
                   - if q.widget == 'select'
-                    = select_tag q.id, options_for_select(q.options, @response.answer(q)), html_attributes(q)
+                    = select_tag q.id, options_for_select(q.options, @response.answer(q)), html_attributes(q, alt: t(".alt_text"))
                   - elsif q.widget == 'text'
-                    = text_field_tag q.id, nil, html_attributes(q)
+                    = text_field_tag q.id, nil, html_attributes(q, alt: t(".alt_text"))
                   - elsif q.widget == 'textarea'
-                    = text_area_tag q.id, nil, html_attributes(q)
+                    = text_area_tag q.id, nil, html_attributes(q, alt: t(".alt_text"))
             - elsif q.widget == 'option'
               %td.description(colspan="2")
                 .header
@@ -106,9 +106,9 @@
                         .control.control-option
                           = label_tag nil, class: 'radio', for: "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}_#{i}" do
                             - if @response.persisted?
-                              = radio_button_tag q.id, option, @response.answer(q) == option, 'id' => "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}_#{i}", 'class' => 'option', 'data-initial' => q.default_value, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled'
+                              = radio_button_tag q.id, option, @response.answer(q) == option, 'id' => "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}_#{i}", 'class' => 'option', 'data-initial' => q.default_value, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled', 'alt' => t(".alt_radio")
                             - else
-                              = radio_button_tag q.id, option, q.selected?(option), 'id' => "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}_#{i}", 'class' => 'option', 'data-initial' => q.default_value, 'data-revenue' => q.revenue?
+                              = radio_button_tag q.id, option, q.selected?(option), 'id' => "#{sanitize_to_id(q.id)}_#{sanitize_to_id(option)}_#{i}", 'class' => 'option', 'data-initial' => q.default_value, 'data-revenue' => q.revenue?, 'alt' => t(".alt_radio")
                             :markdown
                               #{q.labels[i]}
             - else # budgetary
@@ -161,9 +161,9 @@
                       = hidden_field_tag q.id, '0', id: "#{q.id}_2" # Mimic an unchecked box.
                       = label_tag q.id do
                         - if @response.persisted?
-                          = check_box_tag q.id, '1', @response.answer(q) == '1', 'class' => 'onoff', 'data-value' => q.unit_amount, 'data-initial' => q.default_value, 'data-no-label' => q.no_label, 'data-yes-label' => q.yes_label, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled'
+                          = check_box_tag q.id, '1', @response.answer(q) == '1', 'class' => 'onoff', 'data-value' => q.unit_amount, 'data-initial' => q.default_value, 'data-no-label' => q.no_label, 'data-yes-label' => q.yes_label, 'data-revenue' => q.revenue?, 'data-actual' => @response.answer(q), 'disabled' => 'disabled', 'alt' => t(".alt_onoff")
                         - else
-                          = check_box_tag q.id, '1', q.checked?, 'class' => 'onoff', 'data-value' => q.unit_amount, 'data-initial' => q.default_value, 'data-no-label' => q.no_label, 'data-yes-label' => q.yes_label, 'data-revenue' => q.revenue?
+                          = check_box_tag q.id, '1', q.checked?, 'class' => 'onoff', 'data-value' => q.unit_amount, 'data-initial' => q.default_value, 'data-no-label' => q.no_label, 'data-yes-label' => q.yes_label, 'data-revenue' => q.revenue?, 'alt' => t(".alt_onoff")
                     %div(class="meta maximum maximum-amount#{' changed' if q.unchecked?}")
                       = currency q.maximum_amount
                     %div(class="meta minimum minimum-amount#{' changed' if q.checked?}")

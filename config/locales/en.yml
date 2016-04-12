@@ -45,6 +45,14 @@ en:
   questionnaires:
     questionnaire:
       your_choice: Your choice
+      alt_select: Select an option
+      alt_checked: Uncheck the box according to your priorities
+      alt_unchecked: Check the box according to your priorities
+      alt_checkboxes: Select one or more options
+      alt_radio: Select an option
+      alt_text: Leave a comment
+      alt_slider: Move the slider to the right or left according to your priorities
+      alt_onoff: Flip the switch according to your priorities
 
   responses:
     new:
@@ -60,6 +68,14 @@ en:
       required: required
       submit: Submit
       submit_text: If you are satisfied with your choices, click "Submit".
+      alt_select: Select an option
+      alt_checked: Uncheck the box according to your priorities
+      alt_unchecked: Check the box according to your priorities
+      alt_checkboxes: Select one or more options
+      alt_radio: Select an option
+      alt_text: Leave a comment
+      alt_slider: Move the slider to the right or left according to your priorities
+      alt_onoff: Flip the switch according to your priorities
     show:
       header:
         default: "%{name} submitted a budget!"
