@@ -93,7 +93,6 @@ class Questionnaire
   validates_length_of :twitter_text, maximum: 140, allow_blank: true
   validates_length_of :twitter_share_text, maximum: 140, allow_blank: true
   validates_uniqueness_of :domain, allow_blank: true
-  validates :logo, image_size: { width: { min: 940 }, height: { in: 200..500 } }
   validates :reply_to, email: true, allow_blank: true
   validate :ends_at_must_be_greater_than_starts_at
   validate :domain_must_be_active
