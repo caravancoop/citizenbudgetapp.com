@@ -8,7 +8,7 @@ $(document).ready  ->
     setTimeout (->
       $('.slider').each ->
         $this = $(this)
-        value = $this.data('valuetext')
+        value = $this.find('input').val()
         $span = $this.find('.ws-range-thumb')
 
         $span.append('<div class="tip"><div class="tip-content">' + value + '</div><div class="tip-arrow"></div></div>') if value
@@ -422,11 +422,7 @@ class window.Simulator
 
     @scope.find('.slider').each ->
       $this   = $(this)
-      initial = parseFloat($this.data('initial'))
       actual  = parseFloat($this.data('actual'))
-      content = self.tipSlider($this, initial)
-
-      $this.data('valuetext', content)
 
       if $this.attr('disabled')
         $this.find('input').prop('disabled', 'disabled')
