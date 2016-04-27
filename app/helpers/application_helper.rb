@@ -141,7 +141,7 @@ module ApplicationHelper
 
     content_tag('label', tag(:input, {
       id: question.id,
-      name: "variables[#{question.id}]",
+      name: "#{question.id}",
       type: 'range',
       min: minimum,
       max: maximum,
