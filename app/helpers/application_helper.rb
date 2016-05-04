@@ -139,18 +139,23 @@ module ApplicationHelper
       options << content_tag('option', nil, attributes)
     end
 
-    content_tag('label', tag(:input, {
-      id: question.id,
-      name: "#{question.id}",
-      type: 'range',
-      min: minimum,
-      max: maximum,
-      step: step,
-      value: default_value,
-      list: id,
-      style: 'display: none',
-      alt: t(".alt_slider"),
-    }), for: question.id) +
+    content_tag('label',
+      content_tag('span', '', {class: 'tick lowest'}) +
+      content_tag('span', '', {class: 'tick initial'}) +
+      tag(:input, {
+        id: question.id,
+        name: "#{question.id}",
+        type: 'range',
+        min: minimum,
+        max: maximum,
+        step: step,
+        value: default_value,
+        list: id,
+        style: 'display: none',
+        alt: t(".alt_slider"),
+      }) +
+      content_tag('span', '', {class: 'tick highest'}), for: question.id
+    ) +
     content_tag('datalist', content_tag('select', options, title: "datalist options"), id: id)
   end
 
