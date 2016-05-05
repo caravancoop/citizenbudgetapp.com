@@ -14,7 +14,7 @@ $(document).ready  ->
         $span.append('<div class="tip"><div class="tip-content">' + value + '</div><div class="tip-arrow"></div></div>') if value
 
         # Place the initial tick according to the handle's default position.
-        $this.find('.tick.initial').width($this.find('.ws-range-thumb').position().left).show()
+        $this.find('.tick.initial').css('left', $this.find('.ws-range-thumb').position().left).show()
 
         if main_simulator
           main_simulator.update()
