@@ -8,10 +8,13 @@ $(document).ready  ->
     setTimeout (->
       $('.slider').each ->
         $this = $(this)
-        value = $this.find('input').val()
+        value = $this.data('valuetext')
         $span = $this.find('.ws-range-thumb')
 
         $span.append('<div class="tip"><div class="tip-content">' + value + '</div><div class="tip-arrow"></div></div>') if value
+
+        # Place the initial tick according to the handle's default position.
+        $this.find('.tick.initial').width($this.find('.ws-range-thumb').position().left).show()
 
         if main_simulator
           main_simulator.update()
@@ -414,23 +417,33 @@ class window.Simulator
     $('.slider').on 'change', 'input', ->
       $widget = $(this).parents('.slider')
       value = $(this).val()
+
       updateTip($widget, value)
+
       self.updateQuestion($widget, value)
       self.changeSlider($widget, {'value': value})
       self.updateSection($widget)
       self.update()
 
+    $('.slider').on 'mousemove', '.ws-range-thumb', ->
+      $widget = $(this).parents('.slider')
+      value = $(this).parents('.ws-range').attr('aria-valuenow')
+
+      updateTip($widget, value)
+
     @scope.find('.slider').each ->
       $this   = $(this)
+      initial = parseFloat($this.find('input').val())
       actual  = parseFloat($this.data('actual'))
+      content = self.tipSlider($this, initial)
 
       if $this.attr('disabled')
         $this.find('input').prop('disabled', 'disabled')
 
-      # We place the initial tick according to the handle's default position, so
-      # we can't set the value during slider initialization.
       unless isNaN(actual)
         $this.find('input').val(actual)
+
+      $this.data('valuetext', content)
 
   # Static widgets.
   initializeStaticWidgets: ->

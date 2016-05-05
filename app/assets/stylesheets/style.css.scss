@@ -274,21 +274,14 @@ $control-height: 25px;
 
 .tick {
   position: absolute;
-  z-index: 5;
+  z-index: 4;
   height: $control-height;
   margin-top: -7px;
   margin-left: -1px; // room for border
   border-right: 1px solid #999;
 }
-.tick.lowest {
-  width: 0;
-}
-.tick.highest {
-  width: $column-width - $widget-margin * 2 + 1;
-}
 .tick.initial {
   display: none; // hide until positioned
-  border-right: 1px solid #666;
 }
 
 .slider .ws-range {
