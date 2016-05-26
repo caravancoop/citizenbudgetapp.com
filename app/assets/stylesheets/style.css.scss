@@ -280,8 +280,13 @@ $control-height: 25px;
   margin-left: -1px; // room for border
   border-right: 1px solid #999;
 }
+
 .tick.initial {
   display: none; // hide until positioned
+}
+
+.slider label {
+  position: relative;
 }
 
 .slider .ws-range {

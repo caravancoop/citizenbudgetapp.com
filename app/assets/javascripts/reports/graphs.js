@@ -38,11 +38,13 @@ GRAPH_CONF.max_n_bars = Math.floor(GRAPH_CONF.max_width / 25);
 function addGraph(id) {
   var details = all_details[id];
   var graph = d3.select("#graph_" + id);
-  var xport = $('<ul class="download-graph"></ul>');
+  var xport = $('body.summary').length ? $('<ul class="download-graph"></ul>') : '';
 
-  xport.append($('<li/>').data('format', 'svg').text('svg'));
-  xport.append($('<li/>').data('format', 'png').text('png'));
-  xport.append($('<li/>').data('format', 'jpeg').text('jpeg'));
+  if (xport) {
+    xport.append($('<li/>').data('format', 'svg').text('svg'));
+    xport.append($('<li/>').data('format', 'png').text('png'));
+    xport.append($('<li/>').data('format', 'jpeg').text('jpeg'));
+  }
 
   if (details && details.counts !== undefined) {
     // checkboxes or radio buttons
