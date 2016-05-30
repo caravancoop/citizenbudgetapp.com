@@ -388,7 +388,8 @@ class Questionnaire
         # Start with all the respondents who did not change the value.
         choices = [question.cast_default_value] * number_of_nonchanges
 
-        changes.each do |response|
+        # Account for conditional questions where default value should not be reported
+        changes.select { |response| response.answers.keys.include?(question.id.to_s) }.each do |response|
           choices << response.cast_answer(question)
         end
 
