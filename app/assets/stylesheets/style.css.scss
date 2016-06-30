@@ -97,6 +97,7 @@ h1 {
 /* Questionnaire -------------------------------------------------------------*/
 
 .highlight {
+  width: 250px;
   background-color: #ff9;
 }
 
@@ -216,7 +217,7 @@ $widget-margin: 45px;
   margin: 0 $widget-margin;
   .note,
   .control-static {
-    color: #000;
+    color: white;
     font-weight: bold;
     text-align: center;
   }
