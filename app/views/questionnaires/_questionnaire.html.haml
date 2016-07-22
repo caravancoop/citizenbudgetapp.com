@@ -9,11 +9,13 @@
         %tr
           - if section.nonbudgetary?
             %th.category(id="th1-#{section.id}" colspan="2" scope="col")
-              = render partial: 'title', locals: {object: section, placement: 'bottom'}
+              %h4
+                = render partial: 'title', locals: {object: section, placement: 'bottom'}
 
           - else
             %th.category(id="th1-#{section.id}" scope="col")
-              = render partial: 'title', locals: {object: section, placement: 'bottom'}
+              %h4
+                = render partial: 'title', locals: {object: section, placement: 'bottom'}
             %th.column.highlight(id="th2-#{section.id}" scope="col")
               =t '.your_choice'
 
