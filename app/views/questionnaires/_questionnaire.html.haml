@@ -65,7 +65,7 @@
                 - # @todo Implement checkbox widget.
                 - if %w(checkboxes radio).include?(q.widget)
                   %fieldset
-                    %legend(style="display: none")
+                    %legend.legend-hidden
                       "#{q.title}"
                     .control-group
                       .controls
@@ -100,7 +100,7 @@
                   :markdown
                     #{q.description}
                 %fieldset
-                  %legend(style="display: none")
+                  %legend.legend-hidden
                     "#{q.title}"
                   .control-group
                     .controls
