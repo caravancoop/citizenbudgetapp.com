@@ -55,7 +55,9 @@ class window.SimulatorHelper
   @number_to_human: (number, options = {}) ->
     number = parseFloat(number)
     options.strip_insignificant_zeros ?= true
-    if Math.abs(number) >= 1000000
+    if Math.abs(number) >= 1000000000
+      "#{@number_with_precision(number / 1000000000, precision: 1, strip_insignificant_zeros: true)} B"
+    else if Math.abs(number) >= 1000000
       "#{@number_with_precision(number / 1000000, precision: 1, strip_insignificant_zeros: true)} M"
     else if Math.abs(number) >= 1000
       "#{@number_with_precision(number / 1000, precision: 1, strip_insignificant_zeros: true)} k"
