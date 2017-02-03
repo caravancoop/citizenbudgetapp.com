@@ -63,7 +63,6 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
-  config.cache_store = :dalli_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
@@ -98,13 +97,4 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  # Configure Rack with Memcached
-  # https://devcenter.heroku.com/articles/rack-cache-memcached-static-assets-rails31
-  config.static_cache_control = 'public, max-age=2592000' # 30 days
-  config.action_dispatch.rack_cache = {
-    metastore: Dalli::Client.new,
-    entitystore: 'file:tmp/cache/rack/body',
-    allow_reload: false,
-  }
 end

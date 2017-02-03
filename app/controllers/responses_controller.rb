@@ -12,18 +12,21 @@ class ResponsesController < ApplicationController
     cache_key(record)
   end
 
+  # GET /responses/new
   def new
     @response = @questionnaire.responses.build(initialized_at: Time.now.utc)
     build_questionnaire
     fresh_when(@questionnaire, public: true) if Rails.env.production?
   end
 
+  # GET /responses/1
   def show
     @response = @questionnaire.responses.find(params[:id])
     build_questionnaire
     fresh_when(@response, public: true) if Rails.env.production?
   end
 
+  # POST /responses
   def create
     if params[:response][:assessment]
       params[:response][:assessment].gsub!(/[^0-9.-]/, '')
@@ -38,21 +41,25 @@ class ResponsesController < ApplicationController
     redirect_to response_path(@response, params.slice(:token)), notice: @questionnaire.response_notice.present? ? @questionnaire.response_notice : t(:create_response)
   end
 
+  # GET /responses/count
   def count
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
     render json: @questionnaire.responses.count
   end
 
+  # GET /responses/charts
   def charts
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
     render json: @questionnaire.chart_data
   end
 
+  # GET /responses/offline
   def offline
   end
 
+  # GET /responses/preflight
   def preflight
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
