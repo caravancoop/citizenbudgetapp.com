@@ -1,0 +1,202 @@
+<script>
+  google.load('visualization', '1', {language: '#{iso639_locale}'});
+</script>
+
+<h1>
+  <%= t '.header' %>
+  <% if @starts_on && @ends_on %>
+    <span>
+      <%= t '.period', starts_on: l(@starts_on, format: :short), ends_on: l(@ends_on, format: :long) %>
+    </span>
+  <% end %>
+</h1>
+
+<p class="attribution">
+  <%= t '.by', author: t('app.author_name'), organization: @questionnaire.organization.name %>
+</p>
+
+<div class="blocks clearfix">
+  <% if @statistics[:visitors] %>
+    <div class="block block-small">
+      <div class="number">
+        <%= number_with_delimiter @statistics[:visitors] %>
+      </div>
+      <div class="title">
+        <%= t 'statistics.visitors' %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="block block-small">
+    <div class="number">
+      <%= number_with_delimiter @number_of_responses %>
+    </div>
+    <div class="title">
+      <%= t 'statistics.responses' %>
+    </div>
+    <div class="subtitle">
+      <% if @statistics[:visitors] %>
+        <%= t 'statistics.participation_rate', percentage: number_to_percentage(@number_of_responses / @statistics[:visitors].to_f * 100) %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="block block-large">
+    <div class="number">
+      <%= distance_of_time_in_words @questionnaire.time_to_complete %>
+    </div>
+    <div class="title">
+      <%= t 'statistics.time_to_complete' %>
+    </div>
+    <div class="subtitle">
+      &nbsp;
+    </div>
+  </div>
+</div>
+
+<% if @charts[:responses] %>
+  <div class="columns clearfix">
+    <div class="column offset">
+      <div id="responses" style="width:600px; height:250px;"></div>
+    </div>
+  </div>
+<% end %>
+
+<% if @charts[:visits] %>
+  <div class="columns clearfix">
+    <div class="column offset">
+      <div id="visits" style="width:600px; height:250px;"></div>
+    </div>
+  </div>
+<% end %>
+
+<% if @charts[:sources] %>
+  <div class="columns clearfix">
+    <div class="column offset">
+      <div id="sources" style="width:600px;height:300px;"></div>
+    </div>
+  </div>
+<% end %>
+
+<h2>
+  <%= t '.summary' %>
+</h2>
+
+<h3>
+  <%= t '.detail.header' %>
+</h3>
+
+<% i = 0 %>
+<% @questionnaire.sections.each do |section| %>
+  <% if section.questions.any?{|q| q.widget.budgetary? || q.options.any?} %>
+    <h4>
+      <%= section.title.html_safe %>
+    </h4>
+
+    <% section.questions.each do |q| %>
+      <% if q.widget.budgetary? %>
+        <div class="question subdue">
+          <h5>
+            <span>
+              <%= i += 1 %>
+            </span>
+            <% if q.title? %>
+              <%= q.title.html_safe %>
+            <% end %>
+          </h5>
+        </div>
+      <% elsif q.options.any? %>
+        <div class="question subdue">
+          <h5>
+            <span>
+              <%= i += 1 %>
+            </span>
+            <%= q.title.html_safe %>
+          </h5>
+          <% if q.description? %>
+            <p>
+              <i>
+                <%= t :left_quote %>
+                <%= strip_tags(RDiscount.new(q.description).to_html) %>
+                <%= t :right_quote %>
+              </i>
+            </p>
+          <% end %>
+        </div>
+      <% end %>
+      <% unless q.widget == 'textarea' %>
+        <div class="graph" id="graph_<%= q.id %>"></div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<script>
+  var locale = '<%= system_locale %>';
+</script>
+
+<% # Google Charts adds null values for missing dates in the time series. %>
+<% # https://developers.google.com/chart/interactive/docs/gallery/linechart %>
+<% if @charts[:responses] %>
+  <script>
+    draw('LineChart', 'responses', [
+      "#{t 'statistics.responses'}"
+    ], [<%= @charts[:responses] %>], {
+      chartArea: {
+        left: 30,
+        width: '85%'
+      },
+      gridlineColor: '#ffffff',
+      hAxis: {
+        baselineColor: '#ffffff',
+        format: '<%= t :icu_date_format %>'
+      },
+      legend: {
+        position: 'none'
+      },
+      title: "<%= t 'statistics.responses_title' %>"
+    });
+
+  </script>
+<% end %>
+
+<% if @charts[:visits] %>
+  <script>
+    draw('LineChart', 'visits', [
+      "<%= t 'statistics.visitors' %>",
+      "<%= t 'statistics.visits' %>",
+      "<%= t 'statistics.pageviews' %>"
+    ], [<%= @charts[:visits] %>], {
+      chartArea: {
+        left: 30,
+        width: '85%'
+      },
+      gridlineColor: '#ffffff',
+      hAxis: {
+        baselineColor: '#ffffff',
+        format: '<%= t :icu_date_format %>'
+      },
+      legend: {
+        position: 'bottom'
+      },
+      title: "<%= t 'statistics.visits_title', name: @statistics[:name], property: @statistics[:property] %>"
+    });
+  </script>
+<% end %>
+
+<% if @charts[:sources] %>
+  <script>
+    draw('PieChart', 'sources', [
+      "<%= t 'statistics.visitors' %>"
+    ], [<%= @charts[:sources] %>], {
+      chartArea: {
+        left: 0,
+        width: '100%'
+      },
+      gridlineColor: '#ffffff',
+      pieResidueSliceLabel: "<%= t 'statistics.other' %>",
+      sliceVisibilityThreshold: 1 / 180,
+      title: "<%= t 'statistics.sources_title', name: @statistics[:name], property: @statistics[:property] %>"
+    });
+  </script>
+<% end %>

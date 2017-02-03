@@ -1,16 +1,12 @@
 # http://code.google.com/p/google-api-ruby-client/wiki/OAuth2
 # @note Using a JavaScript client, it's impossible for users belonging to the
 # same organization to share access to Google Analytics data.
-class GoogleApiAuthorization
-  include Mongoid::Document
-
+class GoogleApiAuthorization < ActiveRecord::Base
   class CodeExchangeError < StandardError; end
   class AccessRevokedError < StandardError; end
   class APIError < StandardError; end
 
-  embedded_in :questionnaire
-
-  field :token, type: Hash, default: {}
+  belongs_to :questionnaire
 
   # @return [Boolean] whether configuration variables are set
   def self.configured?
@@ -122,7 +118,16 @@ private
   # @see https://github.com/sporkmonger/signet/blob/master/lib/signet/oauth_2/client.rb#L581
   def refresh_access_token!
     # If we have no refresh token, we wait for the API to raise an authorization error.
-    if client.authorization.expired? && client.authorization.refresh_token
+    expires_at = Proc.new do |auth|
+      if auth.issued_at && auth.expires_in
+        DateTime.parse(auth.issued_at) + auth.expires_in
+      else
+        nil
+      end
+    end
+    expired = expires_at.call(client.authorization) != nil && Time.now >= expires_at.call(client.authorization)
+
+    if expired && client.authorization.refresh_token
       begin
         fetch_access_token!
       rescue Signet::AuthorizationError

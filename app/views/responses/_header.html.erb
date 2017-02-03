@@ -1,0 +1,32 @@
+<% present @questionnaire do |questionnaire| %>
+  <header>
+    <% if questionnaire.logo? %>
+      <div id="logo">
+        <%= questionnaire.logo_image %>
+      </div>
+    <% end %>
+
+    <h1 class="clearfix">
+      <% if local_assigns[:header] %>
+        <%= header %>
+      <% else %>
+        <% if questionnaire.title_image? %>
+          <%= image_tag questionnaire.title_image.medium.url, height: '100', alt: '' %>
+        <% end %>
+
+        <%= markdown questionnaire.title %>
+      <% end %>
+    </h1>
+
+    <!--[if gt IE 7]><!-->
+    <div id="facebook">
+      <%= render partial: 'shared/facebook_button', locals: { questionnaire: questionnaire } %>
+    </div>
+    <!--<![endif]-->
+    <!--[if gt IE 8]><!-->
+    <div id="twitter">
+      <%= render partial: 'shared/twitter_button', locals: { questionnaire: questionnaire } %>
+    </div>
+    <!--<![endif]-->
+  </header>
+<% end %>

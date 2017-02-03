@@ -1,10 +1,9 @@
 //= require active_admin/base
-//= require libs/bootstrap
-//= require libs/swfobject
-//= require plugins/jquery.clippy
+//= require bootstrap-sass/assets/javascripts/bootstrap-sprockets
+//= require swfobject/swfobject/swfobject
+//= require clippy-jquery/src/jquery.clippy
 //= require i18n
-//= require libs/d3
-//= require reports/svg2png
+//= require d3/d3
 //= require reports/graphs
 
 $ ->

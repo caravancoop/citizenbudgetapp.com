@@ -1,84 +1,22 @@
 require 'mail'
 
-class Questionnaire
-  include Mongoid::Document
-  include Mongoid::Paranoia
-  include Mongoid::Timestamps
-  include Mongoid::MultiParameterAttributes
+class Questionnaire < ActiveRecord::Base
+  include SpreadsheetExportable
+
+  acts_as_paranoid
 
   MODES = %w(services taxes)
   ASSESSMENT_PERIODS = %w(month year)
 
-  belongs_to :organization, index: true
-  embeds_many :sections
-  has_many :responses
-  embeds_one :google_api_authorization, autobuild: true
+  belongs_to :organization
+  has_one :google_api_authorization
+  has_many :sections, dependent: :destroy
+  has_many :questions, through: :sections
+  has_many :responses, dependent: :destroy
+  has_many :answers, through: :responses
+
   mount_uploader :logo, ImageUploader
   mount_uploader :title_image, ImageUploader
-
-  # Basic
-  field :title, type: String
-  field :locale, type: String
-  field :starts_at, type: Time
-  field :ends_at, type: Time
-  field :time_zone, type: String
-  field :domain, type: String
-  field :email_required, type: Boolean, default: true
-
-  # Mode
-  field :mode, type: String
-  field :starting_balance, type: Integer
-  field :maximum_deviation, type: Integer
-  field :default_assessment, type: Integer
-  field :assessment_period, type: String, default: 'month'
-  field :tax_rate, type: Float
-  field :tax_revenue, type: Integer
-  field :change_required, type: Boolean
-
-  # Appearance
-  field :logo, type: String
-  field :title_image, type: String
-  field :introduction, type: String
-  field :instructions, type: String
-  field :read_more, type: String
-  field :content_before, type: String
-  field :content_after, type: String
-  field :description, type: String
-  field :attribution, type: String
-  field :stylesheet, type: String
-  field :javascript, type: String
-
-  # Thank-you email
-  field :reply_to, type: String
-  field :thank_you_subject, type: String
-  field :thank_you_template, type: String
-
-  # Individual response
-  field :response_notice, type: String
-  field :response_preamble, type: String
-  field :response_body, type: String
-
-  # Third-party integration
-  field :google_analytics, type: String # tracking code
-  field :google_analytics_profile, type: String # table ID
-  field :twitter_screen_name, type: String
-  field :twitter_text, type: String
-  field :twitter_share_text, type: String
-  field :facebook_app_id, type: String
-  field :open_graph_title, type: String
-  field :open_graph_description, type: String
-  field :authorization_token, type: String
-
-  # Image uploaders
-  field :logo_width, type: Integer
-  field :logo_height, type: Integer
-  field :title_image_width, type: Integer
-  field :title_image_height, type: Integer
-
-  attr_protected :authorization_token, :logo_width, :logo_height,
-    :title_image_width, :title_image_height
-
-  index domain: 1
 
   validates :title, :organization_id, :mode, presence: true
   validates :default_assessment, :tax_rate, presence: true, if: ->(q){q.mode == 'taxes'}
@@ -101,19 +39,18 @@ class Questionnaire
   validate :mode_must_match_options
 
   before_validation :sanitize_domain
-  before_save :add_domain
   before_create :set_authorization_token
 
-  scope :current, lambda { where(:starts_at.ne => nil, :ends_at.ne => nil, :starts_at.lte => Time.now, :ends_at.gte => Time.now) }
-  scope :future, lambda { where(:starts_at.ne => nil, :starts_at.gt => Time.now) }
-  scope :past, lambda { where(:ends_at.ne => nil, :ends_at.lt => Time.now) }
-  scope :active, lambda { where(:ends_at.ne => nil, :ends_at.gte => Time.now) }
+  scope :current, -> { where.not(starts_at: nil).where.not(ends_at: nil).where('starts_at <= ?', Time.now).where('ends_at >= ?', Time.now) }
+  scope :future, -> { where.not(starts_at: nil).where('starts_at > ?', Time.now) }
+  scope :past, -> { where.not(ends_at: nil).where('ends_at < ?', Time.now) }
+  scope :active, -> { where.not(ends_at: nil).where('ends_at >= ?', Time.now) }
 
   # @param [String] domain a domain name
   # @return [Enumerable] questionnaires whose domain name matches
   # @note No two active questionnaires should have the same domain.
   def self.by_domain(domain)
-    any_in(domain: [domain, sanitize_domain(domain)])
+    where('domain = ? OR domain = ?', domain, sanitize_domain(domain))
   end
 
   # @param [String] domain a domain name
@@ -158,16 +95,6 @@ class Questionnaire
     else
       (times[middle - 1] + times[middle]) / 2.0
     end
-  end
-
-  # @return [Integer] the number of days elapsed
-  def days_elapsed
-    (today - starts_on).to_i
-  end
-
-  # @return [Integer] the number of days left
-  def days_left
-    (ends_on - today).to_i
   end
 
   # @return [Time] the consultation's start date in its time zone
@@ -218,11 +145,6 @@ class Questionnaire
     end
   end
 
-  # @return [String,nil] the consultation's URL, or nil
-  def domain_url
-    domain? && "http://#{domain}"
-  end
-
   # @return [Boolean] whether the questionnaire has a maximum deviation
   def maximum_deviation?
     super && maximum_deviation.nonzero?
@@ -263,92 +185,18 @@ class Questionnaire
     ends_at? && ends_at < Time.now
   end
 
-  # @return [Float] the largest surplus possible
+  # @return [BigDecimal] the largest surplus possible
   def maximum_amount
-    sum = 0
-    sections.budgetary.each do |section|
-      section.questions.budgetary.each do |question|
-        sum += question.maximum_amount
-      end
+    questions.where(section: sections.budgetary).to_a.sum do |q|
+      q.widget.maximum_amount ? q.widget.maximum_amount : 0
     end
-    sum
   end
 
-  # @return [Float] the largest deficit possible
+  # @return [BigDecimal] the largest deficit possible
   def minimum_amount
-    sum = 0
-    sections.budgetary.each do |section|
-      section.questions.budgetary.each do |question|
-        sum += question.minimum_amount
-      end
+    questions.where(section: sections.budgetary).to_a.sum do |q|
+      q.widget.minimum_amount ? q.widget.minimum_amount : 0
     end
-    sum
-  end
-
-  # @return [Array] a list of headers for a spreadsheet
-  def headers
-    # If the first two letters of a file are "ID", Microsoft Excel will try to
-    # open the file in the SYLK file format.
-    headers = %w(ip id created_at time_to_complete email name)
-    if assessment?
-      headers << 'assessment'
-    end
-    headers
-  end
-
-  # @return [Array] rows for a spreadsheet
-  def rows
-    rows = []
-
-    # Add headers
-    row = headers.map do |column|
-      Response.human_attribute_name(column)
-    end
-    sections.each do |section|
-      section.questions.each do |question|
-        row << question.title
-      end
-    end
-    rows << row
-
-    # Add defaults
-    row = headers.map do |column|
-      I18n.t(:default)
-    end
-    sections.each do |section|
-      section.questions.each do |question|
-        if ['checkbox', 'onoff', 'option', 'slider', 'scaler'].include?(question.widget)
-          row << question.default_value || I18n.t(:default)
-        else
-          row << I18n.t(:default)
-        end
-      end
-    end
-    rows << row
-
-    # Add data
-    responses.each do |response|
-      row = headers.map do |column|
-        if column == 'id'
-          response.id.to_s # axlsx may error when trying to convert Moped::BSON::ObjectId
-        elsif column != 'assessment' || assessment?
-          response.send(column)
-        end
-      end
-      sections.each do |section|
-        section.questions.each do |question|
-          answer = response.cast_answer(question)
-          if Array === answer
-            row << answer.to_sentence
-          else
-            row << answer
-          end
-        end
-      end
-      rows << row
-    end
-
-    rows
   end
 
   def comments
@@ -371,100 +219,6 @@ class Questionnaire
     end
   end
 
-  def chart_data # @todo Significant duplication of dashboard.rb
-    number_of_responses = responses.count
-    reponses = responses.to_a
-
-    all_details = {}
-    sections.map(&:questions).flatten.each do |question|
-      next unless question.widget
-
-      details = {}
-      if question.budgetary?
-        changes = responses.select{|r| r.answers[question.id.to_s] != question.default_value}
-        number_of_changes = changes.size
-        number_of_nonchanges = number_of_responses - number_of_changes
-
-        # Start with all the respondents who did not change the value.
-        choices = [question.cast_default_value] * number_of_nonchanges
-
-        # Account for conditional questions where default value should not be reported
-        changes.select { |response| response.answers.keys.include?(question.id.to_s) }.each do |response|
-          choices << response.cast_answer(question)
-        end
-
-        details.merge!({
-          :choices => choices,
-          # Question parameters.
-          :minimum_units => question.minimum_units,
-          :maximum_units => question.maximum_units,
-          :step          => question.step,
-          :unit_name     => question.unit_name,
-          :default_value => question.default_value,
-          :widget        => question.widget,
-          # How large were the modifications?
-          :mean_choice   => choices.sum / number_of_responses.to_f,
-          :n             => number_of_responses,
-        })
-
-        if question.widget == 'onoff'
-          details[:labels] = if question.checked?
-            [question.yes_label, question.no_label]
-          else
-            [question.no_label, question.yes_label]
-          end
-        end
-
-        if question.widget == 'option'
-          details[:counts] = Hash.new(0)
-          changes.each do |response|
-            details[:counts][response.answer(question)] += 1
-          end
-          details[:counts][question.default_value] = number_of_nonchanges
-
-          details[:raw_counts] = details[:counts].clone
-          details[:counts].each do |option,count|
-            details[:counts][option] /= number_of_responses.to_f
-          end
-
-          details[:options] = question.options
-          details[:labels] = question.labels
-        end
-      # Multiple choice survey questions.
-      elsif question.options?
-        changes = responses.select{|r| r.answers[question.id.to_s]}
-        number_of_changes = changes.size
-
-        details[:counts] = Hash.new(0)
-        question.options.each do |option|
-          details[:counts][option] = 0
-        end
-        changes.each do |response|
-          answer = response.answer(question)
-          if question.multiple?
-            answer.each do |a|
-              details[:counts][a] += 1
-            end
-          else
-            if details[:counts].key?(answer) || answer.present?
-              details[:counts][answer] += 1
-            end
-          end
-        end
-
-        details[:raw_counts] = details[:counts].clone
-        if number_of_changes.nonzero?
-          details[:counts].each do |answer,count|
-            details[:counts][answer] /= number_of_changes.to_f
-          end
-        end
-      end
-
-      all_details[question.id.to_s] = details
-    end
-
-    all_details
-  end
 
 private
 
@@ -534,38 +288,6 @@ private
     loop do
       self.authorization_token = SecureRandom.base64(15).tr('+/=lIO0', 'pqrsxyz')
       break unless self.class.where(authorization_token: authorization_token).first
-    end
-  end
-
-  # Adds the questionnaire's domain to the app's custom domains list on Heroku.
-  # @todo Will not add a "www" subdomain to domains ending in "co.uk"
-  def add_domain
-    if HerokuClient.configured? && domain_changed?
-      domains = HerokuClient.list_domains
-
-      if domain_was.present?
-        queue = [domain_was]
-        if domain_was.split('.').size == 2
-          queue << "www.#{domain_was}"
-        end
-        queue.each do |d|
-          if domains.include?(d)
-            HerokuClient.remove_domain(d)
-          end
-        end
-      end
-
-      if domain.present?
-        queue = [domain]
-        if domain.split('.').size == 2
-          queue << "www.#{domain}"
-        end
-        queue.each do |d|
-          unless domains.include?(d)
-            HerokuClient.add_domain(d)
-          end
-        end
-      end
     end
   end
 end

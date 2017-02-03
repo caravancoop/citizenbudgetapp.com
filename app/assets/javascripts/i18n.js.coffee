@@ -1,4 +1,4 @@
-//= require libs/mustache
+//= require mustache.js/mustache
 
 window.I18n =
   en_US:

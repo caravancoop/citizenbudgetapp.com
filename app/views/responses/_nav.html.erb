@@ -1,0 +1,34 @@
+<li class="dropdown">
+  <%= link_to('#', { 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown' }) do %>
+    <%= t '.sections' %>
+    <span class="caret"></span>
+  <% end %>
+
+  <ul class="dropdown-menu">
+    <% present @simulator do |section| %>
+      <%= render section %>
+    <% end %>
+  </ul>
+</li>
+
+<% @groups.each do |group, sections| %>
+  <% if sections.any? %>
+    <li id="<%= group %>">
+      <div class="inner">
+        <div class="chart-container">
+          <div class="title">
+            <%= t '.balance' %>
+          </div>
+
+          <div class="chart">
+            <div class="bar"></div>
+            <div class="zero"></div>
+            <div class="amount">
+              <%= number_to_currency 0 %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  <% end %>
+<% end %>

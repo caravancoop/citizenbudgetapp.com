@@ -1,29 +1,13 @@
-# coding: utf-8
+class Response < ActiveRecord::Base
+  acts_as_paranoid
 
-class Response
-  include Mongoid::Document
-  include Mongoid::Paranoia
-  include Mongoid::Timestamps
-
-  default_scope -> { where(deleted_at: nil, comments: {'$in' => ['', nil]}) }
-
-  # Don't embed, as a popular questionnaire may be over 16MB in size.
   belongs_to :questionnaire
+  has_many :answers, dependent: :destroy
 
-  field :initialized_at, type: Time
-  field :answers, type: Hash
-  field :ip, type: String
-  field :assessment, type: Float
-
-  # This is a honeypot field.
-  field :comments, type: String
-
-  # The social sharing feature requires email and name.
-  field :email, type: String
-  field :name, type: String
-
-  validates :questionnaire_id, :initialized_at, :ip, presence: true  # Answers can be blank if all radio buttons
+  validates :questionnaire, :initialized_at, :ip, presence: true  # Answers can be blank if all radio buttons
   # We don't do more ambitious validation to avoid excluding valid responses.
+
+  default_scope -> { where(deleted_at: nil, comments: nil) }
 
   # @return [Float] the time to submit the response in seconds
   def time_to_complete
@@ -33,13 +17,7 @@ class Response
   # @param [Question] question a question
   # @return the answer to the question
   def answer(question)
-    if answers.present? && answers.key?(question.id.to_s)
-      answers[question.id.to_s]
-    elsif ['checkbox', 'onoff', 'option', 'slider', 'scaler'].include?(question.widget)
-      question.default_value
-    elsif question.widget == 'checkboxes'
-      []
-    end
+    answers.where(question: question).first.try(:value)
   end
 
   # @param [Question] question a question
@@ -68,16 +46,6 @@ class Response
       end
     end
     balance
-  end
-
-  # @return [String] the full first name and last name initial
-  def display_name
-    if name?
-      parts = name.strip.split(' ', 2)
-      parts[0] = UnicodeUtils.titlecase(parts[0]) if parts[0][/\A\p{Ll}/]
-      parts[1] = "#{UnicodeUtils.upcase(parts[1][0])}." if parts[1]
-      parts.join ' '
-    end
   end
 
   # Performs validations outside create or update operations.

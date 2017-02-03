@@ -1,22 +1,4 @@
 module ApplicationHelper
-  def bootstrap_form_for(record_or_name_or_array, *args, &proc)
-    options = args.extract_options!
-    options[:builder] ||= FormtasticBootstrap::FormBuilder
-    semantic_form_for record_or_name_or_array, options, &proc
-  end
-
-  # Facebook uses underscores in locale identifiers (as do Unix systems).
-  def system_locale
-    if locale.to_s == 'en'
-      'en_US'
-    else
-      locale.to_s.sub('-', '_')
-    end
-  end
-
-  def iso639_locale
-    locale.to_s.split('-', 2).first
-  end
 
   # <head> tags
 
@@ -51,7 +33,7 @@ module ApplicationHelper
   end
 
   def og_url
-    @questionnaire && @questionnaire.domain_url || t('app.product_url')
+    @questionnaire && present(@questionnaire) { |q| q.domain_url } || t('app.product_url')
   end
 
   def og_image
@@ -74,6 +56,63 @@ module ApplicationHelper
     @questionnaire && @questionnaire.google_analytics || t('.google_analytics')
   end
 
+  # Only strip zeroes if all are insignificant.
+  def currency(number, options = {})
+    escaped_separator = Regexp.escape t(:'number.currency.format.separator', default: [:'number.format.separator', '.'])
+    # Inexplicably, -0.0 renders as "-0" instead of 0 without this line.
+    number = 0 if number.zero?
+    # This logic should be in number_with_precision, but as long as the
+    # separator occurs only once, this is safe.
+    number_to_currency(number, options).sub /#{escaped_separator}0+\b/, ''
+  end
+
+  # @param [String] string a string
+  # # @return [String] the string surrounded by locale-appropriate curly quotes
+  def curly_quote(string)
+    "#{t(:left_quote)}#{string}#{t(:right_quote)}"
+  end
+
+  # @param [String] string a string
+  # @return [String] the string with escaped double-quotes for use in HTML attributes
+  def escape_attribute(string)
+    string.gsub '"', '&quot;'
+  end
+
+  # @return [Boolean] whether there is a single section
+  def simple_navigation?
+    @simulator.one?
+  end
+
+  # @param [String] custom a custom string
+  # @param [String] default a default string
+  # @return [String] the custom string if present, the default string otherwise
+  def custom_or_default(custom, default)
+    if custom.present?
+      custom
+    else
+      default
+    end
+  end
+
+  def bootstrap_form_for(record_or_name_or_array, *args, &proc)
+    options = args.extract_options!
+    options[:builder] ||= FormtasticBootstrap::FormBuilder
+    semantic_form_for record_or_name_or_array, options, &proc
+  end
+
+  # Facebook uses underscores in locale identifiers (as do Unix systems).
+  def system_locale
+    if locale.to_s == 'en'
+      'en_US'
+    else
+      locale.to_s.sub('-', '_')
+    end
+  end
+
+  def iso639_locale
+    locale.to_s.split('-', 2).first
+  end
+
   # Used in both public and private controllers.
 
   def token_url(questionnaire)
@@ -88,29 +127,8 @@ module ApplicationHelper
     RDiscount.new(string).to_html.html_safe
   end
 
-  # @see http://speakerdeck.com/assets/embed.js
-  def speakerdeck_or_markdown(html)
-    if html['speakerdeck.com/assets/embed.js']
-      id = html[/data-id="([0-9a-f]+)"/, 1]
-      ratio = html[/data-ratio="([0-9.]+)"/, 1].to_f
-
-      properties = {}
-      if ratio >= 1
-        properties['width']  = MAX_DIMENSION
-        properties['height'] = ((properties['width'] - 2) / ratio + 64).round
-      else
-        properties['height'] = MAX_DIMENSION
-        properties['width']  = ((properties['height'] - 64) * ratio + 2).round
-        properties['margin-left'] = ((MAX_DIMENSION - properties['width']) / 2.0).round
-      end
-
-      content_tag(:div,
-        content_tag(:div, nil,
-          'class' => 'speakerdeck-embed', 'data-id' => id, 'data-ratio' => ratio),
-        'style' => properties.map{|k,v| "#{k}:#{v}px"}.join(';'))
-    else
-      content_tag(:div, markdown(html), class: 'extra clearfix')
-    end
+  def markdown_embed(html)
+    content_tag(:div, markdown(html), class: 'extra clearfix')
   end
 
   # @param [CitizenBudgetModel::Question] question a question

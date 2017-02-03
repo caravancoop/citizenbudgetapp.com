@@ -1,11 +1,8 @@
-class Organization
-  include Mongoid::Document
-  include Mongoid::Paranoia
+class Organization < ActiveRecord::Base
+  acts_as_paranoid
 
-  has_many :admin_users
-  has_many :questionnaires
-
-  field :name, type: String
+  has_many :admin_users, dependent: :destroy
+  has_many :questionnaires, dependent: :destroy
 
   validates :name, presence: true
 end

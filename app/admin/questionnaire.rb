@@ -1,15 +1,22 @@
 ActiveAdmin.register Questionnaire do
+  permit_params :assessment_period, :attribution, :change_required, :content_after, :content_before, :default_assessment,
+    :description, :domain, :email_required, :facebook_app_id, :google_analytics, :google_analytics_profile, :instructions,
+    :introduction, :javascript, :locale, :logo_cache, :maximum_deviation, :mode, :open_graph_description, :open_graph_title,
+    :organization_id, :read_more, :reply_to, :response_body, :response_notice, :response_preamble, :starting_balance,
+    :stylesheet, :tax_rate, :tax_revenue, :thank_you_subject, :thank_you_template, :time_zone, :title, :title_image_cache,
+    :twitter_screen_name, :twitter_share_text, :twitter_text, :starts_at, :ends_at
+
   scope :current
   scope :future
   scope :past
 
-  action_item only: :show do
+  action_item(:show, only: :show) do
     if resource.google_api_authorization.try(:authorized?) && resource.domain?
       link_to t(:link_google_analytics), link_google_analytics_admin_questionnaire_path(resource), method: :post
     end
   end
 
-  action_item only: :show do
+  action_item(:show, only: :show) do
     if resource.google_api_authorization.try(:configured?)
       if resource.google_api_authorization.authorized?
         link_to t(:deauthorize_google_api), deauthorize_google_api_admin_questionnaire_path(resource), method: :post
@@ -125,10 +132,12 @@ ActiveAdmin.register Questionnaire do
           l(q.local_ends_at, format: :long) if q.ends_at?
         end
         row :time_zone do |q|
-          TimeZoneI18n[q.time_zone].human if q.time_zone?
+          t("timezones.#{ActiveSupport::TimeZone[q.time_zone].name}" ) if q.time_zone?
         end
         row :domain do |q|
-          link_to(q.domain, q.domain_url) if q.domain?
+          present q do |q|
+            link_to(q.domain, q.domain_url) if q.domain?
+          end
         end
         row :email_required do |q|
           if q.email_required?
