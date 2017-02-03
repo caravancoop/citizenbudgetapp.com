@@ -1,54 +1,32 @@
 source 'https://rubygems.org'
-ruby '1.9.3'
+ruby '2.3.0'
 
-gem 'rails', '3.2.22.1'
+gem 'rails', '4.2.5.1'
+gem 'actionpack-action_caching'
 gem 'rails-i18n'
+gem 'dotenv-rails'
 
-group :production do
-  # Non-Heroku deployments
-  unless ENV['HEROKU']
-    gem 'foreman'
-  end
-
-  # Error logging
-  gem 'airbrake', '~> 3.1.15'
-  gem 'heroku'
-  gem 'rails_12factor'
-
-  # Performance
-  gem 'action_dispatch-gz_static'
-  gem 'memcachier'
-  gem 'dalli'
-
-  # Heroku deployments
-  if ENV['HEROKU']
-    gem 'newrelic_rpm'
-  end
-end
-
-# Background jobs
-gem 'girl_friday'
+# Server
+gem 'unicorn'
 
 # Database
-gem 'mongoid', '~> 3.1.0' # 4.0 is backwards-incompatible
+gem 'mongoid', '5.1'
+gem 'mongoid_paranoia'
 
 # Admin
-gem 'formtastic', '~> 2.2.1'
-gem 'activeadmin', '0.6.3'
-gem 'inherited_resources', '~> 1.4.1'
-gem 'sass', '~> 3.2.14'
-gem 'activeadmin-mongoid', '0.3.0'
+gem 'activeadmin', '1.0.0.pre2'
+
 gem 'cancan'
-gem 'devise', '~> 2.1.3' # 2.2 is backwards-incompatible
+gem 'devise'
 gem 'devise-i18n'
-gem 'google-api-client', '~> 0.6.4', require: 'google/api_client'
-gem 'jwt', '~> 0.1.4' # google-api-client
-gem 'mustache', '~> 0.99.0'
+gem 'google-api-client', '0.9'
+gem 'jwt'
+gem 'mustache'
 
 # Image uploads
 gem 'fog'
 gem 'rmagick'
-gem 'carrierwave-mongoid', '~> 0.6.3'
+gem 'carrierwave-mongoid'
 
 # Views
 gem 'haml-rails'
@@ -59,8 +37,8 @@ gem 'unicode_utils'
 gem 'docxer'
 gem 'net-ssh', '2.9.2'
 gem 'spreadsheet'
-gem 'axlsx', '2.0.0' # 2.0.1 uses rubyzip 1.0.0
-gem 'rubyzip',  '~> 0.9.9' # 1.0.0 has new interface, heroku gem uses old interface https://github.com/rubyzip/rubyzip#important-note
+gem 'axlsx', '2.1.0.pre'
+gem 'rubyzip', '>= 1.0.0'
 
 # Heroku API
 gem 'oj'
@@ -79,22 +57,42 @@ group :assets do
     gem 'libv8', '3.16.14.7'
   end
 
-  gem 'sass-rails', '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'uglifier', '>= 1.0.3'
+  gem 'sass-rails', '~> 5.0'
+  gem 'coffee-rails', '~> 4.1.0'
+  gem 'uglifier', '>= 1.3.0'
 end
 
-gem 'jquery-rails'
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'pry-rails'
+  gem 'byebug'
+end
 
 # For maintenance scripts to run in development console.
 group :development do
   gem 'mechanize'
-  gem 'pry-rails'
   gem 'odf-report'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
-group :development, :test do
-  gem 'rspec-rails', '~> 2.6'
-end
+group :production do
+  # Non-Heroku deployments
+  unless ENV['HEROKU']
+    gem 'foreman'
+  end
 
-gem 'unicorn'
+  # Error logging
+  gem 'airbrake', '~> 3.1.15'
+  gem 'rails_12factor'
+
+  # Performance
+  gem 'action_dispatch-gz_static'
+  gem 'memcachier'
+  gem 'dalli'
+
+  # Heroku deployments
+  if ENV['HEROKU']
+    gem 'newrelic_rpm'
+  end
+end

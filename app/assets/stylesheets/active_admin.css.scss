@@ -30,6 +30,10 @@
 
 $highlight-color: #33f;
 
+@mixin box-shadow($shadow) {
+  box-shadow: $shadow;
+}
+
 @mixin border-radius($radius) {
   -webkit-border-radius: $radius;
   -moz-border-radius: $radius;

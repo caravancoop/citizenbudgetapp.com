@@ -4,7 +4,7 @@ ActiveAdmin.register Organization do
     column :questionnaires do |o|
       link_to_if authorized?(:read, Questionnaire), o.questionnaires.count, [:admin, :questionnaires]
     end
-    default_actions
+    actions
   end
 
   form partial: 'form'

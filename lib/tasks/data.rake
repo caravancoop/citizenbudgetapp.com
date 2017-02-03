@@ -1,5 +1,3 @@
-# coding: utf-8
-
 namespace :data do
   # @param [Hash] hash a hash
   # @param [Hash] opts optional arguments

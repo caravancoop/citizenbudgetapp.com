@@ -1,4 +1,3 @@
-# coding: utf-8
 require 'csv'
 
 ActiveAdmin.register_page 'Dashboard' do

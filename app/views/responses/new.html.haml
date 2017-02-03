@@ -3,7 +3,7 @@
 
   %section#introduction
     :markdown
-      #{Mustache.render(@questionnaire.introduction, number_of_participants: @questionnaire.responses.count)}
+      #{Mustache.render(@questionnaire.introduction || String.new, number_of_participants: @questionnaire.responses.count)}
 
   = bootstrap_form_for @response, html: {class: 'form-horizontal js-new-response'} do |f|
     - if !@questionnaire.current? || params[:token]
