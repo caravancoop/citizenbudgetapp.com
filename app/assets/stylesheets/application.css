@@ -9,10 +9,10 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require bootstrap
+ *= require bootstrap/dist/css/bootstrap
  *= require bootstrap-responsive
- *= require validationEngine.jquery
+ *= require validationEngine/css/validationEngine.jquery
  *= require iphone-style-checkboxes
- *= require style
+ *= require application
  *= require d3
 */

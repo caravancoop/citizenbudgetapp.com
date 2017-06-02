@@ -29,6 +29,7 @@
     "jquery-easing-original": "^1.3.2",
     "jquery.localScroll": "^1.4.0",
     "jqueryui-touch-punch": "*",
-    "validationEngine": "^2.6.4"
+    "validationEngine": "^2.6.4",
+    "bootstrap": "^3.3.7"
   }
 }
