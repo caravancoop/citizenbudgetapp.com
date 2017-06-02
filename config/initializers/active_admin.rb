@@ -19,7 +19,6 @@ ActiveAdmin.setup do |config|
   # config.site_title_image = "logo.png"
 
   # == Default Namespace
-  #
   # Set the default namespace each administration resource
   # will be added to.
   #
@@ -122,7 +121,7 @@ ActiveAdmin.setup do |config|
   config.comments = false
 
   # You can disable the menu item for the comments index page:
-  config.show_comments_in_menu = false
+  # config.show_comments_in_menu = false
 
   # You can change the name under which comments are registered:
   # config.comments_registration_name = 'AdminComment'

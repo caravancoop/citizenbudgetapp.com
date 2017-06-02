@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.3.0'
+ruby '2.3.3'
 
 gem 'rails', '4.2.5.1'
 gem 'actionpack-action_caching'
@@ -13,35 +13,43 @@ gem 'jwt', '~> 0.1.4' # google-api-client
 gem 'mustache'
 
 # Server
-gem 'puma'
+gem 'unicorn'
 
 # Database
 gem 'pg'
 gem 'paranoia', '~> 2.0'
 
 # Admin
-gem 'activeadmin', '1.0.0.pre2'
+gem 'activeadmin', '1.0.0'
 
 # I18n
 gem 'devise-i18n'
 gem 'i18n-timezones'
 
 # Image uploads
-gem 'fog'
+gem 'fog', '1.34.0'
 gem 'mini_magick'
 gem 'carrierwave'
+gem 'mime-types'
+gem 'sprockets-rails', :require => 'sprockets/railtie'
 
 # Views
+gem 'haml-rails'
 gem 'rdiscount'
 gem 'unicode_utils'
 gem 'bourgeois'
 
 # Export
-gem 'docxer'
+gem 'docx'
 gem 'net-ssh', '2.9.2'
 gem 'spreadsheet'
 gem 'axlsx', '2.1.0.pre'
-gem 'rubyzip', '>= 1.0.0'
+gem 'rubyzip', '1.1.7'
+
+# Heroku API
+gem 'oj'
+gem 'multi_json'
+gem 'faraday'
 
 # Rake
 gem 'ruby-progressbar'
@@ -59,19 +67,22 @@ gem 'sentry-raven'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
+  # Non-Heroku deployments
+  unless ENV['HEROKU']
+    gem 'therubyracer', require: 'v8'
+    gem 'libv8', '3.16.14.7'
+  end
+  gem 'bootstrap-sass' 
   gem 'sass-rails', '~> 5.0'
-  gem 'uglifier', '>= 1.3.0'
   gem 'coffee-rails', '~> 4.1.0'
-  gem 'coffee-script'
+  gem 'uglifier', '>= 1.3.0'
 end
 
 group :development, :test do
-  gem 'foreman'
-
+  gem 'rspec-rails'
   gem 'pry-rails'
   gem 'byebug'
 
-  gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'ffaker'
 
@@ -79,6 +90,7 @@ group :development, :test do
   gem 'dawnscanner', require: false
 end
 
+# For maintenance scripts to run in development console.
 group :development do
   gem 'mechanize'
   gem 'odf-report'
@@ -92,6 +104,13 @@ group :test do
 end
 
 group :production do
+  # Non-Heroku deployments
+  unless ENV['HEROKU']
+    gem 'foreman'
+  end
+
+  # Error logging
+  gem 'airbrake', '~> 3.1.15'
   gem 'rails_12factor'
   gem 'lograge'
 end
