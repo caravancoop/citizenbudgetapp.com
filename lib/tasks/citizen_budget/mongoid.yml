@@ -27,6 +27,7 @@ test:
 production:
   clients:
     default:
+      logger: false
       database: citizen_budget_production
       hosts:
         - <%= ENV['MONGODB_ADDRESS'] %>
